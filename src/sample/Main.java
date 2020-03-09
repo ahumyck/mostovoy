@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.matrix.Matrix;
 
 public class Main extends Application {
 
@@ -17,7 +18,11 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(String[] args) throws Exception {
+        Matrix matrix = new Matrix(10);
+        String string = matrix.generateValues(0.25).toString();
+        System.out.println("SOUT:");
+        System.out.println(string);
+        //launch(args);
     }
 }
