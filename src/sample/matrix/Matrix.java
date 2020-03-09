@@ -26,6 +26,8 @@ public class Matrix {
                 else matrix[i][j].setType(CellType.WHITE);
             }
         }
+        markClusters();
+        joinClusters();
         return this;
     }
 
@@ -37,7 +39,10 @@ public class Matrix {
         return Math.min(first.getClusterMark(), second.getClusterMark());
     }
 
-    public Matrix markClusters(){
+    /**
+     * this method is used to give a percolation blocks their marks
+     * */
+    private Matrix markClusters(){
         int clusterCounter = 0;
         for(int i = offset; i < matrix.length - offset;i++){
             for(int j = offset ; j < matrix.length - offset; j++){
@@ -65,6 +70,23 @@ public class Matrix {
         return this;
     }
 
+    /**
+     * this method is used to join clusters together
+     * this method uses joinCells to join neighbor cells from different clusters together
+     * */
+    private Matrix joinClusters(){
+        for(int i = offset; i < matrix.length - offset; i++){
+            for(int j = offset ; j < matrix.length - offset; j++) {
+                joinCells(i,j);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * @param i,j - current cell coordinates
+     * recursive method to join neighbor cells from different clusters
+     */
     private void joinCells(int i,int j){
         Cell currentCell = matrix[i][j];
         Cell next = matrix[i][j+1];
@@ -86,14 +108,7 @@ public class Matrix {
 
     }
 
-    public Matrix joinClusters(){
-        for(int i = offset; i < matrix.length - offset; i++){
-            for(int j = offset ; j < matrix.length - offset; j++) {
-                joinCells(i,j);
-            }
-        }
-        return this;
-    }
+
 
     @Override
     public String toString() {

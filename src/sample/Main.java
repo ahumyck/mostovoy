@@ -20,11 +20,8 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         Matrix matrix = new Matrix(8);
-        String percolationMatrix = matrix.generateValues(0.5).markClusters().toString();
+        String percolationMatrix = matrix.generateValues(0.5).toString();
         System.out.println(percolationMatrix);
-        String join = matrix.joinClusters().toString();
-        System.out.println("after join");
-        System.out.println(join);
         //launch(args);
     }
 }
