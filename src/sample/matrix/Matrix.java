@@ -1,8 +1,5 @@
 package sample.matrix;
 
-import com.sun.corba.se.impl.resolver.SplitLocalResolverImpl;
-
-import javax.sound.midi.Soundbank;
 import java.util.Random;
 
 public class Matrix {
@@ -86,9 +83,7 @@ public class Matrix {
     public Matrix joinClusters(){
         for(int i = OFFSET; i < matrix.length - OFFSET; i++){
             for(int j = OFFSET; j < matrix.length - OFFSET; j++) {
-                System.out.println("Checking cell");
                 joinCells(i,j);
-                System.out.println();
             }
         }
         return this;
