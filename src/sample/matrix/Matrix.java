@@ -28,10 +28,31 @@ public class Matrix {
         if(percolationProbability < 0 || percolationProbability > 1)
             throw new Exception("percolation probability has to be in [0;1]");
         Random generator = new Random();
+        int clusterCounter = 0;
         for(int i = OFFSET; i < matrix.length - OFFSET; i++){
             for(int j = OFFSET; j < matrix.length - OFFSET; j++){
-                if(generator.nextDouble() <= percolationProbability) matrix[i][j].setType(CellType.BLACK);
-                else matrix[i][j].setType(CellType.WHITE);
+                Cell currentCell = matrix[i][j];
+                if(generator.nextDouble() <= percolationProbability) currentCell.setType(CellType.BLACK);
+                else currentCell.setType(CellType.WHITE);
+
+                if(isBlack(currentCell)){
+                    Cell up = matrix[i - 1][j];
+                    Cell left = matrix[i][j - 1];
+                    boolean isLeftBlack = isBlack(left);
+                    boolean isUpBlack = isBlack(up);
+                    if(isUpBlack && !isLeftBlack){
+                        currentCell.setClusterMark(up.getClusterMark());
+                    }
+                    if(!isUpBlack && isLeftBlack){
+                        currentCell.setClusterMark(left.getClusterMark());
+                    }
+                    if(isUpBlack && isLeftBlack){
+                        currentCell.setClusterMark(minClusterMark(up,left));
+                    }
+                    if(!isLeftBlack && !isUpBlack){
+                        currentCell.setClusterMark(++clusterCounter);
+                    }
+                }
             }
         }
         return this;
@@ -43,37 +64,6 @@ public class Matrix {
 
     private int minClusterMark(Cell first,Cell second){
         return Math.min(first.getClusterMark(), second.getClusterMark());
-    }
-
-    /**
-     * this method is used to give a percolation blocks their marks
-     * */
-    public Matrix markClusters(){
-        int clusterCounter = 0;
-        for(int i = OFFSET; i < matrix.length - OFFSET; i++){
-            for(int j = OFFSET; j < matrix.length - OFFSET; j++){
-               Cell currentCell = matrix[i][j];
-               if(isBlack(currentCell)){
-                   Cell up = matrix[i - 1][j];
-                   Cell left = matrix[i][j - 1];
-                   boolean isLeftBlack = isBlack(left);
-                   boolean isUpBlack = isBlack(up);
-                   if(isUpBlack && !isLeftBlack){
-                       currentCell.setClusterMark(up.getClusterMark());
-                   }
-                   if(!isUpBlack && isLeftBlack){
-                       currentCell.setClusterMark(left.getClusterMark());
-                   }
-                   if(isUpBlack && isLeftBlack){
-                       currentCell.setClusterMark(minClusterMark(up,left));
-                   }
-                   if(!isLeftBlack && !isUpBlack){
-                       currentCell.setClusterMark(++clusterCounter);
-                   }
-               }
-            }
-        }
-        return this;
     }
 
     /**
