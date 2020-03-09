@@ -1,5 +1,7 @@
 package sample.matrix;
 
+import com.sun.corba.se.impl.resolver.SplitLocalResolverImpl;
+
 import javax.sound.midi.Soundbank;
 import java.util.Random;
 
@@ -103,43 +105,31 @@ public class Matrix {
             Cell left = matrix[i][j-1];
             Cell down = matrix[i+1][j];
             Cell up = matrix[i-1][j];
-
-            System.out.println("current cell:" + i + " " + j + "has value " + currentCell.getClusterMark());
-
             if(up.hasClusterMark()) {
-                System.out.println("down cluster mark has value " + up.getClusterMark());
                 if (up.getClusterMark() > currentCell.getClusterMark()) {
                     up.setClusterMark(currentCell.getClusterMark());
-                    System.out.println("updated current to up cell:" + (i - 1) + " " + j + "has value " + currentCell.getClusterMark());
                     joinCells(i-1, j);
                 }
             }
             if(left.hasClusterMark()) {
-                System.out.println("down cluster mark has value " + left.getClusterMark());
                 if (left.getClusterMark() > currentCell.getClusterMark()) {
                     left.setClusterMark(currentCell.getClusterMark());
-                    System.out.println("updated current to left cell:" + (i) + " " + (j - 1) + "has value " + currentCell.getClusterMark());
                     joinCells(i, j - 1);
                 }
             }
             if(right.hasClusterMark()) {
-                System.out.println("right cluster mark has value " + right.getClusterMark());
                 if (right.getClusterMark() > currentCell.getClusterMark()) {
                     right.setClusterMark(currentCell.getClusterMark());
-                    System.out.println("updated current to left cell:" + (i) + " " + (j + 1) + "has value " + currentCell.getClusterMark());
                     joinCells(i, j + 1);
                 }
             }
             if(down.hasClusterMark()) {
-                System.out.println("down cluster mark has value " + down.getClusterMark());
                 if (down.getClusterMark() > currentCell.getClusterMark()) {
                     down.setClusterMark(currentCell.getClusterMark());
-                    System.out.println("updated current to left cell:" + (i + 1) + " " + j + "has value " + currentCell.getClusterMark());
                     joinCells(i + 1, j);
                 }
             }
         }
-
     }
 
     @Override
