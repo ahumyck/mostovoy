@@ -19,9 +19,11 @@ public class Main extends Application {
 
 
     public static void main(String[] args) throws Exception {
-        Matrix matrix = new Matrix(8);
+        Matrix matrix = new Matrix(15);
         String percolationMatrix = matrix.generateValues(0.5).markClusters().toString();
         System.out.println(percolationMatrix);
+        String s = matrix.joinClusters().toString();
+        System.out.println(s);
         //launch(args);
     }
 }
