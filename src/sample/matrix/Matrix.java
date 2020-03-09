@@ -1,9 +1,5 @@
 package sample.matrix;
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
-import javafx.util.Builder;
-
-import java.util.Arrays;
 import java.util.Random;
 
 public class Matrix {
@@ -26,21 +22,89 @@ public class Matrix {
         Random generator = new Random();
         for(int i = offset; i < matrix.length - offset;i++){
             for(int j = offset ; j < matrix.length - offset; j++){
-                if(generator.nextDouble() >= percolationProbability) matrix[i][j].setType(CellType.BLACK);
+                if(generator.nextDouble() <= percolationProbability) matrix[i][j].setType(CellType.BLACK);
                 else matrix[i][j].setType(CellType.WHITE);
             }
         }
+        return this;
+    }
 
+    private boolean isBlack(Cell cell){
+        return cell.getType().equals(CellType.BLACK);
+    }
+
+    private int minClusterMark(Cell first,Cell second){
+        return Math.min(first.getClusterMark(), second.getClusterMark());
+    }
+
+    public Matrix markClusters(){
+        int clusterCounter = 0;
+        for(int i = offset; i < matrix.length - offset;i++){
+            for(int j = offset ; j < matrix.length - offset; j++){
+               Cell currentCell = matrix[i][j];
+               if(isBlack(currentCell)){
+                   Cell up = matrix[i - 1][j];
+                   Cell left = matrix[i][j - 1];
+                   boolean isLeftBlack = isBlack(left);
+                   boolean isUpBlack = isBlack(up);
+                   if(isUpBlack && !isLeftBlack){
+                       currentCell.setClusterMark(up.getClusterMark());
+                   }
+                   if(!isUpBlack && isLeftBlack){
+                       currentCell.setClusterMark(left.getClusterMark());
+                   }
+                   if(isUpBlack && isLeftBlack){
+                       currentCell.setClusterMark(minClusterMark(up,left));
+                   }
+                   if(!isLeftBlack && !isUpBlack){
+                       currentCell.setClusterMark(++clusterCounter);
+                   }
+               }
+            }
+        }
+        return this;
+    }
+
+    private void joinCells(int i,int j){
+        Cell currentCell = matrix[i][j];
+        Cell next = matrix[i][j+1];
+        Cell down = matrix[i+1][j];
+        if(currentCell.hasClusterMark()) {
+            if(next.hasClusterMark()) {
+                if (next.getClusterMark() < currentCell.getClusterMark()) {
+                    currentCell.setClusterMark(next.getClusterMark());
+                    joinCells(i, j + 1);
+                }
+            }
+            if(down.hasClusterMark()) {
+                if (down.getClusterMark() < currentCell.getClusterMark()) {
+                    currentCell.setClusterMark(down.getClusterMark());
+                    joinCells(i + 1, j);
+                }
+            }
+        }
+
+    }
+
+    public Matrix joinClusters(){
+        for(int i = offset; i < matrix.length - offset; i++){
+            for(int j = offset ; j < matrix.length - offset; j++) {
+                joinCells(i,j);
+            }
+        }
         return this;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (Cell[] cells : matrix) {
-            for(Cell cell : cells){
-                builder.append(cell.getIntType());
-                builder.append(' ');
+        for(int i = offset; i < matrix.length - offset;i++){
+            for(int j = offset ; j < matrix.length - offset; j++){
+                builder.append(matrix[i][j].getIntType());
+                builder.append('{');
+                builder.append(matrix[i][j].getClusterMark());
+                builder.append('}');
+                builder.append('\t');
             }
             builder.append('\n');
         }

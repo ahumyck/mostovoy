@@ -19,10 +19,12 @@ public class Main extends Application {
 
 
     public static void main(String[] args) throws Exception {
-        Matrix matrix = new Matrix(10);
-        String string = matrix.generateValues(0.25).toString();
-        System.out.println("SOUT:");
-        System.out.println(string);
+        Matrix matrix = new Matrix(8);
+        String percolationMatrix = matrix.generateValues(0.5).markClusters().toString();
+        System.out.println(percolationMatrix);
+        String join = matrix.joinClusters().toString();
+        System.out.println("after join");
+        System.out.println(join);
         //launch(args);
     }
 }
