@@ -14,7 +14,7 @@ public class ExperimentManager {
         experimentDataRepository.clear();
         ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
         for (int i = 0; i < number; i++) {
-            experimentObservableList.add(new Experiment("name" + i, "path" + i));
+            experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), "key" + i));
         }
         experimentObservableList.forEach(experiment -> {
             experimentDataRepository.add(experiment.getPath(), new Matrix(size).generateValues(fillingType).markClusters().joinClusters());
