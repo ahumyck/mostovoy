@@ -27,7 +27,7 @@ public class Main extends Application {
         Map<Integer,Matrix> map = new HashMap<>();
         long l = System.currentTimeMillis();
         for (int i = 0; i < 100 ; i++) {
-            map.put(i,new Matrix(100).generateValues(0.5).joinClusters());
+            map.put(i,new Matrix(100).generateValues(0.5).markClusters().joinClusters());
         }
         long l1 = System.currentTimeMillis();
         System.out.println(l1 - l);
