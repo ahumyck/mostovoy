@@ -1,7 +1,4 @@
-package sample.matrix;
-
-import com.sun.org.apache.bcel.internal.generic.ARETURN;
-import sun.security.krb5.internal.CredentialsUtil;
+package company.expirement;
 
 enum CellType{
     WHITE(0),
@@ -23,8 +20,20 @@ enum CellType{
 public class Cell {
     private CellType type;
     private int clusterMark = 0;
+    private int x;
+    private int y;
+    public int getX()
+    {
+        return x;
+    }
 
-    public Cell(){
+    public int getY()
+    {
+        return y;
+    }
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
         this.type = CellType.EMPTY;
     }
 

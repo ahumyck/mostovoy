@@ -1,6 +1,10 @@
-package sample.matrix;
+package company.expirement;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Matrix {
     private Cell[][] matrix;
@@ -9,24 +13,34 @@ public class Matrix {
     public Matrix(int size) {
         int actualSize = size + 2 * OFFSET;
         this.matrix = new Cell[actualSize][actualSize];
-        for(int i = 0 ; i < actualSize; i++){
-            for(int j = 0 ; j < actualSize; j++){
-                matrix[i][j] = new Cell();
+        for (int i = 0; i < actualSize; i++) {
+            for (int j = 0; j < actualSize; j++) {
+                matrix[i][j] = new Cell(i,j);
             }
         }
+    }
+
+    public Stream<Cell> stream() {
+        List<Cell> cells = new ArrayList<>();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                cells.add(matrix[i][j]);
+            }
+        }
+        return cells.stream();
     }
 
     public int getSize(){
         return matrix.length;
     }
 
-    public Cell getCell(int i,int j){
+    public Cell getCell(int i, int j){
         return matrix[i][j];
     }
 
-    public Matrix generateValues(double percolationProbability) throws Exception {
-        if(percolationProbability < 0 || percolationProbability > 1)
-            throw new Exception("percolation probability has to be in [0;1]");
+    public Matrix generateValues(double percolationProbability) /*throws Exception*/ {
+        /*if(percolationProbability < 0 || percolationProbability > 1)
+            throw new Exception("percolation probability has to be in [0;1]");*/
         Random generator = new Random();
         for(int i = OFFSET; i < matrix.length - OFFSET; i++){
             for(int j = OFFSET; j < matrix.length - OFFSET; j++){
