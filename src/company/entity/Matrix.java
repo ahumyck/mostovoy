@@ -1,14 +1,15 @@
-package company.expirement;
+package company.entity;
 
+
+import company.filling.FillingType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 
 public class Matrix {
     private Cell[][] matrix;
-    private final int OFFSET = 1; // Chto bi ydobno bilo obrabativat granichnie kletki
+    public static final int OFFSET = 1; // Chto bi ydobno bilo obrabativat granichnie kletki
 
     public Matrix(int size) {
         int actualSize = size + 2 * OFFSET;
@@ -38,16 +39,11 @@ public class Matrix {
         return matrix[i][j];
     }
 
-    public Matrix generateValues(double percolationProbability) /*throws Exception*/ {
+    public Matrix generateValues(FillingType fillingType) /*throws Exception*/ {
         /*if(percolationProbability < 0 || percolationProbability > 1)
             throw new Exception("percolation probability has to be in [0;1]");*/
-        Random generator = new Random();
-        for(int i = OFFSET; i < matrix.length - OFFSET; i++){
-            for(int j = OFFSET; j < matrix.length - OFFSET; j++){
-                if(generator.nextDouble() <= percolationProbability) matrix[i][j].setType(CellType.BLACK);
-                else matrix[i][j].setType(CellType.WHITE);
-            }
-        }
+
+        fillingType.fillMatrix(this);
         return this;
     }
 
