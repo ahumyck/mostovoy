@@ -22,6 +22,12 @@ public class Cell {
         this.type = CellType.EMPTY;
     }
 
+    public Cell(int x, int y, CellType type) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+    }
+
     public Cell(CellType type) {
         this.type = type;
     }

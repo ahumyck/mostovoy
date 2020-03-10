@@ -2,8 +2,10 @@ package company.entity;
 
 
 import company.filling.FillingType;
+import company.filling.FillingTypeV2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,12 +23,28 @@ public class Matrix {
         }
     }
 
+    public Matrix(FillingTypeV2 type){
+        int[][] matrix = type.getMatrix();
+        int actualSize = matrix.length + 2 * OFFSET;
+        this.matrix = new Cell[actualSize][actualSize];
+        for (int i = 0; i < actualSize; i++) {
+            for (int j = 0; j < actualSize; j++) {
+                this.matrix[i][j] = new Cell(i,j);
+                if(i < OFFSET || i > actualSize - OFFSET) continue;
+                if(j < OFFSET || j > actualSize - OFFSET) continue;
+                if(matrix[i][j] == 1)
+                    this.matrix[i][i].setType(CellType.BLACK);
+                else
+                    this.matrix[i][j].setType(CellType.WHITE);
+            }
+        }
+    }
+
+
     public Stream<Cell> stream() {
         List<Cell> cells = new ArrayList<>();
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
-                cells.add(matrix[i][j]);
-            }
+        for (Cell[] value : matrix) {
+            cells.addAll(Arrays.asList(value).subList(0, matrix.length));
         }
         return cells.stream();
     }
@@ -97,6 +115,21 @@ public class Matrix {
             }
         }
         return this;
+    }
+
+    public void lightningBolt(){
+        return;
+    }
+
+
+    private int dijksta(int st){
+        /**
+         * start point: matrix[offset][offset + start]
+         * end points: matrix[offset][offset: matrix.length - offset]
+         * */
+        int n = matrix.length - 2 * OFFSET;
+
+        return 0;
     }
 
     /**

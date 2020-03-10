@@ -7,10 +7,10 @@ import java.util.Random;
 
 import static company.entity.Matrix.OFFSET;
 
-public class RandomFillingType extends FillingType {
+public class RandomFillingTypeV2 extends FillingTypeV2{
     private double percolationProbability;
-
-    public RandomFillingType() {
+    private int size;
+    public RandomFillingTypeV2() {
         super("Случайная");
     }
 
@@ -19,13 +19,15 @@ public class RandomFillingType extends FillingType {
     }
 
     @Override
-    public void fillMatrix(Matrix matrix) {
+    public int[][] getMatrix() {
         Random generator = new Random();
-        for(int i = OFFSET; i < matrix.getSize() - OFFSET; i++){
-            for(int j = OFFSET; j < matrix.getSize() - OFFSET; j++){
-                if(generator.nextDouble() <= percolationProbability) matrix.getCell(i,j).setType(CellType.BLACK);
-                else matrix.getCell(i,j).setType(CellType.WHITE);
+        int[][] matrix = new int[size][size];
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                if(generator.nextDouble() <= percolationProbability) matrix[i][j] = 0;
+                else matrix[i][j] = 0;
             }
         }
+        return matrix;
     }
 }
