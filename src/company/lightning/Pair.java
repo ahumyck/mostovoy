@@ -1,26 +1,27 @@
 package company.lightning;
 
-public class Pair {
-    int x, y;
+public class Pair<V,T> {
+    private V x;
+    private T y;
 
-    public Pair(int x, int y) {
+    public Pair(V x, T y) {
         this.x = x;
         this.y = y;
     }
 
-    public int getX() {
+    public V getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(V x) {
         this.x = x;
     }
 
-    public int getY() {
+    public T getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(T y) {
         this.y = y;
     }
 

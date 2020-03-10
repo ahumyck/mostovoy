@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class LightWeightAdjacencyListBuilderByMatrix {
 
-    private Map<Integer, List<Pair>> map = new HashMap<>();
+    private Map<Integer, List<Pair<Integer,Integer>>> map = new HashMap<>();
 
     private boolean isEmpty(Cell cell){
         return cell.getType().equals(CellType.EMPTY);
@@ -26,13 +26,13 @@ public class LightWeightAdjacencyListBuilderByMatrix {
         if(!isEmpty(endCell)){
             int endShiftedPosition = (size - 2*Matrix.OFFSET) * (i - Matrix.OFFSET) + (j - Matrix.OFFSET);
             if(isBlack(endCell) && isBlack(startCell))
-                map.get(startShiftedPosition).add(new Pair(endShiftedPosition,1));
+                map.get(startShiftedPosition).add(new Pair<Integer,Integer>(endShiftedPosition,1));
             else
-                map.get(startShiftedPosition).add(new Pair(endShiftedPosition,dis));
+                map.get(startShiftedPosition).add(new Pair<Integer,Integer>(endShiftedPosition,dis));
         }
     }
 
-    public Map<Integer, List<Pair>> build(Matrix matrix){
+    public Map<Integer, List<Pair<Integer,Integer>>> build(Matrix matrix){
         int size = matrix.getSize();
         for (int i = 0; i < size ; i++) {
             for (int j = 0; j < size; j++) {

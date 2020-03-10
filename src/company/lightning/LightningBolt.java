@@ -2,26 +2,40 @@ package company.lightning;
 
 import company.entity.Matrix;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class LightningBolt {
 
+    public static Pair<List<Pair<Integer,Integer>>,Integer> findShortestWays(Matrix matrix){
+        Map<Integer, List<Pair<Integer, Integer>>> adjacencyList = new LightWeightAdjacencyListBuilderByMatrix().build(matrix);
+        int shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
+        List<Pair<List<Pair<Integer,Integer>>,Integer>> paths = new ArrayList<>();
+        for(int currentPos = 0 ; currentPos < shiftedSize; currentPos++){
+            Pair<List<Integer>, List<Integer>> inf = findDistances(currentPos, adjacencyList, shiftedSize);
+            List<Integer> distances = inf.getY();
+            List<Integer> parents = inf.getX();
 
-
-    public static List<Integer> findShortestWays(Matrix matrix){
-        Map<Integer, List<Pair>> adjacencyList = new LightWeightAdjacencyListBuilderByMatrix().build(matrix);
-        int start_pos = 0;
-        return findDistances(start_pos, adjacencyList, matrix.getSize());
+            int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
+            List<Pair<Integer,Integer>> path = new ArrayList<>();
+            int endPos = shiftedSize*(shiftedSize - 1) + shortest;
+            for (int v = endPos; v!= currentPos ; v = parents.get(v)) {
+                int j = v % shiftedSize;
+                int i = (v-j)/shiftedSize;
+                path.add(0,new Pair<>(i,j));
+            }
+            int j = currentPos % shiftedSize;
+            int i = (currentPos - j) / shiftedSize;
+            path.add(0, new Pair<>(i,j));
+            System.out.println("Path: " + path + " = " + distances.get(shortest));
+            paths.add(new Pair<>(path,distances.get(shortest)));
+        }
+        return paths.stream().min((a, b) -> Integer.compare(a.getY(), b.getY())).get();
     }
 
 
-    private static List<Integer> findDistances(int start_pos,  Map<Integer, List<Pair>> adjacencyList,int actualMatrixSize){
-        int shiftedSize = actualMatrixSize - 2 * Matrix.OFFSET;
-        int stepCost = shiftedSize * shiftedSize + 1;
+    private static Pair<List<Integer>, List<Integer>> findDistances(int start_pos,  Map<Integer, List<Pair<Integer, Integer>>> adjacencyList,int shiftedSize){
         List<Integer> distanceToOtherNeighbors = IntStream.generate(() -> Integer.MAX_VALUE)
                 .limit(adjacencyList.size())
                 .boxed().collect(Collectors.toList());
@@ -32,8 +46,8 @@ public class LightningBolt {
         List<Boolean> visitedNeighbors = IntStream.range(0, adjacencyList.size())
                 .mapToObj(object -> false).collect(Collectors.toList());
 
-        distanceToOtherNeighbors.set(start_pos,0);
 
+        distanceToOtherNeighbors.set(start_pos,0);
         int n = adjacencyList.keySet().size();
         for (int i = 0; i < n; i++) {
             int v = -1;
@@ -46,7 +60,7 @@ public class LightningBolt {
             }
             visitedNeighbors.set(v,true);
             for (int j = 0; j < adjacencyList.get(v).size(); j++) {
-                Pair pair = adjacencyList.get(v).get(j);
+                Pair<Integer,Integer> pair = adjacencyList.get(v).get(j);
                 int to = pair.getX();
                 int len = pair.getY();
                 if (distanceToOtherNeighbors.get(v) + len < distanceToOtherNeighbors.get(to)) {
@@ -56,20 +70,7 @@ public class LightningBolt {
             }
         }
 
-
-        List<Pair> path = new ArrayList<>();
-        int t = distanceToOtherNeighbors.size() - shiftedSize;
-        for (int v = t; v!= start_pos ; v = parents.get(v)) {
-            int j = v % shiftedSize;
-            int i = (v-j)/shiftedSize;
-            path.add(0,new Pair(i,j));
-        }
-        int j = start_pos % shiftedSize;
-        int i = (start_pos - j) / shiftedSize;
-        path.add(0, new Pair(i,j));
-        System.out.println("path = " + path);
-
-        return distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - shiftedSize, distanceToOtherNeighbors.size());
+        return new Pair<>(parents,distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - shiftedSize, distanceToOtherNeighbors.size()));
     }
 
 
