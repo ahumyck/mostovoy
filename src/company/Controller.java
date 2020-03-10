@@ -3,9 +3,7 @@ package company;
 import company.expirement.Experiment;
 import company.expirement.ExperimentManager;
 import company.entity.Matrix;
-import company.filling.FillingType;
-import company.filling.RandomFillingType;
-import company.filling.TestFillingType;
+import company.filling.*;
 import company.paint.Painter;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -36,7 +34,9 @@ public class Controller {
     public TextField fillingProbability;
 
     @FXML
-    public ComboBox<FillingType> fillingTypes;
+    public Label gridSizeLabel;
+    @FXML
+    public ComboBox<FillingTypeV2> fillingTypes;
 
     @FXML
     public Button applyConfiguration;
@@ -44,7 +44,7 @@ public class Controller {
     @FXML
     public void initialize() {
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
-        fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(), new TestFillingType()));
+        fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(), new MaltTestFillingType("Мальтийский крест")));
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
             Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
@@ -54,11 +54,17 @@ public class Controller {
         });
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);
+        gridSize.setVisible(false);
+        gridSizeLabel.setVisible(false);
         fillingTypes.setOnAction(event -> {
             if (fillingTypes.getValue() instanceof RandomFillingType) {
                 fillingProbability.setVisible(true);
                 probabilityLabel.setVisible(true);
-            } else {
+                gridSize.setVisible(true);
+                gridSizeLabel.setVisible(true);
+            } else if (fillingTypes.getValue() instanceof CustomTestFillingType) {
+                gridSize.setVisible(false);
+                gridSizeLabel.setVisible(false);
                 fillingProbability.setVisible(false);
                 probabilityLabel.setVisible(false);
             }
@@ -66,13 +72,16 @@ public class Controller {
         applyConfiguration.setOnAction(actionEvent -> {
             String txt = experimentNumber.getText();
             int number = Integer.parseInt(txt);
-            int size = gridSize.getValue().getValue();
-            double probability = Double.parseDouble(fillingProbability.getText());
-            FillingType fillingType = fillingTypes.getValue();
+            FillingTypeV2 fillingType = fillingTypes.getValue();
             if (fillingType instanceof RandomFillingType) {
+                int size = gridSize.getValue().getValue();
+                double probability = Double.parseDouble(fillingProbability.getText());
                 ((RandomFillingType) fillingType).setPercolationProbability(probability);
+                ((RandomFillingType) fillingType).setSize(size);
+                experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
+            } else if (fillingType instanceof MaltTestFillingType) {
+                experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
             }
-            experimentListView.setItems(experimentManager.initializeExperiments(number, size, fillingType));
         });
     }
 }

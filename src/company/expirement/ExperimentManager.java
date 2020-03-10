@@ -2,6 +2,7 @@ package company.expirement;
 
 import company.entity.Matrix;
 import company.filling.FillingType;
+import company.filling.FillingTypeV2;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,14 +11,14 @@ public class ExperimentManager {
 
     private ExperimentDataRepository experimentDataRepository = new ExperimentDataRepository();
 
-    public ObservableList<Experiment> initializeExperiments(int number, int size,  FillingType fillingType) {
+    public ObservableList<Experiment> initializeExperiments(int number, FillingTypeV2 fillingType) {
         experimentDataRepository.clear();
         ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
         for (int i = 0; i < number; i++) {
             experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), "key" + i));
         }
         experimentObservableList.forEach(experiment -> {
-            experimentDataRepository.add(experiment.getPath(), new Matrix(size).generateValues(fillingType).markClusters().joinClusters());
+            experimentDataRepository.add(experiment.getPath(), new Matrix(fillingType).markClusters().joinClusters());
         });
         return experimentObservableList;
     }

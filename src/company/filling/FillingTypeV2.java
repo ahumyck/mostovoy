@@ -1,7 +1,5 @@
 package company.filling;
 
-import company.entity.Matrix;
-
 abstract public class FillingTypeV2 {
     private String name;
 
