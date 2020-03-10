@@ -20,6 +20,6 @@ public class ColorRepository {
 
     private Color getRandomColor(){
         Random random = new Random();
-        return Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+        return Color.rgb(30 + random.nextInt(226), 30 + random.nextInt(226), 30 +  random.nextInt(226));
     }
 }
