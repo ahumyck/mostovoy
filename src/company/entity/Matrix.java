@@ -30,8 +30,9 @@ public class Matrix {
         for (int i = 0; i < actualSize; i++) {
             for (int j = 0; j < actualSize; j++) {
                 this.matrix[i][j] = new Cell(i,j);
-                if(i < OFFSET || i > actualSize - OFFSET) continue;
-                if(j < OFFSET || j > actualSize - OFFSET) continue;
+                if(i == OFFSET || i == actualSize - OFFSET) continue;
+                if(j == OFFSET || j == actualSize - OFFSET) continue;
+                //todo: ne securno
                 if(matrix[i][j] == 1)
                     this.matrix[i][i].setType(CellType.BLACK);
                 else
