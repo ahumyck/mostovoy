@@ -1,4 +1,4 @@
-package company.filling;
+package company.filling.customs;
 
 public class MaltTestFillingType extends CustomTestFillingType {
 

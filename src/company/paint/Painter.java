@@ -13,7 +13,7 @@ public class Painter {
     private ColorRepository colorRepository = new ColorRepository();
 
     public void paintCanvas(AnchorPane grid, Matrix matrix) {
-        Double size = Double.min(grid.getWidth(), grid.getHeight())/matrix.getSize();
+        double size = Double.min(grid.getWidth(), grid.getHeight())/matrix.getSize();
         Canvas canvas = new Canvas(grid.getWidth(), grid.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);

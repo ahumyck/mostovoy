@@ -4,6 +4,8 @@ import company.expirement.Experiment;
 import company.expirement.ExperimentManager;
 import company.entity.Matrix;
 import company.filling.*;
+import company.filling.customs.CustomTestFillingType;
+import company.filling.customs.MaltTestFillingType;
 import company.paint.Painter;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -36,7 +38,7 @@ public class Controller {
     @FXML
     public Label gridSizeLabel;
     @FXML
-    public ComboBox<FillingTypeV2> fillingTypes;
+    public ComboBox<FillingType> fillingTypes;
 
     @FXML
     public Button applyConfiguration;
@@ -49,7 +51,7 @@ public class Controller {
         experimentListView.setOnMouseClicked(item -> {
             Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             Matrix matrix = experimentManager.getMatrix(experiment);
-            System.out.println(experiment.getPath() + "\n" + matrix.toString());
+//            System.out.println(experiment.getPath() + "\n" + matrix.toString());
             painter.paintCanvas(grid, matrix);
         });
         fillingProbability.setVisible(false);
@@ -72,7 +74,7 @@ public class Controller {
         applyConfiguration.setOnAction(actionEvent -> {
             String txt = experimentNumber.getText();
             int number = Integer.parseInt(txt);
-            FillingTypeV2 fillingType = fillingTypes.getValue();
+            FillingType fillingType = fillingTypes.getValue();
             if (fillingType instanceof RandomFillingType) {
                 int size = gridSize.getValue().getValue();
                 double probability = Double.parseDouble(fillingProbability.getText());

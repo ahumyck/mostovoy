@@ -1,7 +1,5 @@
 package company.entity;
 
-import company.entity.CellType;
-
 public class Cell {
     private CellType type;
     private int clusterMark = 0;
@@ -54,5 +52,21 @@ public class Cell {
 
     public void setClusterMark(int clusterMark) {
         this.clusterMark = clusterMark;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("My cluster mark = ").append(clusterMark)
+                .append(" and i am = ");
+        switch (type){
+            case EMPTY: builder.append("empty"); break;
+            case RED: builder.append("red"); break;
+            case BURGUNDY: builder.append("burgundy"); break;
+            case WHITE: builder.append("white"); break;
+            case BLACK: builder.append("black"); break;
+            default: builder.append("what am i?"); break;
+        }
+        return builder.toString();
     }
 }

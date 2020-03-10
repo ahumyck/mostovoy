@@ -2,7 +2,7 @@ package company.filling;
 
 import java.util.Random;
 
-public class RandomFillingType extends FillingTypeV2 {
+public class RandomFillingType extends FillingType {
     private double percolationProbability;
     private int size;
 
