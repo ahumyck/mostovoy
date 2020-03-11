@@ -30,7 +30,7 @@ public class Main extends Application {
         randomFillingType.setPercolationProbability(0.5);
         randomFillingType.setSize(30);
         Matrix matrix = new Matrix(randomFillingType);
-        Pair<List<Pair<Integer, Integer>>, Integer> shortestWays = LightningBolt.findShortestWays(matrix);
+        Pair<List<Pair<Integer, Integer>>, Integer> shortestWays = LightningBolt.findShortestWay(matrix);
         long l1 = System.currentTimeMillis();
         System.out.println(matrix);
         System.out.println();

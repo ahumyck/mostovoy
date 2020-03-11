@@ -8,12 +8,12 @@ import java.util.stream.IntStream;
 
 public class LightningBolt {
 
-    public static Pair<List<Pair<Integer,Integer>>,Integer> findShortestWays(Matrix matrix){
+    public static Pair<List<Pair<Integer,Integer>>,Integer> findShortestWay(Matrix matrix){
         Map<Integer, List<Pair<Integer, Integer>>> adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix);
         int shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
         List<Pair<List<Pair<Integer,Integer>>,Integer>> paths = new ArrayList<>();
         for(int currentPos = 0 ; currentPos < shiftedSize; currentPos++){
-            Pair<List<Integer>, List<Integer>> inf = findDistances(currentPos, adjacencyList, shiftedSize);
+            Pair<List<Integer>, List<Integer>> inf = findShortestWays(currentPos, adjacencyList, shiftedSize);
             List<Integer> distances = inf.getY();
             List<Integer> parents = inf.getX();
 
@@ -23,21 +23,14 @@ public class LightningBolt {
 
             paths.add(new Pair<>(path,distances.get(shortest)));
         }
-        return paths.stream().min((a, b) -> Integer.compare(a.getY(), b.getY())).get();
+        return paths.stream().min(Comparator.comparingInt(Pair::getY)).get(); //find min by distances.get(shortest)
     }
 
 
-    private static Pair<List<Integer>, List<Integer>> findDistances(int start_pos,  Map<Integer, List<Pair<Integer, Integer>>> adjacencyList,int shiftedSize){
-        List<Integer> distanceToOtherNeighbors = IntStream.generate(() -> Integer.MAX_VALUE)
-                .limit(adjacencyList.size())
-                .boxed().collect(Collectors.toList());
-        List<Integer> parents = IntStream.generate(() -> 0)
-                .limit(adjacencyList.size())
-                .boxed().collect(Collectors.toList());
-
-        List<Boolean> visitedNeighbors = IntStream.range(0, adjacencyList.size())
-                .mapToObj(object -> false).collect(Collectors.toList());
-
+    private static Pair<List<Integer>, List<Integer>> findShortestWays(int start_pos, Map<Integer, List<Pair<Integer, Integer>>> adjacencyList, int shiftedSize){
+        List<Integer> distanceToOtherNeighbors = initWith(Integer.MAX_VALUE,adjacencyList.size());
+        List<Integer> parents = initWith(0,adjacencyList.size());
+        List<Boolean> visitedNeighbors = initWith(false,adjacencyList.size());
 
         distanceToOtherNeighbors.set(start_pos,0);
         int n = adjacencyList.keySet().size();
@@ -77,6 +70,19 @@ public class LightningBolt {
         path.add(0, new Pair<>(i,j));
         return path;
     }
+
+    private static List<Integer> initWith(int initialValue, int size){
+        return IntStream.generate(() -> initialValue)
+                .limit(size)
+                .boxed().collect(Collectors.toList());
+    }
+
+    private static List<Boolean> initWith(boolean value, int size){
+        return IntStream.range(0, size)
+                .mapToObj(object -> value).collect(Collectors.toList());
+    }
+
+
 
 
 }
