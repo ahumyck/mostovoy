@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 public class LightningBolt {
 
     public static Pair<List<Pair<Integer,Integer>>,Integer> findShortestWays(Matrix matrix){
-        Map<Integer, List<Pair<Integer, Integer>>> adjacencyList = new LightWeightAdjacencyListBuilderByMatrix().build(matrix);
+        Map<Integer, List<Pair<Integer, Integer>>> adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix);
         int shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
         List<Pair<List<Pair<Integer,Integer>>,Integer>> paths = new ArrayList<>();
         for(int currentPos = 0 ; currentPos < shiftedSize; currentPos++){
@@ -18,17 +18,9 @@ public class LightningBolt {
             List<Integer> parents = inf.getX();
 
             int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
-            List<Pair<Integer,Integer>> path = new ArrayList<>();
             int endPos = shiftedSize*(shiftedSize - 1) + shortest;
-            for (int v = endPos; v!= currentPos ; v = parents.get(v)) {
-                int j = v % shiftedSize;
-                int i = (v-j)/shiftedSize;
-                path.add(0,new Pair<>(i,j));
-            }
-            int j = currentPos % shiftedSize;
-            int i = (currentPos - j) / shiftedSize;
-            path.add(0, new Pair<>(i,j));
-            System.out.println("Path: " + path + " = " + distances.get(shortest));
+            List<Pair<Integer, Integer>> path = getPath(currentPos, endPos, parents, shiftedSize);
+
             paths.add(new Pair<>(path,distances.get(shortest)));
         }
         return paths.stream().min((a, b) -> Integer.compare(a.getY(), b.getY())).get();
@@ -71,6 +63,19 @@ public class LightningBolt {
         }
 
         return new Pair<>(parents,distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - shiftedSize, distanceToOtherNeighbors.size()));
+    }
+
+    private static List<Pair<Integer,Integer>> getPath(int start,int end, List<Integer> parents, int shiftedSize){
+        List<Pair<Integer,Integer>> path = new ArrayList<>();
+        for (int v = end; v!= start ; v = parents.get(v)) {
+            int j = v % shiftedSize;
+            int i = (v-j)/shiftedSize;
+            path.add(0,new Pair<>(i,j));
+        }
+        int j = start % shiftedSize;
+        int i = (start - j) / shiftedSize;
+        path.add(0, new Pair<>(i,j));
+        return path;
     }
 
 

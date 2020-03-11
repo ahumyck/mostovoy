@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LightWeightAdjacencyListBuilderByMatrix {
+public class AdjacencyListBuilderByMatrix {
 
     private Map<Integer, List<Pair<Integer,Integer>>> map = new HashMap<>();
 
@@ -26,9 +26,9 @@ public class LightWeightAdjacencyListBuilderByMatrix {
         if(!isEmpty(endCell)){
             int endShiftedPosition = (size - 2*Matrix.OFFSET) * (i - Matrix.OFFSET) + (j - Matrix.OFFSET);
             if(isBlack(endCell) && isBlack(startCell))
-                map.get(startShiftedPosition).add(new Pair<Integer,Integer>(endShiftedPosition,1));
+                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,1));
             else
-                map.get(startShiftedPosition).add(new Pair<Integer,Integer>(endShiftedPosition,dis));
+                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,dis));
         }
     }
 

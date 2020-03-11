@@ -8,7 +8,8 @@ import java.util.stream.Stream;
 
 public class Matrix {
     private Cell[][] matrix;
-    public static final int OFFSET = 1; // Chto bi ydobno bilo obrabativat granichnie kletki
+    public static final int OFFSET = 1;
+    int clusterCounter = 0;
 
     private void init(int size){
         int actualSize = size + 2 * OFFSET;
@@ -33,6 +34,7 @@ public class Matrix {
         }
         markClusters();
         joinClusters();
+        countClusters();
     }
 
     public Stream<Cell> stream() {
@@ -51,6 +53,10 @@ public class Matrix {
         return this.matrix[i][j];
     }
 
+    public int getClusterCounter(){
+        return clusterCounter;
+    }
+
     private boolean isBlack(Cell cell){
         return cell.getType().equals(CellType.BLACK);
     }
@@ -59,7 +65,7 @@ public class Matrix {
         return Math.min(first.getClusterMark(), second.getClusterMark());
     }
 
-    public int countClusters(){
+    private void countClusters(){
         /**
          * Using HashSet to count cluster marks
          *
@@ -72,7 +78,7 @@ public class Matrix {
                 set.add(this.matrix[i][j].getClusterMark());
             }
         }
-        return set.size() - 1;
+        clusterCounter = set.size() - 1;
     }
 
     private void markClusters(){
