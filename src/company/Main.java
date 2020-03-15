@@ -27,9 +27,11 @@ public class Main extends Application {
     public static void main(String[] args) {
         long l = System.currentTimeMillis();
         RandomFillingType randomFillingType = new RandomFillingType();
-        randomFillingType.setPercolationProbability(0.5);
-        randomFillingType.setSize(30);
+        randomFillingType.setPercolationProbability(0.7);
+        randomFillingType.setSize(100);
+        System.out.println("Start generating");
         Matrix matrix = new Matrix(randomFillingType);
+        System.out.println("Matrix generated");
         Pair<List<Pair<Integer, Integer>>, Integer> shortestWays = LightningBolt.findShortestWay(matrix);
         long l1 = System.currentTimeMillis();
         System.out.println(matrix);

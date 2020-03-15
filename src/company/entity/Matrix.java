@@ -128,33 +128,28 @@ public class Matrix {
          * @param i,j - current cell coordinates
          * recursive method to join neighbor cells from different clusters
          */
-        Cell currentCell = this.matrix[i][j];
-        if(currentCell.hasClusterMark()) {
-            Cell right = this.matrix[i][j+1];
-            Cell left = this.matrix[i][j-1];
-            Cell down = this.matrix[i+1][j];
-            Cell up = this.matrix[i-1][j];
-            if(up.hasClusterMark()) {
-                if (up.getClusterMark() > currentCell.getClusterMark()) {
-                    up.setClusterMark(currentCell.getClusterMark());
+        if(this.matrix[i][j].hasClusterMark()) {
+            if(this.matrix[i-1][j].hasClusterMark()) {
+                if (this.matrix[i-1][j].getClusterMark() > this.matrix[i][j].getClusterMark()) {
+                    this.matrix[i-1][j].setClusterMark(this.matrix[i][j].getClusterMark());
                     joinCells(i-1, j);
                 }
             }
-            if(left.hasClusterMark()) {
-                if (left.getClusterMark() > currentCell.getClusterMark()) {
-                    left.setClusterMark(currentCell.getClusterMark());
+            if(this.matrix[i][j-1].hasClusterMark()) {
+                if (this.matrix[i][j-1].getClusterMark() > this.matrix[i][j].getClusterMark()) {
+                    this.matrix[i][j-1].setClusterMark(this.matrix[i][j].getClusterMark());
                     joinCells(i, j - 1);
                 }
             }
-            if(right.hasClusterMark()) {
-                if (right.getClusterMark() > currentCell.getClusterMark()) {
-                    right.setClusterMark(currentCell.getClusterMark());
+            if(this.matrix[i][j+1].hasClusterMark()) {
+                if (this.matrix[i][j+1].getClusterMark() > this.matrix[i][j].getClusterMark()) {
+                    this.matrix[i][j+1].setClusterMark(this.matrix[i][j].getClusterMark());
                     joinCells(i, j + 1);
                 }
             }
-            if(down.hasClusterMark()) {
-                if (down.getClusterMark() > currentCell.getClusterMark()) {
-                    down.setClusterMark(currentCell.getClusterMark());
+            if(this.matrix[i+1][j].hasClusterMark()) {
+                if (this.matrix[i+1][j].getClusterMark() > this.matrix[i][j].getClusterMark()) {
+                    this.matrix[i+1][j].setClusterMark(this.matrix[i][j].getClusterMark());
                     joinCells(i + 1, j);
                 }
             }
