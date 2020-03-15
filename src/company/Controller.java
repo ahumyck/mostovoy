@@ -11,11 +11,14 @@ import company.paint.Painter;
 import company.stat.StatManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -68,10 +71,10 @@ public class Controller {
     public TextField matrixCount;
 
     @FXML
-    public AnchorPane clusterCountChart;
+    public AnchorPane clusterCountChartPane;
 
     @FXML
-    public AnchorPane clusterSizeChart;
+    public AnchorPane clusterSizeChartPane;
 
     @FXML
     public void initialize() {
@@ -120,22 +123,25 @@ public class Controller {
             double endProbability = Double.valueOf(this.endProbability.getText());
             double stepProbability = Double.valueOf(this.stepProbability.getText());
             int count = Integer.valueOf(this.matrixCount.getText());
-            int size = Integer.valueOf(this.matrixSize.getText());
-            List<LineChartNode> midClustersCounts = new ArrayList<>();
-            List<LineChartNode> midClustersSize = new ArrayList<>();
-            for (double propability  = startProbability; propability <= endProbability; propability += stepProbability)
-            {
-                System.out.println("propability: " + propability);
-                RandomFillingType randomFillingType = new RandomFillingType();
-                randomFillingType.setSize(size);
-                randomFillingType.setPercolationProbability(propability);
-                List<Matrix> matrices = experimentManager.getMatrices(count, randomFillingType);
-                midClustersCounts.add(new LineChartNode(propability, statManager.clusterCountStat(matrices)));
-                midClustersSize.add(new LineChartNode(propability, statManager.clusterSizeStat(matrices)));
+            List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Среднее количество кластеров");
+            LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
+            for (Integer size : sizes) {
+                List<LineChartNode> midClustersCounts = new ArrayList<>();
+                List<LineChartNode> midClustersSize = new ArrayList<>();
+                for (double probability  = startProbability; probability <= endProbability + stepProbability; probability += stepProbability)
+                {
+                    RandomFillingType randomFillingType = new RandomFillingType();
+                    randomFillingType.setSize(size);
+                    randomFillingType.setPercolationProbability(probability);
+                    List<Matrix> matrices = experimentManager.getMatrices(count, randomFillingType);
+                    midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(matrices)));
+                    midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(matrices)));
+                }
+                painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
+                painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
+                System.out.println("chart");
             }
-            System.out.println(midClustersCounts);
-            painter.paintLineChart(clusterCountChart, midClustersCounts, "Среднее количество кластеров");
-            painter.paintLineChart(clusterSizeChart, midClustersSize, "Средний размер кластеров");
         });
     }
 

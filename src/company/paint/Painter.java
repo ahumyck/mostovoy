@@ -50,4 +50,29 @@ public class Painter {
         pane.getChildren().clear();
         pane.getChildren().add(numberLineChart);
     }
+
+    public LineChart<Number, Number> paintEmptyLineChart(AnchorPane pane, String title)
+    {
+        pane.getChildren().clear();
+        NumberAxis x = new NumberAxis();
+        NumberAxis y = new NumberAxis();
+        LineChart<Number, Number> numberLineChart = new LineChart<>(x, y);
+        numberLineChart.setPrefHeight(pane.getPrefHeight());
+        numberLineChart.setPrefWidth(pane.getPrefWidth());
+        numberLineChart.setTitle(title);
+        pane.getChildren().clear();
+        pane.getChildren().add(numberLineChart);
+        return numberLineChart;
+    }
+
+    public void addSeriesToLineChart(LineChart<Number, Number> chart, String title, List<LineChartNode> nodes)
+    {
+        XYChart.Series series = new XYChart.Series();
+        series.setName(title);
+//        numberLineChart.getStylesheets().add(".chart-line-symbol {}");
+        ObservableList<XYChart.Data> data = FXCollections.observableArrayList();
+        nodes.forEach(node -> data.add(new XYChart.Data(node.x, node.y)));
+        series.setData(data);
+        chart.getData().add(series);
+    }
 }
