@@ -25,19 +25,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        long l = System.currentTimeMillis();
-        RandomFillingType randomFillingType = new RandomFillingType();
-        randomFillingType.setPercolationProbability(0.7);
-        randomFillingType.setSize(100);
-        System.out.println("Start generating");
-        Matrix matrix = new Matrix(randomFillingType);
-        System.out.println("Matrix generated");
-        Pair<List<Pair<Integer, Integer>>, Integer> shortestWays = LightningBolt.findShortestWay(matrix);
-        long l1 = System.currentTimeMillis();
-        System.out.println(matrix);
-        System.out.println();
-        System.out.println("shortest way: " + shortestWays.getX() + " = " + shortestWays.getY());
-        System.out.println("Total time: " + (l1 - l) + " ms");
-        //launch(args);
+        launch(args);
     }
 }
