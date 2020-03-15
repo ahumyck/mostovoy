@@ -7,15 +7,21 @@ import company.filling.*;
 import company.filling.customs.CustomTestFillingType;
 import company.filling.customs.MaltTestFillingType;
 import company.paint.Painter;
+import company.stat.StatManager;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
 
     private ExperimentManager experimentManager = new ExperimentManager();
     private Painter painter = new Painter();
+    private StatManager statManager = new StatManager();
 
     @FXML
     private ListView<Experiment> experimentListView;
@@ -42,6 +48,27 @@ public class Controller {
 
     @FXML
     public Button applyConfiguration;
+
+    @FXML
+    public Button applyExperiment;
+
+    @FXML
+    public TextField startProbability;
+
+    @FXML
+    public TextField endProbability;
+
+    @FXML
+    public TextField stepProbability;
+
+    @FXML
+    public TextField matrixSize;
+
+    @FXML
+    public TextField matrixCount;
+
+    @FXML
+    public AnchorPane chart;
 
     @FXML
     public void initialize() {
@@ -85,5 +112,28 @@ public class Controller {
                 experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
             }
         });
+        applyExperiment.setOnAction(event -> {
+            double startProbability = Double.valueOf(this.startProbability.getText());
+            double endProbability = Double.valueOf(this.endProbability.getText());
+            double stepProbability = Double.valueOf(this.stepProbability.getText());
+            int count = Integer.valueOf(this.matrixCount.getText());
+            int size = Integer.valueOf(this.matrixSize.getText());
+            List<Double> midClustersCounts = new ArrayList<>();
+            List<Double> probabilities = new ArrayList<>();
+            for (double propability  = startProbability; propability <= endProbability; propability += stepProbability)
+            {
+                System.out.println("propability: " + propability);
+                RandomFillingType randomFillingType = new RandomFillingType();
+                randomFillingType.setSize(size);
+                randomFillingType.setPercolationProbability(propability);
+                List<Matrix> matrices = experimentManager.getMatrices(count, randomFillingType);
+                midClustersCounts.add(statManager.clusterStat(matrices) / size);
+                probabilities.add(propability);
+            }
+            painter.paintLineChart(chart, probabilities, midClustersCounts);
+            System.out.println(midClustersCounts);
+        });
     }
+
+
 }
