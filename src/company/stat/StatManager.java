@@ -1,5 +1,6 @@
 package company.stat;
 
+import company.entity.Cell;
 import company.entity.Matrix;
 
 import java.util.*;
@@ -28,9 +29,17 @@ public class StatManager {
         }
     }
 
-    public double clusterStat(List<Matrix> matrices) {
-        double midClusterSize = 0.0;
+    public double clusterCountStat(List<Matrix> matrices) {
         OptionalDouble midClusterCount = matrices.stream().mapToInt(Matrix::getClusterCounter).average();
         return midClusterCount.getAsDouble();
     }
+
+    public double clusterSizeStat(List<Matrix> matrices)
+    {
+       return matrices.stream()
+                .mapToDouble(matrix -> ((double)matrix.stream().filter(Cell::hasClusterMark).count()) / matrix.getClusterCounter())
+                .average()
+                .getAsDouble();
+    }
+
 }

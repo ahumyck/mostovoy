@@ -6,10 +6,10 @@ import company.entity.Matrix;
 import company.filling.*;
 import company.filling.customs.CustomTestFillingType;
 import company.filling.customs.MaltTestFillingType;
+import company.paint.LineChartNode;
 import company.paint.Painter;
 import company.stat.StatManager;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -68,7 +68,10 @@ public class Controller {
     public TextField matrixCount;
 
     @FXML
-    public AnchorPane chart;
+    public AnchorPane clusterCountChart;
+
+    @FXML
+    public AnchorPane clusterSizeChart;
 
     @FXML
     public void initialize() {
@@ -118,8 +121,8 @@ public class Controller {
             double stepProbability = Double.valueOf(this.stepProbability.getText());
             int count = Integer.valueOf(this.matrixCount.getText());
             int size = Integer.valueOf(this.matrixSize.getText());
-            List<Double> midClustersCounts = new ArrayList<>();
-            List<Double> probabilities = new ArrayList<>();
+            List<LineChartNode> midClustersCounts = new ArrayList<>();
+            List<LineChartNode> midClustersSize = new ArrayList<>();
             for (double propability  = startProbability; propability <= endProbability; propability += stepProbability)
             {
                 System.out.println("propability: " + propability);
@@ -127,11 +130,12 @@ public class Controller {
                 randomFillingType.setSize(size);
                 randomFillingType.setPercolationProbability(propability);
                 List<Matrix> matrices = experimentManager.getMatrices(count, randomFillingType);
-                midClustersCounts.add(statManager.clusterStat(matrices) / size);
-                probabilities.add(propability);
+                midClustersCounts.add(new LineChartNode(propability, statManager.clusterCountStat(matrices)));
+                midClustersSize.add(new LineChartNode(propability, statManager.clusterSizeStat(matrices)));
             }
-            painter.paintLineChart(chart, probabilities, midClustersCounts);
             System.out.println(midClustersCounts);
+            painter.paintLineChart(clusterCountChart, midClustersCounts, "Среднее количество кластеров");
+            painter.paintLineChart(clusterSizeChart, midClustersSize, "Средний размер кластеров");
         });
     }
 

@@ -33,18 +33,18 @@ public class Painter {
         grid.getChildren().add(canvas);
     }
 
-    public void paintLineChart(AnchorPane pane, List<Double> values1, List<Double> values2) {
+    public void paintLineChart(AnchorPane pane, List<LineChartNode> nodes, String title) {
         NumberAxis x = new NumberAxis();
         NumberAxis y = new NumberAxis();
         LineChart<Number, Number> numberLineChart = new LineChart<>(x, y);
-        numberLineChart.setTitle("Среднее количество кластеров");
+        numberLineChart.setPrefHeight(pane.getPrefHeight());
+        numberLineChart.setPrefWidth(pane.getPrefWidth());
+        numberLineChart.setTitle(title);
         XYChart.Series series = new XYChart.Series();
-        series.setName("Среднее количество кластеров");
-        numberLineChart.getStylesheets().add(".chart-line-symbol {}");
+        series.setName(title);
+//        numberLineChart.getStylesheets().add(".chart-line-symbol {}");
         ObservableList<XYChart.Data> datas = FXCollections.observableArrayList();
-        for (int i = 0; i < values1.size(); i++) {
-            datas.add(new XYChart.Data(values1.get(i), values2.get(i)));
-        }
+        nodes.forEach(node -> datas.add(new XYChart.Data(node.x, node.y)));
         series.setData(datas);
         numberLineChart.getData().add(series);
         pane.getChildren().clear();
