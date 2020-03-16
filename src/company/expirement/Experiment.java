@@ -1,13 +1,34 @@
 package company.expirement;
 
+import company.entity.Matrix;
+import company.lightning.LightningBolt;
+import company.lightning.Pair;
+
+import java.util.List;
+
 public class Experiment {
 
     private String name;
-    private String path;
+    private Matrix matrix;
+    private Pair<List<Pair<Integer, Integer>>, Integer> path = null;
 
-    public Experiment(String name, String path) {
+
+    public Experiment(String name, Matrix matrix) {
         this.name = name;
-        this.path = path;
+        this.matrix = matrix;
+    }
+
+    public Pair<List<Pair<Integer, Integer>>, Integer> getPath() {
+        if (path == null)calculatePath();
+        return path;
+    }
+
+    private void calculatePath() {
+        this.path = LightningBolt.findShortestWay(matrix);
+    }
+
+    public Matrix getMatrix() {
+        return matrix;
     }
 
     public String getName() {
@@ -16,14 +37,6 @@ public class Experiment {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     @Override

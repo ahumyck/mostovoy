@@ -11,17 +11,11 @@ import java.util.List;
 public class ExperimentManager {
 
 
-    private ExperimentDataRepository experimentDataRepository = new ExperimentDataRepository();
-
     public ObservableList<Experiment> initializeExperiments(int number, FillingType fillingType) {
-        experimentDataRepository.clear();
         ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
         for (int i = 0; i < number; i++) {
-            experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), "key" + i));
+            experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
         }
-        experimentObservableList.forEach(experiment -> {
-            experimentDataRepository.add(experiment.getPath(), new Matrix(fillingType));
-        });
         return experimentObservableList;
     }
 
@@ -31,9 +25,5 @@ public class ExperimentManager {
             matrices.add(new Matrix(fillingType));
         }
         return matrices;
-    }
-
-    public Matrix getMatrix(Experiment experiment){
-        return experimentDataRepository.get(experiment.getPath());
     }
 }

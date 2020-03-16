@@ -1,6 +1,8 @@
 package company.paint;
 
+import company.entity.Cell;
 import company.entity.Matrix;
+import company.lightning.Pair;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
@@ -26,7 +28,7 @@ public class Painter {
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, grid.getWidth(), grid.getHeight());
         matrix.stream().forEach(cell -> {
-            graphicsContext2D.setFill(colorRepository.getColorForCluster(cell.getClusterMark()));
+            graphicsContext2D.setFill(colorRepository.getRandomColorForCluster(cell.getClusterMark()));
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
         });
         grid.getChildren().clear();
@@ -74,5 +76,26 @@ public class Painter {
         nodes.forEach(node -> data.add(new XYChart.Data(node.x, node.y)));
         series.setData(data);
         chart.getData().add(series);
+    }
+
+    public void paintLightningBoltCanvas(AnchorPane pane, Pair<List<Pair<Integer,Integer>>,Integer> path, Matrix matrix)
+    {
+        double size = Double.min(pane.getWidth(), pane.getHeight()) / matrix.getSize();
+        Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
+        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+        graphicsContext2D.setFill(Color.WHITE);
+        graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
+        matrix.stream().forEach(cell -> {
+            graphicsContext2D.setFill(colorRepository.getColorForCell(cell.getClusterMark()));
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+        path.getX().forEach(dot -> {
+            Cell cell = matrix.getCell(dot.getX() + Matrix.OFFSET, dot.getY()+ Matrix.OFFSET);
+            graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+        pane.getChildren().clear();
+        pane.getChildren().add(canvas);
+
     }
 }

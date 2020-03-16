@@ -10,6 +10,7 @@ import company.paint.LineChartNode;
 import company.paint.Painter;
 import company.stat.StatManager;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
@@ -23,14 +24,14 @@ import java.util.stream.Collectors;
 public class Controller {
 
     private ExperimentManager experimentManager = new ExperimentManager();
-    private Painter painter = new Painter();
+    private final Painter painter = new Painter();
     private StatManager statManager = new StatManager();
 
     @FXML
     private ListView<Experiment> experimentListView;
 
     @FXML
-    private AnchorPane grid;
+    private AnchorPane gridPane;
 
     @FXML
     public Label probabilityLabel;
@@ -77,15 +78,23 @@ public class Controller {
     public AnchorPane clusterSizeChartPane;
 
     @FXML
+    public Tab gridTab;
+
+    @FXML
+    public Tab lightningBoltTab;
+
+    @FXML
+    public AnchorPane lightningBoltPane;
+
+    @FXML
     public void initialize() {
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(), new MaltTestFillingType("Мальтийский крест")));
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
-            Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            Matrix matrix = experimentManager.getMatrix(experiment);
-//            System.out.println(experiment.getPath() + "\n" + matrix.toString());
-            painter.paintCanvas(grid, matrix);
+            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+            painter.paintCanvas(gridPane, experiment.getMatrix());
+            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getMatrix());
         });
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);
@@ -129,8 +138,7 @@ public class Controller {
             for (Integer size : sizes) {
                 List<LineChartNode> midClustersCounts = new ArrayList<>();
                 List<LineChartNode> midClustersSize = new ArrayList<>();
-                for (double probability  = startProbability; probability <= endProbability + stepProbability; probability += stepProbability)
-                {
+                for (double probability = startProbability; probability <= endProbability + stepProbability; probability += stepProbability) {
                     RandomFillingType randomFillingType = new RandomFillingType();
                     randomFillingType.setSize(size);
                     randomFillingType.setPercolationProbability(probability);

@@ -30,14 +30,14 @@
                           <ListView fx:id="experimentListView" layoutX="-4.0" layoutY="107.0" prefHeight="582.0" prefWidth="212.0" />
                           <TabPane layoutX="208.0" layoutY="107.0" prefHeight="582.0" prefWidth="589.0" tabClosingPolicy="UNAVAILABLE">
                               <tabs>
-                                  <Tab text="Решетка">
+                                  <Tab fx:id="gridTab" text="Решетка">
                                       <content>
-                                          <AnchorPane fx:id="grid" minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="595.0" />
+                                          <AnchorPane fx:id="gridPane" minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="595.0" />
                                       </content>
                                   </Tab>
-                                  <Tab text="Графики">
+                                  <Tab fx:id="lightningBoltTab" text="Молния">
                                       <content>
-                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                          <AnchorPane fx:id="lightningBoltPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                       </content>
                                   </Tab>
                               </tabs>
@@ -47,7 +47,7 @@
                 </Tab>
                 <Tab text="Общий эксперимент">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="86.0" prefWidth="801.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
                         <Button fx:id="applyExperiment" layoutX="8.0" layoutY="122.0" mnemonicParsing="false" text="Apply" />
                         <TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />
@@ -77,6 +77,11 @@
                      </children></AnchorPane>
                     </content>
                 </Tab>
+            <Tab text="Untitled Tab">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
             </tabs>
         </TabPane>
     </children>

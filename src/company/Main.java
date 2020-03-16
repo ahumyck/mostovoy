@@ -25,17 +25,17 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-//        long l = System.currentTimeMillis();
-//        RandomFillingType randomFillingType = new RandomFillingType();
-//        randomFillingType.setPercolationProbability(0.5);
-//        randomFillingType.setSize(30);
-//        Matrix matrix = new Matrix(randomFillingType);
-//        Pair<List<Pair<Integer, Integer>>, Integer> shortestWays = LightningBolt.findShortestWay(matrix);
-//        long l1 = System.currentTimeMillis();
-//        System.out.println(matrix);
-//        System.out.println();
-//        System.out.println("shortest way: " + shortestWays.getX() + " = " + shortestWays.getY());
-//        System.out.println("Total time: " + (l1 - l) + " ms");
+        long l = System.currentTimeMillis();
+        RandomFillingType randomFillingType = new RandomFillingType();
+        randomFillingType.setPercolationProbability(0.5);
+        randomFillingType.setSize(30);
+        Matrix matrix = new Matrix(randomFillingType);
+        Pair<List<Pair<Integer, Integer>>, Integer> shortestWays = LightningBolt.findShortestWay(matrix);
+        long l1 = System.currentTimeMillis();
+        System.out.println(matrix);
+        System.out.println();
+        System.out.println("shortest way: " + shortestWays.getX() + " = " + shortestWays.getY());
+        System.out.println("Total time: " + (l1 - l) + " ms");
         launch(args);
     }
 }
