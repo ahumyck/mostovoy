@@ -129,7 +129,7 @@ public class Matrix {
          * @param i,j - current cell coordinates
          * recursive method to join neighbor cells from different clusters
          */
-        List<Pair<Integer,Integer>> path = new ArrayList<>();
+        List<Pair<Integer,Integer>> path = new ArrayList<>(); //if we'll be able to find "bad" cells we need path to comeback
         path.add(new Pair<>(i,j)); //add to path current position
 
         while(!path.isEmpty()){
@@ -142,6 +142,7 @@ public class Matrix {
                 Cell left = this.matrix[i][j - 1];
                 Cell down = this.matrix[i + 1][j];
                 Cell up = this.matrix[i - 1][j];
+                //Look for "bad" cells
                 if (up.hasClusterMark()) {
                     if (up.getClusterMark() > currentCell.getClusterMark()) {
                         up.setClusterMark(currentCell.getClusterMark());
