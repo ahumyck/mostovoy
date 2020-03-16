@@ -5,7 +5,6 @@ import company.entity.Matrix;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class LightningBolt {
 
@@ -15,8 +14,9 @@ public class LightningBolt {
         List<Pair<List<Pair<Integer,Integer>>,Integer>> paths = new ArrayList<>();
         for(int currentPos = 0 ; currentPos < shiftedSize; currentPos++){
             Pair<List<Integer>, List<Integer>> inf = findShortestWays(currentPos, adjacencyList, shiftedSize);
-            List<Integer> distances = inf.getY();
-            List<Integer> parents = inf.getX();
+            List<Integer> distances = inf.getSecond();
+            List<Integer> parents = inf.getFirst();
+//            System.out.println(inf.getSecond());
 
             int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
             int endPos = shiftedSize*(shiftedSize - 1) + shortest;
@@ -24,7 +24,8 @@ public class LightningBolt {
 
             paths.add(new Pair<>(path,distances.get(shortest)));
         }
-        return paths.stream().min(Comparator.comparingInt(Pair::getY)).get(); //find min by distances.get(shortest)
+//        paths.forEach(System.out::println);
+        return paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get(); //find min by distances.get(shortest)
     }
 
 
@@ -47,8 +48,8 @@ public class LightningBolt {
             visitedNeighbors.set(v,true);
             for (int j = 0; j < adjacencyList.get(v).size(); j++) {
                 Pair<Integer,Integer> pair = adjacencyList.get(v).get(j);
-                int to = pair.getX();
-                int len = pair.getY();
+                int to = pair.getFirst();
+                int len = pair.getSecond();
                 if (distanceToOtherNeighbors.get(v) + len < distanceToOtherNeighbors.get(to)) {
                     distanceToOtherNeighbors.set(to,distanceToOtherNeighbors.get(v) + len);
                     parents.set(to,v);

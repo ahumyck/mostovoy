@@ -17,6 +17,7 @@ public class AdjacencyListBuilderByMatrix {
         return cell.getType().equals(CellType.EMPTY);
     }
     private boolean isBlack(Cell cell) { return cell.getType().equals(CellType.BLACK); }
+    private boolean isWhite(Cell cell) { return cell.getType().equals(CellType.WHITE); }
 
     void add(Cell startCell, int startShiftedPosition, int i, int j, Matrix matrix){
         int size = matrix.getSize();
@@ -25,10 +26,19 @@ public class AdjacencyListBuilderByMatrix {
         Cell endCell = matrix.getCell(i,j);
         if(!isEmpty(endCell)){
             int endShiftedPosition = (size - 2*Matrix.OFFSET) * (i - Matrix.OFFSET) + (j - Matrix.OFFSET);
-            if(isBlack(endCell) && isBlack(startCell))
-                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,1));
-            else
+            //todo: discuss this moment
+
+            if(isBlack(startCell) && isWhite(endCell)) // black -> white - expensive
                 map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,dis));
+
+            if(isBlack(startCell) && isBlack(endCell))  //black -> black - cheap
+                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,1));
+
+            if(isWhite(startCell) && isWhite(endCell)) // white -> white - expensive
+                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,dis));
+
+            if(isWhite(startCell) && isBlack(endCell)) // white -> black - cheap
+                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,1));
         }
     }
 

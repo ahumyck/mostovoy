@@ -1,32 +1,32 @@
 package company.lightning;
 
 public class Pair<V,T> {
-    private V x;
-    private T y;
+    private V first;
+    private T second;
 
-    public Pair(V x, T y) {
-        this.x = x;
-        this.y = y;
+    public Pair(V first, T second) {
+        this.first = first;
+        this.second = second;
     }
 
-    public V getX() {
-        return x;
+    public V getFirst() {
+        return first;
     }
 
-    public void setX(V x) {
-        this.x = x;
+    public void setFirst(V first) {
+        this.first = first;
     }
 
-    public T getY() {
-        return y;
+    public T getSecond() {
+        return second;
     }
 
-    public void setY(T y) {
-        this.y = y;
+    public void setSecond(T second) {
+        this.second = second;
     }
 
     @Override
     public String toString() {
-        return "{" + "end=" + x + ", cost=" + y + '}';
+        return "{" + "first=" + first + ", second=" + second + '}';
     }
 }
