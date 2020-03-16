@@ -21,24 +21,30 @@ public class AdjacencyListBuilderByMatrix {
 
     void add(Cell startCell, int startShiftedPosition, int i, int j, Matrix matrix){
         int size = matrix.getSize();
-        int dis = (size - 2*Matrix.OFFSET) * (size - 2*Matrix.OFFSET) + 1;
+        int bigCost = (size - 2*Matrix.OFFSET) * (size - 2*Matrix.OFFSET) + 1;
+        int lowCost = 1;
 
         Cell endCell = matrix.getCell(i,j);
         if(!isEmpty(endCell)){
             int endShiftedPosition = (size - 2*Matrix.OFFSET) * (i - Matrix.OFFSET) + (j - Matrix.OFFSET);
             //todo: discuss this moment
 
-            if(isBlack(startCell) && isWhite(endCell)) // black -> white - expensive
-                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,dis));
-
+            int cost = 0;
             if(isBlack(startCell) && isBlack(endCell))  //black -> black - cheap
-                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,1));
+                cost = lowCost;
+
+            if(isBlack(startCell) && isWhite(endCell)) // black -> white - expensive
+                cost = bigCost;
+
+            if(isWhite(startCell) && isBlack(endCell)) // white -> black - expensive
+                cost = bigCost;
 
             if(isWhite(startCell) && isWhite(endCell)) // white -> white - expensive
-                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,dis));
+                cost = bigCost;
 
-            if(isWhite(startCell) && isBlack(endCell)) // white -> black - cheap
-                map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition,1));
+            map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition, cost));
+
+
         }
     }
 

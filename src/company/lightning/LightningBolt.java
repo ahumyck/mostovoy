@@ -16,7 +16,6 @@ public class LightningBolt {
             Pair<List<Integer>, List<Integer>> inf = findShortestWays(currentPos, adjacencyList, shiftedSize);
             List<Integer> distances = inf.getSecond();
             List<Integer> parents = inf.getFirst();
-//            System.out.println(inf.getSecond());
 
             int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
             int endPos = shiftedSize*(shiftedSize - 1) + shortest;
@@ -24,7 +23,6 @@ public class LightningBolt {
 
             paths.add(new Pair<>(path,distances.get(shortest)));
         }
-//        paths.forEach(System.out::println);
         return paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get(); //find min by distances.get(shortest)
     }
 
@@ -51,12 +49,12 @@ public class LightningBolt {
                 int to = pair.getFirst();
                 int len = pair.getSecond();
                 if (distanceToOtherNeighbors.get(v) + len < distanceToOtherNeighbors.get(to)) {
+
                     distanceToOtherNeighbors.set(to,distanceToOtherNeighbors.get(v) + len);
                     parents.set(to,v);
                 }
             }
         }
-
         return new Pair<>(parents,distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - shiftedSize, distanceToOtherNeighbors.size()));
     }
 

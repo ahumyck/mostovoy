@@ -90,8 +90,7 @@ public class Painter {
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
         });
         path.getFirst().forEach(dot -> {
-            // Cell cell = matrix.getCell(dot.getFirst() + Matrix.OFFSET, dot.getSecond()+ Matrix.OFFSET);
-            Cell cell = matrix.getCell(dot.getSecond() + Matrix.OFFSET, dot.getFirst()+ Matrix.OFFSET);
+            Cell cell = matrix.getCell(dot.getFirst() + Matrix.OFFSET, dot.getSecond()+ Matrix.OFFSET);
             graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
         });
