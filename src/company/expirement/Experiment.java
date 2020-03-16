@@ -24,7 +24,7 @@ public class Experiment {
     }
 
     private void calculatePath() {
-        this.path = LightningBolt.findShortestWay(matrix);
+        this.path = LightningBolt.startNextIteration(matrix);
     }
 
     public Matrix getMatrix() {
