@@ -2,6 +2,7 @@ package company.entity;
 
 
 import company.filling.FillingType;
+import company.lightning.Pair;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -128,31 +129,57 @@ public class Matrix {
          * @param i,j - current cell coordinates
          * recursive method to join neighbor cells from different clusters
          */
-        if(this.matrix[i][j].hasClusterMark()) {
-            if(this.matrix[i-1][j].hasClusterMark()) {
-                if (this.matrix[i-1][j].getClusterMark() > this.matrix[i][j].getClusterMark()) {
-                    this.matrix[i-1][j].setClusterMark(this.matrix[i][j].getClusterMark());
-                    joinCells(i-1, j);
+        List<Pair<Integer,Integer>> path = new ArrayList<>();
+        path.add(new Pair<>(i,j)); //add to path current position
+
+        while(!path.isEmpty()){
+            Pair p = path.get(path.size() - 1);
+            i = (int) p.getFirst();
+            j = (int) p.getSecond();
+            Cell currentCell = this.matrix[i][j];
+            if(currentCell.hasClusterMark()) {
+                Cell right = this.matrix[i][j + 1];
+                Cell left = this.matrix[i][j - 1];
+                Cell down = this.matrix[i + 1][j];
+                Cell up = this.matrix[i - 1][j];
+                if (up.hasClusterMark()) {
+                    if (up.getClusterMark() > currentCell.getClusterMark()) {
+                        up.setClusterMark(currentCell.getClusterMark());
+                        i = i - 1;
+                        path.add(new Pair<>(i,j));
+                        continue;
+                    }
                 }
-            }
-            if(this.matrix[i][j-1].hasClusterMark()) {
-                if (this.matrix[i][j-1].getClusterMark() > this.matrix[i][j].getClusterMark()) {
-                    this.matrix[i][j-1].setClusterMark(this.matrix[i][j].getClusterMark());
-                    joinCells(i, j - 1);
+                if (left.hasClusterMark()) {
+                    if (left.getClusterMark() > currentCell.getClusterMark()) {
+                        left.setClusterMark(currentCell.getClusterMark());
+                        j = j - 1;
+                        path.add(new Pair<>(i,j));
+                        continue;
+                    }
                 }
-            }
-            if(this.matrix[i][j+1].hasClusterMark()) {
-                if (this.matrix[i][j+1].getClusterMark() > this.matrix[i][j].getClusterMark()) {
-                    this.matrix[i][j+1].setClusterMark(this.matrix[i][j].getClusterMark());
-                    joinCells(i, j + 1);
+                if (right.hasClusterMark()) {
+                    if (right.getClusterMark() > currentCell.getClusterMark()) {
+                        right.setClusterMark(currentCell.getClusterMark());
+                        j = j + 1;
+                        path.add(new Pair<>(i,j));
+                        continue;
+                    }
                 }
-            }
-            if(this.matrix[i+1][j].hasClusterMark()) {
-                if (this.matrix[i+1][j].getClusterMark() > this.matrix[i][j].getClusterMark()) {
-                    this.matrix[i+1][j].setClusterMark(this.matrix[i][j].getClusterMark());
-                    joinCells(i + 1, j);
+                if (down.hasClusterMark()) {
+                    if (down.getClusterMark() > currentCell.getClusterMark()) {
+                        down.setClusterMark(currentCell.getClusterMark());
+                        i = i + 1;
+                        path.add(new Pair<>(i,j));
+                        continue;
+                    }
                 }
+
+                // if we made it here it means we're surrounded by good cells and it's time to go back
+                path.remove(path.size() - 1);
             }
+            //if we made it here it means we're in bad spot and it's time to go back
+            else path.remove(path.size() - 1);
         }
     }
 
