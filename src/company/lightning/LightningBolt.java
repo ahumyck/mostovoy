@@ -8,25 +8,31 @@ import java.util.stream.IntStream;
 
 public class LightningBolt {
 
-    private int iteration = 0;
-    private int shiftedSize = 0;
-    private Map<Integer, List<Pair<Integer, Integer>>> adjacencyList;
+    public static Pair<List<Pair<Integer,Integer>>,Integer> findShortestWay(Matrix matrix){
+        Map<Integer, List<Pair<Integer, Integer>>> adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix);
+        int shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
+        List<Pair<List<Pair<Integer,Integer>>,Integer>> paths = new ArrayList<>();
+        for(int currentPos = 0 ; currentPos < shiftedSize; currentPos++){
+            Pair<List<Integer>, List<Integer>> inf = findShortestWays(currentPos, adjacencyList, shiftedSize);
+            List<Integer> distances = inf.getSecond();
+            List<Integer> parents = inf.getFirst();
 
-    public LightningBolt(Matrix matrix) {
-        adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix);
-        shiftedSize = (matrix.getSize() - 2 * Matrix.OFFSET);
+            int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
+            int endPos = shiftedSize*(shiftedSize - 1) + shortest;
+            List<Pair<Integer, Integer>> path = getPath(currentPos, endPos, parents, shiftedSize);
+
+            paths.add(new Pair<>(path,distances.get(shortest)));
+        }
+        return paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get(); //find min by distances.get(shortest)
     }
 
-    public boolean isActive() {
-        return iteration < shiftedSize;
-    }
 
-    public Pair<List<Pair<Integer,Integer>>,Integer> startNextIteration(){
+    private static Pair<List<Integer>, List<Integer>> findShortestWays(int start_pos, Map<Integer, List<Pair<Integer, Integer>>> adjacencyList, int shiftedSize){
         List<Integer> distanceToOtherNeighbors = initWith(Integer.MAX_VALUE,adjacencyList.size());
         List<Integer> parents = initWith(0,adjacencyList.size());
         List<Boolean> visitedNeighbors = initWith(false,adjacencyList.size());
 
-        distanceToOtherNeighbors.set(iteration,0);
+        distanceToOtherNeighbors.set(start_pos,0);
         int n = adjacencyList.keySet().size();
         for (int i = 0; i < n; i++) {
             int v = -1;
@@ -49,18 +55,10 @@ public class LightningBolt {
                 }
             }
         }
-
-        List<Integer> distances = distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - shiftedSize, distanceToOtherNeighbors.size());
-        int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
-        int endPos = shiftedSize*(shiftedSize - 1) + shortest;
-        List<Pair<Integer, Integer>> path = getPath(iteration, endPos, parents, shiftedSize);
-
-        iteration++;
-
-        return new Pair<>(path,distances.get(shortest));
+        return new Pair<>(parents,distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - shiftedSize, distanceToOtherNeighbors.size()));
     }
 
-    private List<Pair<Integer,Integer>> getPath(int start,int end, List<Integer> parents, int shiftedSize){
+    private static List<Pair<Integer,Integer>> getPath(int start,int end, List<Integer> parents, int shiftedSize){
         List<Pair<Integer,Integer>> path = new ArrayList<>();
         for (int v = end; v!= start ; v = parents.get(v)) {
             int j = v % shiftedSize;
@@ -73,13 +71,13 @@ public class LightningBolt {
         return path;
     }
 
-    private List<Integer> initWith(int initialValue, int size){
+    private static List<Integer> initWith(int initialValue, int size){
         return IntStream.generate(() -> initialValue)
                 .limit(size)
                 .boxed().collect(Collectors.toList());
     }
 
-    private List<Boolean> initWith(boolean value, int size){
+    private static List<Boolean> initWith(boolean value, int size){
         return IntStream.range(0, size)
                 .mapToObj(object -> value).collect(Collectors.toList());
     }
