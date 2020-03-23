@@ -29,6 +29,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        FillingType type = new SquareFillingType("square");
+        Matrix matrix = new Matrix(type);
+        System.out.println(matrix);
+        //launch(args);
     }
 }
