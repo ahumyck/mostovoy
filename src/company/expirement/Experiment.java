@@ -4,6 +4,7 @@ import company.entity.Matrix;
 import company.lightning.LightningBolt;
 import company.lightning.Pair;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Experiment {
@@ -19,11 +20,10 @@ public class Experiment {
     }
 
     public Pair<List<Pair<Integer, Integer>>, Integer> getPath() {
-        if (path == null)calculatePath();
-        return path;
+        return path != null ? path : new Pair<>(Collections.emptyList(), 0);
     }
 
-    private void calculatePath() {
+    void calculatePath() {
         this.path = LightningBolt.findShortestWay(matrix);
     }
 

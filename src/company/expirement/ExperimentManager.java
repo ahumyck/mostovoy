@@ -4,6 +4,7 @@ import company.entity.Matrix;
 import company.filling.FillingType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,13 @@ public class ExperimentManager {
         for (int i = 0; i < number; i++) {
             experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
         }
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                experimentObservableList.parallelStream().forEach(Experiment::calculatePath);
+                return null;
+            }
+        }).start();
         return experimentObservableList;
     }
 
