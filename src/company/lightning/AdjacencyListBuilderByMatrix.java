@@ -27,8 +27,8 @@ public class AdjacencyListBuilderByMatrix {
         Cell endCell = matrix.getCell(i,j);
         if(!isEmpty(endCell)){
             int endShiftedPosition = (size - 2*Matrix.OFFSET) * (i - Matrix.OFFSET) + (j - Matrix.OFFSET);
-            //todo: discuss this moment
 
+            //cost rules
             int cost = 0;
             if(isBlack(startCell) && isBlack(endCell))  //black -> black - cheap
                 cost = lowCost;

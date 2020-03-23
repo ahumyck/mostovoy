@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public class Matrix {
     private Cell[][] matrix;
     public static final int OFFSET = 1;
-    int clusterCounter = 0;
+    private int clusterCounter = 0;
 
     private void init(int size){
         int actualSize = size + 2 * OFFSET;
