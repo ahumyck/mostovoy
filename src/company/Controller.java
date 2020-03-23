@@ -4,13 +4,11 @@ import company.expirement.Experiment;
 import company.expirement.ExperimentManager;
 import company.entity.Matrix;
 import company.filling.*;
-import company.filling.customs.CustomTestFillingType;
-import company.filling.customs.MaltTestFillingType;
+import company.filling.customs.*;
 import company.paint.LineChartNode;
 import company.paint.Painter;
 import company.stat.StatManager;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
@@ -26,6 +24,9 @@ public class Controller {
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
     private StatManager statManager = new StatManager();
+
+    @FXML
+    public Label currentClustersCount;
 
     @FXML
     private ListView<Experiment> experimentListView;
@@ -89,12 +90,17 @@ public class Controller {
     @FXML
     public void initialize() {
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
-        fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(), new MaltTestFillingType("Мальтийский крест")));
+        fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
+                new MaltTestFillingType(),
+                new HorizontalLineFillingType(),
+                new SquareFillingType(),
+                new VerticalLineFillingType()));
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             painter.paintCanvas(gridPane, experiment.getMatrix());
             painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getMatrix());
+            currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
         });
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);
@@ -123,7 +129,7 @@ public class Controller {
                 ((RandomFillingType) fillingType).setPercolationProbability(probability);
                 ((RandomFillingType) fillingType).setSize(size);
                 experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
-            } else if (fillingType instanceof MaltTestFillingType) {
+            } else if (fillingType instanceof CustomTestFillingType) {
                 experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
             }
         });

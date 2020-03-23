@@ -2,11 +2,15 @@ package company.filling.customs;
 
 public class SquareFillingType extends CustomTestFillingType  {
 
-    private final int MATRIX_SIZE = 10;
+    private final int MATRIX_SIZE = 30;
     private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
 
     public SquareFillingType(String name) {
         super(name);
+    }
+
+    public SquareFillingType() {
+        super("Квадраты");
     }
 
     @Override

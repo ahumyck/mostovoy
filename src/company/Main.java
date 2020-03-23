@@ -1,20 +1,10 @@
 package company;
 
-import company.entity.Matrix;
-import company.filling.FillingType;
-import company.filling.RandomFillingType;
-import company.filling.customs.LineFillingType;
-import company.filling.customs.MaltTestFillingType;
-import company.filling.customs.SquareFillingType;
-import company.lightning.LightningBolt;
-import company.lightning.Pair;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.List;
 
 public class Main extends Application {
 
@@ -29,9 +19,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        FillingType type = new SquareFillingType("square");
-        Matrix matrix = new Matrix(type);
-        System.out.println(matrix);
-        //launch(args);
+//        FillingType type = new SquareFillingType("square");
+//        Matrix matrix = new Matrix(type);
+//        System.out.println(matrix);
+        launch(args);
     }
 }

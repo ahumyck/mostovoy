@@ -1,12 +1,16 @@
 package company.filling.customs;
 
-public class LineFillingType extends CustomTestFillingType {
+public class VerticalLineFillingType  extends CustomTestFillingType {
 
     private final int MATRIX_SIZE = 50;
     private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
 
-    public LineFillingType(String name) {
+    public VerticalLineFillingType(String name) {
         super(name);
+    }
+
+    public VerticalLineFillingType() {
+        super("Вертикальные линии");
     }
 
     @Override
@@ -15,7 +19,7 @@ public class LineFillingType extends CustomTestFillingType {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             if(i % step == 0) {
                 for (int j = 0; j < MATRIX_SIZE; j++) {
-                    matrix[j][i] = 1;
+                    matrix[i][j] = 1;
                 }
             }
         }

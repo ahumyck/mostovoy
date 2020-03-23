@@ -17,6 +17,11 @@ public class MaltTestFillingType extends CustomTestFillingType {
         super(name);
     }
 
+    public MaltTestFillingType() {
+        super("Мальтийский крест");
+
+    }
+
     @Override
     public int[][] getMatrix() {
         return MATRIX;
