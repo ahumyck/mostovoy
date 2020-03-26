@@ -19,7 +19,7 @@ public class Painter {
 
     private static final int SIZE = 15;
 
-    private ColorRepository colorRepository = new ColorRepository();
+    private ColorGradientRepository colorRepository = new ColorGradientRepository();
 
     public void paintCanvas(AnchorPane grid, Matrix matrix) {
         double size = grid.getHeight() / (matrix.getSize() - 2);

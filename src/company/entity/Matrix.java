@@ -34,6 +34,7 @@ public class Matrix {
             }
         }
         markClusters();
+        reindexClusterMarks();
         joinClusters();
         countClusters();
     }
@@ -64,6 +65,21 @@ public class Matrix {
 
     private int minClusterMark(Cell first,Cell second){
         return Math.min(first.getClusterMark(), second.getClusterMark());
+    }
+
+    private void reindexClusterMarks(){
+        this.clusterCounter = 1;
+        Map<Integer, Integer> newMarks = new HashMap<>();
+        for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
+            for(int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
+                Cell cell = this.matrix[i][j];
+                if(cell.getClusterMark() == 0) continue;
+                if(!newMarks.containsKey(cell.getClusterMark())){
+                    newMarks.put(cell.getClusterMark(), clusterCounter++);
+                }
+                cell.setClusterMark(newMarks.get(cell.getClusterMark()));
+            }
+        }
     }
 
     private void countClusters(){

@@ -1,5 +1,8 @@
 package company;
 
+import company.entity.Matrix;
+import company.filling.FillingType;
+import company.filling.customs.SquareFillingType;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,9 +22,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-//        FillingType type = new SquareFillingType("square");
-//        Matrix matrix = new Matrix(type);
-//        System.out.println(matrix);
         launch(args);
     }
 }
