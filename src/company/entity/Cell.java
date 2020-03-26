@@ -9,12 +9,12 @@ public class Cell {
     private int y;
     public int getX()
     {
-        return x;
+        return x - 1;
     }
 
     public int getY()
     {
-        return y;
+        return y - 1;
     }
     public Cell(int x, int y) {
         this.x = x;
@@ -33,6 +33,8 @@ public class Cell {
     public boolean isBlack(){ return type.equals(CellType.BLACK); }
 
     public boolean isEmpty(){ return type.equals(CellType.EMPTY); }
+
+    public boolean isNotEmpty(){ return !type.equals(CellType.EMPTY); }
 
     public CellType getType() {
         return type;

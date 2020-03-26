@@ -2,9 +2,7 @@ package company.paint;
 
 import javafx.scene.paint.Color;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class ColorRepository {
 
@@ -20,7 +18,7 @@ public class ColorRepository {
     }
 
     public Color getColorForCell(int clusterMark) {
-        return clusterMark > 0 ? Color.DARKGRAY : Color.WHITE;
+        return clusterMark > 0 ? Color.BLACK : Color.WHITE;
     }
 
     private Color getRandomColor() {

@@ -22,14 +22,19 @@ public class Painter {
     private ColorRepository colorRepository = new ColorRepository();
 
     public void paintCanvas(AnchorPane grid, Matrix matrix) {
-        double size = Double.min(grid.getWidth(), grid.getHeight()) / matrix.getSize();
+        double size = grid.getHeight() / (matrix.getSize() - 2);
         Canvas canvas = new Canvas(grid.getWidth(), grid.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, grid.getWidth(), grid.getHeight());
-        matrix.stream().forEach(cell -> {
+        matrix.stream().filter(Cell::isNotEmpty).forEach(cell -> {
             graphicsContext2D.setFill(colorRepository.getRandomColorForCluster(cell.getClusterMark()));
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size , size, size );
+            graphicsContext2D.setFill(Color.GRAY);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
+            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
         });
         grid.getChildren().clear();
         grid.getChildren().add(canvas);
@@ -80,7 +85,7 @@ public class Painter {
 
     public void paintLightningBoltCanvas(AnchorPane pane, Pair<List<Pair<Integer,Integer>>,Integer> path, Matrix matrix)
     {
-        double size = Double.min(pane.getWidth(), pane.getHeight()) / matrix.getSize();
+        double size = pane.getHeight()/ (matrix.getSize() - 2);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
@@ -88,11 +93,21 @@ public class Painter {
         matrix.stream().forEach(cell -> {
             graphicsContext2D.setFill(colorRepository.getColorForCell(cell.getClusterMark()));
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.setFill(Color.GRAY);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
+            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
         });
         path.getFirst().forEach(dot -> {
             Cell cell = matrix.getCell(dot.getFirst() + Matrix.OFFSET, dot.getSecond()+ Matrix.OFFSET);
             graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.setFill(Color.GRAY);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
+            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
         });
         pane.getChildren().clear();
         pane.getChildren().add(canvas);
