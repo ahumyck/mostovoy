@@ -5,10 +5,6 @@ public class HorizontalLineFillingType extends CustomTestFillingType {
     private final int MATRIX_SIZE = 50;
     private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
 
-    public HorizontalLineFillingType(String name) {
-        super(name);
-    }
-
     public HorizontalLineFillingType() {
         super("Горизонтальные линии");
     }
