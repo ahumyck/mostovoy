@@ -26,7 +26,7 @@ public class LightningBolt {
     }
 
     public int getRedCellCounter(){
-        if(isShortedPathFound)
+        if(this.isShortedPathFound)
             return this.redCellCounters[this.indexOfShortestPath];
         return -1; // Error Code
     }
@@ -79,7 +79,8 @@ public class LightningBolt {
                 }
             }
         }
-        return new Pair<>(parents,distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - shiftedSize, distanceToOtherNeighbors.size()));
+        return new Pair<>(parents,distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - this.shiftedSize,
+                distanceToOtherNeighbors.size()));
     }
 
 
@@ -111,8 +112,8 @@ public class LightningBolt {
         Pair<Integer, Integer> indecies = getIndecies(currentPosition);
         int i = indecies.getFirst();
         int j = indecies.getSecond();
-        if(matrix.getCell(i + Matrix.OFFSET, j + Matrix.OFFSET).isWhite())
-            redCellCounters[startPosition]++;
+        if(this.matrix.getCell(i + Matrix.OFFSET, j + Matrix.OFFSET).isWhite())
+            this.redCellCounters[startPosition]++;
     }
 
 
