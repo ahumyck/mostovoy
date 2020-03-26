@@ -48,6 +48,11 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <Label fx:id="redCellsLabel" layoutX="477.0" layoutY="689.0" prefHeight="34.0" prefWidth="194.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                             </children></AnchorPane>
                     </content>
                 </Tab>

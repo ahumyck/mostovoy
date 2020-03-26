@@ -12,6 +12,7 @@ public class Experiment {
     private String name;
     private Matrix matrix;
     private Pair<List<Pair<Integer, Integer>>, Integer> path = null;
+    private int redCellsCounter;
 
 
     public Experiment(String name, Matrix matrix) {
@@ -23,8 +24,14 @@ public class Experiment {
         return path != null ? path : new Pair<>(Collections.emptyList(), 0);
     }
 
+    public int getRedCellsCounter() {
+        return redCellsCounter;
+    }
+
     void calculatePath() {
-        this.path = LightningBolt.findShortestWay(matrix);
+        LightningBolt lightningBolt = new LightningBolt(matrix);
+        this.path = lightningBolt.findShortestWay();
+        this.redCellsCounter = lightningBolt.getRedCellCounter();
     }
 
     public Matrix getMatrix() {

@@ -29,6 +29,9 @@ public class Controller {
     public Label currentClustersCount;
 
     @FXML
+    public Label redCellsLabel;
+
+    @FXML
     private ListView<Experiment> experimentListView;
 
     @FXML
@@ -101,6 +104,7 @@ public class Controller {
             painter.paintCanvas(gridPane, experiment.getMatrix());
             painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getMatrix());
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
+            redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
         });
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);
@@ -134,10 +138,10 @@ public class Controller {
             }
         });
         applyExperiment.setOnAction(event -> {
-            double startProbability = Double.valueOf(this.startProbability.getText());
-            double endProbability = Double.valueOf(this.endProbability.getText());
-            double stepProbability = Double.valueOf(this.stepProbability.getText());
-            int count = Integer.valueOf(this.matrixCount.getText());
+            double startProbability = Double.parseDouble(this.startProbability.getText());
+            double endProbability = Double.parseDouble(this.endProbability.getText());
+            double stepProbability = Double.parseDouble(this.stepProbability.getText());
+            int count = Integer.parseInt(this.matrixCount.getText());
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
             LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Среднее количество кластеров");
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
