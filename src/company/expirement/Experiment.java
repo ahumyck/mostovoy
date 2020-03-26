@@ -28,6 +28,10 @@ public class Experiment {
         return redCellsCounter;
     }
 
+    public int getDistance(){
+        return path != null ? path.getFirst().size() : 0;
+    }
+
     void calculatePath() {
         LightningBolt lightningBolt = new LightningBolt(matrix);
         this.path = lightningBolt.findShortestWay();

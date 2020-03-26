@@ -32,6 +32,9 @@ public class Controller {
     public Label redCellsLabel;
 
     @FXML
+    public Label shortestPathLabel;
+
+    @FXML
     private ListView<Experiment> experimentListView;
 
     @FXML
@@ -105,6 +108,7 @@ public class Controller {
             painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getMatrix());
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
             redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
+            shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);

@@ -14,19 +14,17 @@ public class LightningBolt {
     private int[] redCellCounters;
     private int shiftedSize;
     private int indexOfShortestPath;
-    private boolean isShortedPathFound;
 
     public LightningBolt(Matrix matrix) {
         this.matrix = matrix;
         this.adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix);
         this.shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
-        this.redCellCounters = new int[shiftedSize];
-        this.isShortedPathFound = false;
+        this.redCellCounters = new int[this.shiftedSize];
         this.indexOfShortestPath = -1;
     }
 
     public int getRedCellCounter(){
-        if(this.isShortedPathFound)
+        if(this.indexOfShortestPath >= 0)
             return this.redCellCounters[this.indexOfShortestPath];
         return -1; // Error Code
     }
@@ -46,7 +44,6 @@ public class LightningBolt {
         }
         Pair<List<Pair<Integer, Integer>>, Integer> shortestPath = paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
         this.indexOfShortestPath = paths.indexOf(shortestPath);
-        this.isShortedPathFound = true;
         return shortestPath;
     }
 
@@ -86,12 +83,11 @@ public class LightningBolt {
 
     private List<Pair<Integer,Integer>> getPath(int start, int end, List<Integer> parents){
         List<Pair<Integer,Integer>> path = new ArrayList<>();
-        for (int v = end; v!= start ; v = parents.get(v)) {
+        for (int v = end; ; v = parents.get(v)) {
             buildPath(v,path);
             countRedCells(start,v);
+            if(v == start) break;
         }
-        buildPath(start, path);
-        countRedCells(start,start);
         return path;
     }
 
