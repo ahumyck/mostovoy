@@ -10,8 +10,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
@@ -76,9 +78,15 @@ public class Painter {
     {
         XYChart.Series series = new XYChart.Series();
         series.setName(title);
-//        numberLineChart.getStylesheets().add(".chart-line-symbol {}");
+//        chart.getStylesheets().add(".chart-line-symbol {}");
         ObservableList<XYChart.Data> data = FXCollections.observableArrayList();
-        nodes.forEach(node -> data.add(new XYChart.Data(node.x, node.y)));
+        nodes.forEach(node -> {
+            XYChart.Data dot = new XYChart.Data(node.x, node.y);
+            Rectangle rect = new Rectangle(0, 0);
+            rect.setVisible(false);
+            dot.setNode(rect);
+            data.add(dot);
+        });
         series.setData(data);
         chart.getData().add(series);
     }
