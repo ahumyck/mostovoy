@@ -90,11 +90,11 @@ public class Matrix {
         for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
             for(int j = OFFSET; j < this.matrix.length - OFFSET; j++){
                 Cell currentCell = this.matrix[i][j];
-                if(isBlack(currentCell)){
+                if(currentCell.isBlack()){
                     Cell up = this.matrix[i - 1][j];
                     Cell left = this.matrix[i][j - 1];
-                    boolean isLeftBlack = isBlack(left);
-                    boolean isUpBlack = isBlack(up);
+                    boolean isLeftBlack = left.isBlack();
+                    boolean isUpBlack = up.isBlack();
                     if(isUpBlack && !isLeftBlack){
                         currentCell.setClusterMark(up.getClusterMark());
                     }

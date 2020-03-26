@@ -1,5 +1,7 @@
 package company.entity;
 
+
+
 public class Cell {
     private CellType type;
     private int clusterMark = 0;
@@ -26,9 +28,11 @@ public class Cell {
         this.type = type;
     }
 
-    public Cell(CellType type) {
-        this.type = type;
-    }
+    public boolean isWhite(){ return type.equals(CellType.WHITE); }
+
+    public boolean isBlack(){ return type.equals(CellType.BLACK); }
+
+    public boolean isEmpty(){ return type.equals(CellType.EMPTY); }
 
     public CellType getType() {
         return type;
@@ -61,11 +65,8 @@ public class Cell {
                 .append(" and i am = ");
         switch (type){
             case EMPTY: builder.append("empty"); break;
-            case RED: builder.append("red"); break;
-            case BURGUNDY: builder.append("burgundy"); break;
             case WHITE: builder.append("white"); break;
             case BLACK: builder.append("black"); break;
-            default: builder.append("what am i?"); break;
         }
         return builder.toString();
     }
