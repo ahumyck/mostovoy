@@ -34,8 +34,8 @@ public class Experiment {
 
     void calculatePath() {
         LightningBolt lightningBolt = new LightningBolt(matrix);
-        this.path = lightningBolt.calculateShortestWays().getShortestPath().get();
-        this.redCellsCounter = lightningBolt.getRedCellCounterForShortestWay();
+        this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
+        this.redCellsCounter = lightningBolt.getRedCellCounterForShortestPath();
     }
 
     public Matrix getMatrix() {

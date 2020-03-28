@@ -1,6 +1,5 @@
 package company.lightning;
 
-import company.entity.Cell;
 import company.entity.Matrix;
 
 import java.util.*;
@@ -26,12 +25,16 @@ public class LightningBolt {
         this.paths = new ArrayList<>();
     }
 
-    public int getRedCellCounterForShortestWay(){
+    public int getRedCellCounterForShortestPath(){
         return this.indexOfShortestPath == -1 ? -1 /*error code*/ : this.redCellCounters[this.indexOfShortestPath];
     }
 
     public int getDistanceForShortestPath(){
-        return this.shortestPath == null ? -1 /*error code */ :this.shortestPath.getFirst().size();
+        return this.shortestPath == null ? -1 /*error code */ : this.shortestPath.getFirst().size();
+    }
+
+    public int getRedCellCounterByIndex(int index){
+        return this.redCellCounters[index] == 0 ? -1 /*error code*/ : this.redCellCounters[index];
     }
 
     public int getDistanceForPathByIndex(int index){
@@ -46,14 +49,10 @@ public class LightningBolt {
         return this.paths.size() != 0 ? Optional.of(this.paths.get(index)): Optional.empty();
     }
 
-    public int getRedCellCounterByIndex(int index){
-        return this.redCellCounters[index] == 0 ? -1 /*error code*/ : this.redCellCounters[index];
-    }
 
-
-    public LightningBolt calculateShortestWays() {
+    public LightningBolt calculateShortestPaths() {
         for(int currentPos = 0 ; currentPos < this.shiftedSize; currentPos++){
-            Pair<List<Integer>, List<Integer>> inf = findShortestWays(currentPos);
+            Pair<List<Integer>, List<Integer>> inf = findShortestPaths(currentPos);
             List<Integer> distances = inf.getSecond();
             List<Integer> parents = inf.getFirst();
 
@@ -69,7 +68,7 @@ public class LightningBolt {
     }
 
 
-    private Pair<List<Integer>, List<Integer>> findShortestWays(int start_pos){
+    private Pair<List<Integer>, List<Integer>> findShortestPaths(int start_pos){
         List<Integer> distanceToOtherNeighbors = initWith(Integer.MAX_VALUE,this.adjacencyList.size());
         List<Integer> parents = initWith(0,this.adjacencyList.size());
         List<Boolean> visitedNeighbors = initWith(false,this.adjacencyList.size());
