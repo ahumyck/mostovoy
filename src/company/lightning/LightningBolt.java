@@ -27,9 +27,7 @@ public class LightningBolt {
     }
 
     public int getRedCellCounterForShortestWay(){
-        if(this.indexOfShortestPath >= 0)
-            return this.redCellCounters[this.indexOfShortestPath];
-        return -1; // Error Code
+        return this.indexOfShortestPath == -1 ? -1 /*error code*/ : this.redCellCounters[this.indexOfShortestPath];
     }
 
     public Optional<Pair<List<Pair<Integer, Integer>>, Integer>> getShortestPath(){
