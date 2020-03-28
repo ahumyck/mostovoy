@@ -60,10 +60,10 @@ public class LightningBolt {
             int endPos = this.shiftedSize*(this.shiftedSize - 1) + shortest;
             List<Pair<Integer, Integer>> path = getPath(currentPos, endPos, parents);
 
-            paths.add(new Pair<>(path,distances.get(shortest)));
+            this.paths.add(new Pair<>(path,distances.get(shortest)));
         }
         this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
-        this.indexOfShortestPath = this.paths.indexOf(shortestPath);
+        this.indexOfShortestPath = this.paths.indexOf(this.shortestPath);
         return this;
     }
 
