@@ -64,14 +64,14 @@ public class Controller {
     @FXML
     public Button applyExperiment;
 
-    @FXML
-    public TextField startProbability;
+//    @FXML
+//    public TextField startProbability;
 
-    @FXML
-    public TextField endProbability;
+//    @FXML
+//    public TextField endProbability;
 
-    @FXML
-    public TextField stepProbability;
+//    @FXML
+//    public TextField stepProbability;
 
     @FXML
     public TextField matrixSize;
@@ -149,9 +149,9 @@ public class Controller {
             }
         });
         applyExperiment.setOnAction(event -> {
-            double startProbability = Double.parseDouble(this.startProbability.getText());
-            double endProbability = Double.parseDouble(this.endProbability.getText());
-            double stepProbability = Double.parseDouble(this.stepProbability.getText());
+//            double startProbability = Double.parseDouble(this.startProbability.getText());
+//            double endProbability = Double.parseDouble(this.endProbability.getText());
+//            double stepProbability = Double.parseDouble(this.stepProbability.getText());
             int count = Integer.parseInt(this.matrixCount.getText());
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
             LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Зависимость количество кластеров от концентрации");
@@ -165,7 +165,16 @@ public class Controller {
                 List<LineChartNode> midClustersSize = new ArrayList<>();
                 List<LineChartNode> midRedCellsCount = new ArrayList<>();
                 List<LineChartNode> midWayLengths = new ArrayList<>();
-                for (double probability = startProbability; probability <= endProbability + stepProbability; probability += stepProbability) {
+                List<Double> probabilities = new ArrayList<>();
+                probabilities.add(0.1);
+                probabilities.add(0.2);
+                probabilities.add(0.25);
+                probabilities.add(0.3);
+                probabilities.add(0.4);
+                probabilities.add(0.5);
+                probabilities.add(0.7);
+                probabilities.add(0.85);
+                probabilities.forEach(probability -> {
                     RandomFillingType randomFillingType = new RandomFillingType();
                     randomFillingType.setSize(size);
                     randomFillingType.setPercolationProbability(probability);
@@ -181,7 +190,7 @@ public class Controller {
 //                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimePropability));
                     System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimePropability));
 
-                }
+                });
                 painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
                 painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
                 painter.addSeriesToLineChart(redCellsAdded, "Mat size " + size, midRedCellsCount);

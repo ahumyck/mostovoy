@@ -23,7 +23,7 @@
                                 <Label layoutX="14.0" layoutY="1.0" prefHeight="31.0" prefWidth="157.0" text="Количество экспериментов:" />
                                 <Label fx:id="gridSizeLabel" layoutX="227.0" layoutY="5.0" prefHeight="27.0" prefWidth="149.0" text="Размер решетки:" />
                                 <Label layoutX="429.0" layoutY="6.0" prefHeight="26.0" prefWidth="145.0" text="Тип заполнения:" />
-                                <Label fx:id="probabilityLabel" layoutX="597.0" layoutY="8.0" prefHeight="24.0" prefWidth="146.0" text="Вероятность заполнения:" />
+                                <Label fx:id="probabilityLabel" layoutX="597.0" layoutY="8.0" prefHeight="24.0" prefWidth="146.0" text="Концентрация:" />
                                 <TextField fx:id="fillingProbability" layoutX="596.0" layoutY="35.0" />
                                 <ComboBox fx:id="fillingTypes" layoutX="427.0" layoutY="35.0" prefWidth="150.0" />
                                 <Button fx:id="applyConfiguration" layoutX="14.0" layoutY="70.0" mnemonicParsing="false" text="Apply" />
@@ -72,12 +72,12 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
                         <Button fx:id="applyExperiment" layoutX="8.0" layoutY="122.0" mnemonicParsing="false" text="Apply" />
-                        <TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />
-                        <Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />
-                        <Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />
-                        <TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />
-                        <TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />
-                        <Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />
+                        <!--<TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+                        <!--<Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />-->
+                        <!--<Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />-->
+                        <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+                        <!--<TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+                        <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
                         <Label layoutX="9.0" layoutY="58.0" prefHeight="20.0" prefWidth="170.0" text="Размер матрицы:" />
                         <TextField fx:id="matrixSize" layoutX="9.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
                         <TextField fx:id="matrixCount" layoutX="196.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
