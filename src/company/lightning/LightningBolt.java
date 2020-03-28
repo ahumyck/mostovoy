@@ -43,9 +43,7 @@ public class LightningBolt {
     }
 
     public Optional<Pair<List<Pair<Integer, Integer>>, Integer>> getPathByIndex(int index){
-        if(this.paths.size() != 0)
-            return Optional.of(this.paths.get(index));
-        return Optional.empty();
+        return this.paths.size() != 0 ? Optional.of(this.paths.get(index)): Optional.empty();
     }
 
     public int getRedCellCounterByIndex(int index){
