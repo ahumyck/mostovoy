@@ -30,6 +30,14 @@ public class LightningBolt {
         return this.indexOfShortestPath == -1 ? -1 /*error code*/ : this.redCellCounters[this.indexOfShortestPath];
     }
 
+    public int getDistanceForShortestPath(){
+        return this.shortestPath == null ? -1 /*error code */ :this.shortestPath.getFirst().size();
+    }
+
+    public int getDistanceForPathByIndex(int index){
+        return this.paths.size() == 0 ? -1 /*error code */ : this.paths.get(index).getFirst().size();
+    }
+
     public Optional<Pair<List<Pair<Integer, Integer>>, Integer>> getShortestPath(){
         return Optional.of(this.shortestPath);
     }
