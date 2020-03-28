@@ -28,7 +28,7 @@
                                 <ComboBox fx:id="fillingTypes" layoutX="427.0" layoutY="35.0" prefWidth="150.0" />
                                 <Button fx:id="applyConfiguration" layoutX="14.0" layoutY="70.0" mnemonicParsing="false" text="Apply" />
                                 <ComboBox fx:id="gridSize" layoutX="227.0" layoutY="36.0" prefWidth="150.0" />
-                          <ListView fx:id="experimentListView" layoutX="-4.0" layoutY="107.0" prefHeight="764.0" prefWidth="212.0" />
+                          <ListView fx:id="experimentListView" layoutY="107.0" prefHeight="764.0" prefWidth="208.0" />
                           <TabPane layoutX="208.0" layoutY="107.0" prefHeight="765.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
                               <tabs>
                                   <Tab fx:id="gridTab" text="Матрица">
