@@ -2,12 +2,11 @@ package company;
 
 import company.expirement.Experiment;
 import company.expirement.ExperimentManager;
-import company.entity.Matrix;
 import company.filling.*;
 import company.filling.customs.*;
 import company.paint.LineChartNode;
 import company.paint.Painter;
-import company.stat.StatManager;
+import company.stat.SimpleStatManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -23,7 +22,7 @@ public class Controller {
 
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
-    private StatManager statManager = new StatManager();
+    private SimpleStatManager simpleStatManager = new SimpleStatManager();
 
     @FXML
     public Label currentClustersCount;
@@ -94,6 +93,12 @@ public class Controller {
     public AnchorPane lightningBoltPane;
 
     @FXML
+    public AnchorPane redCellsCountLineChart;
+
+    @FXML
+    public AnchorPane wayLengthLineChart;
+
+    @FXML
     public void initialize() {
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
@@ -147,22 +152,39 @@ public class Controller {
             double stepProbability = Double.parseDouble(this.stepProbability.getText());
             int count = Integer.parseInt(this.matrixCount.getText());
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
-            LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Среднее количество кластеров");
+            LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Зависимость количество кластеров от концентрации");
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
+            LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
+            LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
             for (Integer size : sizes) {
+                System.out.println("For size " + size + " generating start");
+                long startTimeForSize = System.currentTimeMillis();
                 List<LineChartNode> midClustersCounts = new ArrayList<>();
                 List<LineChartNode> midClustersSize = new ArrayList<>();
+                List<LineChartNode> midRedCellsCount = new ArrayList<>();
+                List<LineChartNode> midWayLengths = new ArrayList<>();
                 for (double probability = startProbability; probability <= endProbability + stepProbability; probability += stepProbability) {
                     RandomFillingType randomFillingType = new RandomFillingType();
                     randomFillingType.setSize(size);
                     randomFillingType.setPercolationProbability(probability);
-                    List<Matrix> matrices = experimentManager.getMatrices(count, randomFillingType);
-                    midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(matrices)));
-                    midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(matrices)));
+                    System.out.println("    Initializing for percolation probability " + probability + " started");
+                    long startTimePropability = System.currentTimeMillis();
+                    List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
+//                    startTimePropability = System.currentTimeMillis();
+//                    System.out.println("        Collecting statistic started");
+                    midClustersCounts.add(new LineChartNode(probability, simpleStatManager.clusterCountStat(experiments)));
+                    midClustersSize.add(new LineChartNode(probability, simpleStatManager.clusterSizeStat(experiments)));
+                    midRedCellsCount.add(new LineChartNode(probability, simpleStatManager.redCellsCountStat(experiments)));
+                    midWayLengths.add(new LineChartNode(probability, simpleStatManager.wayLengthStat(experiments)));
+//                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimePropability));
+                    System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimePropability));
+
                 }
                 painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
                 painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
-                System.out.println("chart");
+                painter.addSeriesToLineChart(redCellsAdded, "Mat size " + size, midRedCellsCount);
+                painter.addSeriesToLineChart(wayLengths, "Mat size " + size, midWayLengths);
+                System.out.println("For size " + size + " generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });
     }

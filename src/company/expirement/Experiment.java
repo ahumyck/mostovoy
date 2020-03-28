@@ -12,7 +12,7 @@ public class Experiment {
     private String name;
     private Matrix matrix;
     private Pair<List<Pair<Integer, Integer>>, Integer> path = null;
-    private int redCellsCounter;
+    private Integer redCellsCounter;
 
 
     public Experiment(String name, Matrix matrix) {

@@ -82,9 +82,9 @@
                         <TextField fx:id="matrixSize" layoutX="9.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
                         <TextField fx:id="matrixCount" layoutX="196.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
                         <Label layoutX="196.0" layoutY="56.0" prefHeight="25.0" prefWidth="170.0" text="Количество матриц:" />
-                        <TabPane layoutY="155.0" prefHeight="577.0" prefWidth="801.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane layoutY="155.0" prefHeight="716.0" prefWidth="908.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
-                            <Tab text="Количество Кластеров">
+                            <Tab text="Количество кластеров">
                               <content>
                                 <AnchorPane fx:id="clusterCountChartPane" minHeight="0.0" minWidth="0.0" prefHeight="509.0" prefWidth="790.0" />
                               </content>
@@ -94,6 +94,16 @@
                                 <AnchorPane fx:id="clusterSizeChartPane" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="790.0" />
                               </content>
                             </Tab>
+                              <Tab  text="Количество красных клеток">
+                                <content>
+                                  <AnchorPane fx:id="redCellsCountLineChart" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                              <Tab text="Длина пути">
+                                <content>
+                                  <AnchorPane fx:id="wayLengthLineChart" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
                           </tabs>
                         </TabPane>
                      </children></AnchorPane>

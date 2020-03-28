@@ -12,7 +12,7 @@ import java.util.List;
 public class ExperimentManager {
 
 
-    public ObservableList<Experiment> initializeExperiments(int number, FillingType fillingType) {
+    public ObservableList<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
         ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
         for (int i = 0; i < number; i++) {
             experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
@@ -27,7 +27,16 @@ public class ExperimentManager {
         return experimentObservableList;
     }
 
-    public List<Matrix> getMatrices(int number, FillingType fillingType){
+    public ObservableList<Experiment> initializeExperiments(int number, FillingType fillingType) {
+        ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
+        for (int i = 0; i < number; i++) {
+            experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
+        }
+        experimentObservableList.parallelStream().forEach(Experiment::calculatePath);
+        return experimentObservableList;
+    }
+
+    public List<Matrix> getMatrices(int number, FillingType fillingType) {
         List<Matrix> matrices = new ArrayList<>();
         for (int i = 0; i < number; i++) {
             matrices.add(new Matrix(fillingType));
