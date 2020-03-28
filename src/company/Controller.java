@@ -6,7 +6,9 @@ import company.filling.*;
 import company.filling.customs.*;
 import company.paint.LineChartNode;
 import company.paint.Painter;
+import company.stat.NormalizedStatManager;
 import company.stat.SimpleStatManager;
+import company.stat.StatManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -22,7 +24,7 @@ public class Controller {
 
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
-    private SimpleStatManager simpleStatManager = new SimpleStatManager();
+    private StatManager statManager = new NormalizedStatManager();
 
     @FXML
     public Label currentClustersCount;
@@ -172,10 +174,10 @@ public class Controller {
                     List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
 //                    startTimePropability = System.currentTimeMillis();
 //                    System.out.println("        Collecting statistic started");
-                    midClustersCounts.add(new LineChartNode(probability, simpleStatManager.clusterCountStat(experiments)));
-                    midClustersSize.add(new LineChartNode(probability, simpleStatManager.clusterSizeStat(experiments)));
-                    midRedCellsCount.add(new LineChartNode(probability, simpleStatManager.redCellsCountStat(experiments)));
-                    midWayLengths.add(new LineChartNode(probability, simpleStatManager.wayLengthStat(experiments)));
+                    midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(experiments)));
+                    midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(experiments)));
+                    midRedCellsCount.add(new LineChartNode(probability, statManager.redCellsCountStat(experiments)));
+                    midWayLengths.add(new LineChartNode(probability, statManager.wayLengthStat(experiments)));
 //                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimePropability));
                     System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimePropability));
 
