@@ -14,6 +14,8 @@ public class LightningBolt {
     private int[] redCellCounters;
     private int shiftedSize;
     private int indexOfShortestPath;
+    private List<Pair<List<Pair<Integer,Integer>>,Integer>> paths;
+    private Pair<List<Pair<Integer, Integer>>, Integer> shortestPath = null;
 
     public LightningBolt(Matrix matrix) {
         this.matrix = matrix;
@@ -21,16 +23,31 @@ public class LightningBolt {
         this.shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
         this.redCellCounters = new int[this.shiftedSize];
         this.indexOfShortestPath = -1;
+        this.paths = new ArrayList<>();
     }
 
-    public int getRedCellCounter(){
+    public int getRedCellCounterForShortestWay(){
         if(this.indexOfShortestPath >= 0)
             return this.redCellCounters[this.indexOfShortestPath];
         return -1; // Error Code
     }
 
-    public Pair<List<Pair<Integer,Integer>>,Integer> findShortestWay() {
-        List<Pair<List<Pair<Integer,Integer>>,Integer>> paths = new ArrayList<>();
+    public Optional<Pair<List<Pair<Integer, Integer>>, Integer>> getShortestPath(){
+        return Optional.of(this.shortestPath);
+    }
+
+    public Optional<Pair<List<Pair<Integer, Integer>>, Integer>> getPathByIndex(int index){
+        if(this.paths.size() != 0)
+            return Optional.of(this.paths.get(index));
+        return Optional.empty();
+    }
+
+    public int getRedCellCounterByIndex(int index){
+        return this.redCellCounters[index] == 0 ? -1 /*error code*/ : this.redCellCounters[index];
+    }
+
+
+    public LightningBolt calculateShortestWays() {
         for(int currentPos = 0 ; currentPos < this.shiftedSize; currentPos++){
             Pair<List<Integer>, List<Integer>> inf = findShortestWays(currentPos);
             List<Integer> distances = inf.getSecond();
@@ -42,9 +59,9 @@ public class LightningBolt {
 
             paths.add(new Pair<>(path,distances.get(shortest)));
         }
-        Pair<List<Pair<Integer, Integer>>, Integer> shortestPath = paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
-        this.indexOfShortestPath = paths.indexOf(shortestPath);
-        return shortestPath;
+        this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
+        this.indexOfShortestPath = this.paths.indexOf(shortestPath);
+        return this;
     }
 
 
