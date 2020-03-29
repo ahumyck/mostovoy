@@ -10,13 +10,15 @@ public class ColorGradientRepository {
     private Map<Integer, Color> colors = new HashMap<>();
 
     public ColorGradientRepository() {
-        this.colors.put(0, Color.WHITE);
-        int index = 1;
-        for (int i = 30; i < 255; i+=15) {
-            for (int j = 30; j < 255; j+=15) {
-                for (int k = 30; k < 255; k+=15) {
-                    this.colors.put(index,Color.rgb(i,j,k));
-                    index++;
+        int index = 0;
+        int start = 30;
+        int stop = 255;
+        int step = 15;
+        this.colors.put(index++, Color.WHITE);
+        for (int i = start; i < stop; i+=step) {
+            for (int j = start; j < stop; j+=step) {
+                for (int k = start; k < stop; k+=step) {
+                    this.colors.put(index++,Color.rgb(i,j,k));
                 }
             }
         }
@@ -26,7 +28,5 @@ public class ColorGradientRepository {
         return clusterMark > 0 ? Color.BLACK : Color.WHITE;
     }
 
-    public Color getRandomColorForCluster(int clusterMark) {
-        return colors.get(clusterMark);
-    }
+    public Color getRandomColorForCluster(int clusterMark) { return colors.get(clusterMark); }
 }
