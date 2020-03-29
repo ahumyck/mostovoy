@@ -107,6 +107,7 @@ public class Controller {
                 new MaltTestFillingType(),
                 new HorizontalLineFillingType(),
                 new SquareFillingType(),
+                new TriangleFillingType(),
                 new VerticalLineFillingType()));
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
@@ -143,9 +144,9 @@ public class Controller {
                 double probability = Double.parseDouble(fillingProbability.getText());
                 ((RandomFillingType) fillingType).setPercolationProbability(probability);
                 ((RandomFillingType) fillingType).setSize(size);
-                experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
+                experimentListView.setItems(experimentManager.initializeExperimentsParallel(number, fillingType));
             } else if (fillingType instanceof CustomTestFillingType) {
-                experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
+                experimentListView.setItems(experimentManager.initializeExperimentsParallel(number, fillingType));
             }
         });
         applyExperiment.setOnAction(event -> {
@@ -165,15 +166,8 @@ public class Controller {
                 List<LineChartNode> midClustersSize = new ArrayList<>();
                 List<LineChartNode> midRedCellsCount = new ArrayList<>();
                 List<LineChartNode> midWayLengths = new ArrayList<>();
-                List<Double> probabilities = new ArrayList<>();
-                probabilities.add(0.1);
-                probabilities.add(0.2);
-                probabilities.add(0.25);
-                probabilities.add(0.3);
-                probabilities.add(0.4);
-                probabilities.add(0.5);
-                probabilities.add(0.7);
-                probabilities.add(0.85);
+                List<Double> probabilities = generateProbabilities(0.05,0.85,0.05);
+                probabilities.add(0,0.025);
                 probabilities.forEach(probability -> {
                     RandomFillingType randomFillingType = new RandomFillingType();
                     randomFillingType.setSize(size);
@@ -198,6 +192,16 @@ public class Controller {
                 System.out.println("For size " + size + " generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });
+    }
+
+
+    private List<Double> generateProbabilities(double start, double end, double step){
+        List<Double> probabilities = new ArrayList<>();
+        while(start <= end){
+            probabilities.add(start);
+            start += step;
+        }
+        return probabilities;
     }
 
 
