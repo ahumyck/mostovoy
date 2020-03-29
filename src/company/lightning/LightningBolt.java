@@ -90,12 +90,12 @@ public class LightningBolt {
 //        for (int i = 0; i < this.adjacencyList.size(); i++) {
 //            parents[i] = 0;
 //        }
-//        List<Boolean> visitedNeighbors = initWith(false,this.adjacencyList.size());
-//        List<Boolean> visitedNeighbors = new ArrayList<>(this.adjacencyList.size());
-        boolean[] visitedNeighbors = new boolean[this.adjacencyList.size()];
+//        List<Boolean> visitedNeighbors = initWith(false,this.adjacencyList.size()); v.1
+//        List<Boolean> visitedNeighbors = new ArrayList<>(this.adjacencyList.size()); v.2
 //        for (int i = 0; i < this.adjacencyList.size(); i++) {
 //            visitedNeighbors.add(Boolean.FALSE);
 //        }
+        boolean[] visitedNeighbors = new boolean[this.adjacencyList.size()];
 
 //        distanceToOtherNeighbors.set(start_pos,0);
         distanceToOtherNeighbors[start_pos] = 0;
