@@ -22,7 +22,7 @@ public class LightningBolt {
         this.shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
         this.redCellCounters = new int[this.shiftedSize];
         this.indexOfShortestPath = -1;
-        this.paths = new ArrayList<>();
+        this.paths = new ArrayList<>(matrix.getSize());
     }
 
     public int getRedCellCounterForShortestPath(){
@@ -51,53 +51,90 @@ public class LightningBolt {
 
 
     public LightningBolt calculateShortestPaths() {
-        for(int currentPos = 0 ; currentPos < this.shiftedSize; currentPos++){
+//        long startTime = System.currentTimeMillis();
+        for(int currentPos = 0 ; currentPos < this.shiftedSize; currentPos++) {
             Pair<List<Integer>, List<Integer>> inf = findShortestPaths(currentPos);
             List<Integer> distances = inf.getSecond();
             List<Integer> parents = inf.getFirst();
 
             int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
-            int endPos = this.shiftedSize*(this.shiftedSize - 1) + shortest;
+            int endPos = this.shiftedSize * (this.shiftedSize - 1) + shortest;
             List<Pair<Integer, Integer>> path = getPath(currentPos, endPos, parents);
+            paths.add(new Pair<>(path, distances.get(shortest)));
 
-            paths.add(new Pair<>(path,distances.get(shortest)));
         }
+//        System.out.println(System.currentTimeMillis() - startTime);
+//        startTime = System.currentTimeMillis();
         this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
         this.indexOfShortestPath = this.paths.indexOf(shortestPath);
+//        System.out.println("    " + (System.currentTimeMillis() - startTime));
         return this;
     }
 
 
     private Pair<List<Integer>, List<Integer>> findShortestPaths(int start_pos){
-        List<Integer> distanceToOtherNeighbors = initWith(Integer.MAX_VALUE,this.adjacencyList.size());
-        List<Integer> parents = initWith(0,this.adjacencyList.size());
-        List<Boolean> visitedNeighbors = initWith(false,this.adjacencyList.size());
+//        List<Integer> distanceToOtherNeighbors = initWith(Integer.MAX_VALUE,this.adjacencyList.size()); v.1
 
-        distanceToOtherNeighbors.set(start_pos,0);
+//        List<Integer> distanceToOtherNeighbors = new ArrayList<>(this.adjacencyList.size()); v.2
+//        for (int i = 0; i < this.adjacencyList.size(); i++) {
+//            distanceToOtherNeighbors.add(Integer.MAX_VALUE);
+//        }
+        int[] distanceToOtherNeighbors = new int[this.adjacencyList.size()];
+        for (int i = 0; i < this.adjacencyList.size(); i++) {
+            distanceToOtherNeighbors[i] = Integer.MAX_VALUE;
+        }
+
+//        List<Integer> parents = initWith(0,this.adjacencyList.size()); v.1
+//        List<Integer> parents = new ArrayList<>(this.adjacencyList.size()); v.2
+        int[] parents = new int[this.adjacencyList.size()];
+//        for (int i = 0; i < this.adjacencyList.size(); i++) {
+//            parents[i] = 0;
+//        }
+//        List<Boolean> visitedNeighbors = initWith(false,this.adjacencyList.size());
+//        List<Boolean> visitedNeighbors = new ArrayList<>(this.adjacencyList.size());
+        boolean[] visitedNeighbors = new boolean[this.adjacencyList.size()];
+//        for (int i = 0; i < this.adjacencyList.size(); i++) {
+//            visitedNeighbors.add(Boolean.FALSE);
+//        }
+
+//        distanceToOtherNeighbors.set(start_pos,0);
+        distanceToOtherNeighbors[start_pos] = 0;
         int n = this.adjacencyList.keySet().size();
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n ; i++) {
             int v = -1;
+//            long startTime = System.nanoTime();
             for (int j = 0; j < n; j++) {
-                if(!visitedNeighbors.get(j) && (v == -1 || distanceToOtherNeighbors.get(j) < distanceToOtherNeighbors.get(v)))
+                if(!visitedNeighbors[j] && distanceToOtherNeighbors[j] != Integer.MAX_VALUE && (v == -1 || distanceToOtherNeighbors[j] < distanceToOtherNeighbors[v]))
                     v = j;
             }
-
-            if(distanceToOtherNeighbors.get(v) == Integer.MAX_VALUE)
+//            System.out.println(System.nanoTime() - startTime);
+            if(distanceToOtherNeighbors[v] == Integer.MAX_VALUE)
                 break;
 
-            visitedNeighbors.set(v,true);
-            for (int j = 0; j < this.adjacencyList.get(v).size(); j++) {
-                Pair<Integer,Integer> pair = this.adjacencyList.get(v).get(j);
+            visitedNeighbors[v] = true;
+//            startTime = System.nanoTime();
+            final int v1 = v;
+            adjacencyList.get(v).forEach(pair -> {
                 int to = pair.getFirst();
                 int len = pair.getSecond();
-                if (distanceToOtherNeighbors.get(v) + len < distanceToOtherNeighbors.get(to)) {
-                    distanceToOtherNeighbors.set(to,distanceToOtherNeighbors.get(v) + len);
-                    parents.set(to,v);
+                if (distanceToOtherNeighbors[v1] + len < distanceToOtherNeighbors[to]) {
+                    distanceToOtherNeighbors[to] = distanceToOtherNeighbors[v1] + len;
+                    parents[to] = v1;
                 }
-            }
+            });
+//            for (int j = 0; j < this.adjacencyList.get(v).size(); j++) {
+//                Pair<Integer,Integer> pair = this.adjacencyList.get(v).get(j);
+//                int to = pair.getFirst();
+//                int len = pair.getSecond();
+//                if (distanceToOtherNeighbors[v] + len < distanceToOtherNeighbors[to]) {
+//                    distanceToOtherNeighbors[to] = distanceToOtherNeighbors[v] + len;
+//                    parents[to] = v;
+//                }
+//            }
+//            System.out.println("    " + (System.nanoTime() - startTime));
         }
-        return new Pair<>(parents,distanceToOtherNeighbors.subList(distanceToOtherNeighbors.size() - this.shiftedSize,
-                distanceToOtherNeighbors.size()));
+
+        return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
 
 

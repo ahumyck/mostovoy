@@ -12,7 +12,7 @@ public class NormalizedStatManager implements StatManager {
     public double clusterCountStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize();
         OptionalDouble midClusterCount = experiments.stream().map(Experiment::getMatrix).mapToInt(Matrix::getClusterCounter).average();
-        return midClusterCount.getAsDouble() / (size * size);
+        return midClusterCount.getAsDouble() / (size*size) ;
     }
 
     public double clusterSizeStat(List<Experiment> experiments) {
@@ -21,18 +21,18 @@ public class NormalizedStatManager implements StatManager {
                 .map(Experiment::getMatrix)
                 .mapToDouble(matrix -> ((double) matrix.stream().filter(Cell::hasClusterMark).count()) / matrix.getClusterCounter())
                 .average()
-                .getAsDouble() / (size * size);
+                .getAsDouble() / size ;
     }
 
     public double redCellsCountStat(List<Experiment> experiments){
         int size = experiments.get(0).getMatrix().getSize();
-        return experiments.stream().mapToDouble(Experiment::getRedCellsCounter).average().getAsDouble()/ (size * size);
+        return experiments.stream().mapToDouble(Experiment::getRedCellsCounter).average().getAsDouble()/ size ;
 
     }
 
     public double wayLengthStat(List<Experiment> experiments){
         int size = experiments.get(0).getMatrix().getSize();
-        return experiments.stream().mapToDouble(Experiment::getDistance).average().getAsDouble()/ (size * size);
+        return experiments.stream().mapToDouble(Experiment::getDistance).average().getAsDouble()/size ;
     }
 
 }

@@ -30,9 +30,12 @@ public class ExperimentManager {
     public ObservableList<Experiment> initializeExperiments(int number, FillingType fillingType) {
         ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
         for (int i = 0; i < number; i++) {
-            experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
+            experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1)));
         }
-        experimentObservableList.parallelStream().forEach(Experiment::calculatePath);
+        experimentObservableList.parallelStream().forEach( experiment -> {
+            experiment.setMatrix(new Matrix(fillingType));
+            experiment.calculatePath();
+        });
         return experimentObservableList;
     }
 

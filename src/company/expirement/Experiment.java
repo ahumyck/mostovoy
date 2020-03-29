@@ -14,6 +14,15 @@ public class Experiment {
     private Pair<List<Pair<Integer, Integer>>, Integer> path = null;
     private Integer redCellsCounter;
 
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
+    }
+
+
+
+    public Experiment(String name) {
+        this.name = name;
+    }
 
     public Experiment(String name, Matrix matrix) {
         this.name = name;
@@ -34,7 +43,11 @@ public class Experiment {
 
     void calculatePath() {
         LightningBolt lightningBolt = new LightningBolt(matrix);
+//        System.out.println(System.currentTimeMillis() - startTime);
+//        startTime = System.currentTimeMillis();
+//        long startTime = System.currentTimeMillis();
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
+//        System.out.println("    " + (System.currentTimeMillis() - startTime));
         this.redCellsCounter = lightningBolt.getRedCellCounterForShortestPath();
     }
 
