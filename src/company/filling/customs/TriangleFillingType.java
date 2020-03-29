@@ -16,7 +16,7 @@ public class TriangleFillingType extends CustomTestFillingType {
             {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
-    public TriangleFillingType(String name) {
+    public TriangleFillingType() {
         super("Треугольники");
     }
 

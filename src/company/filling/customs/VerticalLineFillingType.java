@@ -2,7 +2,7 @@ package company.filling.customs;
 
 public class VerticalLineFillingType  extends CustomTestFillingType {
 
-    private final int MATRIX_SIZE = 30;
+    private final int MATRIX_SIZE = 50;
     private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
 
     public VerticalLineFillingType() {
