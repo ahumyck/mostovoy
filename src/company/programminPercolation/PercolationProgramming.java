@@ -48,6 +48,8 @@ public class PercolationProgramming {
             if(percolationCell.isWhite()){
                 int boundary = 1;
                 while(true){
+                    if(boundary > 2*(matrix.getSize() - 2*Matrix.OFFSET))
+                        break;
 //                    System.out.println("boundary " + boundary);
                     BoundaryCellsGenerator generator = new BoundaryCellsGenerator(boundary,percolationCell,matrix);
                     List<Cell> potentialCells = generator.generate();
