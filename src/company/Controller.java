@@ -2,8 +2,7 @@ package company;
 
 import company.expirement.Experiment;
 import company.expirement.ExperimentManager;
-import company.filling.FillingType;
-import company.filling.RandomFillingType;
+import company.filling.*;
 import company.filling.customs.*;
 import company.paint.LineChartNode;
 import company.paint.Painter;
@@ -108,6 +107,7 @@ public class Controller {
                 new MaltTestFillingType(),
                 new HorizontalLineFillingType(),
                 new SquareFillingType(),
+                new TriangleFillingType(),
                 new VerticalLineFillingType()));
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
@@ -144,9 +144,9 @@ public class Controller {
                 double probability = Double.parseDouble(fillingProbability.getText());
                 ((RandomFillingType) fillingType).setPercolationProbability(probability);
                 ((RandomFillingType) fillingType).setSize(size);
-                experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
+                experimentListView.setItems(experimentManager.initializeExperimentsParallel(number, fillingType));
             } else if (fillingType instanceof CustomTestFillingType) {
-                experimentListView.setItems(experimentManager.initializeExperiments(number, fillingType));
+                experimentListView.setItems(experimentManager.initializeExperimentsParallel(number, fillingType));
             }
         });
         applyExperiment.setOnAction(event -> {
@@ -159,7 +159,6 @@ public class Controller {
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
             LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
-
             for (Integer size : sizes) {
                 System.out.println("For size " + size + " generating start");
                 long startTimeForSize = System.currentTimeMillis();
@@ -167,20 +166,6 @@ public class Controller {
                 List<LineChartNode> midClustersSize = new ArrayList<>();
                 List<LineChartNode> midRedCellsCount = new ArrayList<>();
                 List<LineChartNode> midWayLengths = new ArrayList<>();
-                List<Double> probabilities = new ArrayList<>();
-                probabilities.add(0.0);
-                probabilities.add(0.1);
-                probabilities.add(0.2);
-                probabilities.add(0.22);
-                probabilities.add(0.24);
-                probabilities.add(0.26);
-                probabilities.add(0.27);
-                probabilities.add(0.28);
-                probabilities.add(0.3);
-                probabilities.add(0.4);
-                probabilities.add(0.5);
-                probabilities.add(0.7);
-                probabilities.add(0.85);
                 DoubleStream.iterate(0, x -> {
                     if (x < 0.4)
                         return x + 0.02;
@@ -210,6 +195,16 @@ public class Controller {
                 System.out.println("For size " + size + " generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });
+    }
+
+
+    private List<Double> generateProbabilities(double start, double end, double step){
+        List<Double> probabilities = new ArrayList<>();
+        while(start <= end){
+            probabilities.add(start);
+            start += step;
+        }
+        return probabilities;
     }
 
 

@@ -1,7 +1,7 @@
 package company.lightning;
 
 import company.entity.Matrix;
-import org.omg.CORBA.INTERNAL;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -99,6 +99,7 @@ public class LightningBolt {
             });
             distanceToOtherNeighborsMap.remove(v);
         }
+
         return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
 
