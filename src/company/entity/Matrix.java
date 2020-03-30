@@ -55,12 +55,12 @@ public class Matrix {
         return this.matrix[i][j];
     }
 
-    public int getClusterCounter(){
-        return clusterCounter;
+    public Cell getCell(Pair<Integer,Integer> indecies){
+        return this.matrix[indecies.getFirst() + Matrix.OFFSET][indecies.getSecond() + Matrix.OFFSET];
     }
 
-    private boolean isBlack(Cell cell){
-        return cell.getType().equals(CellType.BLACK);
+    public int getClusterCounter(){
+        return clusterCounter;
     }
 
     private int minClusterMark(Cell first,Cell second){

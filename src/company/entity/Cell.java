@@ -1,6 +1,7 @@
 package company.entity;
 
 
+import java.text.MessageFormat;
 
 public class Cell {
     private CellType type;
@@ -9,12 +10,12 @@ public class Cell {
     private int y;
     public int getX()
     {
-        return x - 1;
+        return x - Matrix.OFFSET;
     }
 
     public int getY()
     {
-        return y - 1;
+        return y - Matrix.OFFSET;
     }
     public Cell(int x, int y) {
         this.x = x;
@@ -62,14 +63,6 @@ public class Cell {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("My cluster mark = ").append(clusterMark)
-                .append(" and i am = ");
-        switch (type){
-            case EMPTY: builder.append("empty"); break;
-            case WHITE: builder.append("white"); break;
-            case BLACK: builder.append("black"); break;
-        }
-        return builder.toString();
+        return "Cell [" + getX() + "][" + getY() + "]";
     }
 }
