@@ -134,20 +134,4 @@ public class LightningBolt {
         if(this.matrix.getCell(i + Matrix.OFFSET, j + Matrix.OFFSET).isWhite())
             this.redCellCounters[startPosition]++;
     }
-
-
-    private List<Integer> initWith(int initialValue, int size){
-        return IntStream.generate(() -> initialValue)
-                .limit(size)
-                .boxed().collect(Collectors.toList());
-    }
-
-    private List<Boolean> initWith(boolean initialValue, int size){
-        return IntStream.range(0, size)
-                .mapToObj(object -> initialValue).collect(Collectors.toList());
-    }
-
-
-
-
 }
