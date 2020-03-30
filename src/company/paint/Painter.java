@@ -3,6 +3,7 @@ package company.paint;
 import company.entity.Cell;
 import company.entity.Matrix;
 import company.lightning.Pair;
+import company.programminPercolation.PercolationRelation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
@@ -91,7 +92,7 @@ public class Painter {
         chart.getData().add(series);
     }
 
-    public void paintLightningBoltCanvas(AnchorPane pane, Pair<List<Pair<Integer,Integer>>,Integer> path, Matrix matrix)
+    public void paintLightningBoltCanvas(AnchorPane pane, List<Pair<Integer,Integer>> path,List<PercolationRelation> relations, Matrix matrix)
     {
         double size = pane.getHeight()/ (matrix.getSize() - 2);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
@@ -107,9 +108,18 @@ public class Painter {
             graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
             graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
         });
-        path.getFirst().forEach(dot -> {
+        path.forEach(dot -> {
             Cell cell = matrix.getCell(dot.getFirst() + Matrix.OFFSET, dot.getSecond()+ Matrix.OFFSET);
             graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.setFill(Color.GRAY);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
+            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
+        });
+        relations.stream().map(PercolationRelation::getBlackCell).forEach(cell -> {
+            graphicsContext2D.setFill(Color.DARKRED);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
             graphicsContext2D.setFill(Color.GRAY);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
@@ -121,4 +131,34 @@ public class Painter {
         pane.getChildren().add(canvas);
 
     }
+
+//    public void paintPercolationProgramming(AnchorPane pane, List<PercolationRelation> relations, Matrix matrix)
+//    {
+//        double size = pane.getHeight()/ (matrix.getSize() - 2);
+//        Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
+//        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+//        graphicsContext2D.setFill(Color.WHITE);
+//        graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
+//        matrix.stream().forEach(cell -> {
+//            graphicsContext2D.setFill(colorRepository.getColorForCell(cell.getClusterMark()));
+//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+//            graphicsContext2D.setFill(Color.GRAY);
+//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
+//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
+//            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
+//            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
+//        });
+//        relations.stream().map(PercolationRelation::getBlackCell).forEach(cell -> {
+//            graphicsContext2D.setFill(Color.DARKRED);
+//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+//            graphicsContext2D.setFill(Color.GRAY);
+//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
+//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
+//            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
+//            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
+//        });
+//        pane.getChildren().clear();
+//        pane.getChildren().add(canvas);
+//
+//    }
 }

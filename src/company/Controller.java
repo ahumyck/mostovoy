@@ -116,7 +116,7 @@ public class Controller {
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             painter.paintCanvas(gridPane, experiment.getMatrix());
-            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getMatrix());
+            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(),experiment.getProgrammings(), experiment.getMatrix());
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
             redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());

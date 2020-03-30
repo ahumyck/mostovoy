@@ -3,8 +3,9 @@ package company.expirement;
 import company.entity.Matrix;
 import company.lightning.LightningBolt;
 import company.lightning.Pair;
+import company.programminPercolation.PercolationProgramming;
+import company.programminPercolation.PercolationRelation;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Experiment {
@@ -13,11 +14,11 @@ public class Experiment {
     private Matrix matrix;
     private Pair<List<Pair<Integer, Integer>>, Integer> path = null;
     private Integer redCellsCounter;
+    private List<PercolationRelation> programmings = null;
 
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
     }
-
 
 
     public Experiment(String name) {
@@ -29,19 +30,21 @@ public class Experiment {
         this.matrix = matrix;
     }
 
-    public Pair<List<Pair<Integer, Integer>>, Integer> getPath() {
-        return path != null ? path : new Pair<>(Collections.emptyList(), 0);
+    public List<Pair<Integer, Integer>> getPath() {
+        if (path == null) calculatePath();
+        return path.getFirst();
+
     }
 
     public int getRedCellsCounter() {
         return redCellsCounter;
     }
 
-    public int getDistance(){
+    public int getDistance() {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    void calculatePath() {
+    public void calculatePath() {
         LightningBolt lightningBolt = new LightningBolt(matrix);
 //        System.out.println(System.currentTimeMillis() - startTime);
 //        startTime = System.currentTimeMillis();
@@ -49,6 +52,16 @@ public class Experiment {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
 //        System.out.println("    " + (System.currentTimeMillis() - startTime));
         this.redCellsCounter = lightningBolt.getRedCellCounterForShortestPath();
+    }
+
+    public List<PercolationRelation> getProgrammings() {
+        if (programmings == null)
+            calculateProgrammingPercolation();
+        return programmings;
+    }
+
+    private void calculateProgrammingPercolation() {
+        this.programmings = new PercolationProgramming(matrix, getPath()).getProgrammingPercolationList();
     }
 
     public Matrix getMatrix() {
