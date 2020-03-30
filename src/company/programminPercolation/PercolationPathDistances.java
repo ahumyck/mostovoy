@@ -16,7 +16,6 @@ public class PercolationPathDistances {
     private List<Cell> path;
     private Matrix matrix;
     private List<Cell> usedPercolationObjects;
-    private boolean logs = false;
 
     public PercolationPathDistances(Matrix matrix, List<Pair<Integer,Integer>> path) {
         this.matrix = matrix;
