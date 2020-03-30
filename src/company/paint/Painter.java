@@ -127,6 +127,11 @@ public class Painter {
             graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
             graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
         });
+        relations.stream().forEach(relation -> {
+            graphicsContext2D.moveTo(relation.getBlackCell().getX()* size + size/2, relation.getBlackCell().getY()* size+ size/2);
+            graphicsContext2D.lineTo(relation.getRedCell().getX()* size+ size/2, relation.getRedCell().getY()* size+ size/2);
+            graphicsContext2D.stroke();
+        });
         pane.getChildren().clear();
         pane.getChildren().add(canvas);
 
