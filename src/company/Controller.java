@@ -8,6 +8,7 @@ import company.paint.LineChartNode;
 import company.paint.Painter;
 import company.stat.NormalizedStatManager;
 import company.stat.StatManager;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -17,6 +18,8 @@ import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -159,6 +162,7 @@ public class Controller {
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
             LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
+            ForkJoinPool forkJoinPool = new ForkJoinPool(4);
             for (Integer size : sizes) {
                 System.out.println("For size " + size + " generating start");
                 long startTimeForSize = System.currentTimeMillis();
@@ -166,28 +170,40 @@ public class Controller {
                 List<LineChartNode> midClustersSize = new ArrayList<>();
                 List<LineChartNode> midRedCellsCount = new ArrayList<>();
                 List<LineChartNode> midWayLengths = new ArrayList<>();
-                DoubleStream.iterate(0, x -> {
-                    if (x < 0.4)
-                        return x + 0.02;
-                    else if (x > 0.4 && x < 0.6) return x + 0.05;
-                    else return x + 0.1;
-                }).limit(100).filter(x -> x < 1).forEach(probability -> {
-                    RandomFillingType randomFillingType = new RandomFillingType();
-                    randomFillingType.setSize(size);
-                    randomFillingType.setPercolationProbability(probability);
-                    System.out.println("    Initializing for percolation probability " + probability + " started");
-                    long startTimePropability = System.currentTimeMillis();
-                    List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
+                DoubleStream.iterate(0,
+                        x -> {
+                            if (x < 0.4)
+                                return x + 0.02;
+                            else if (x > 0.4 && x < 0.6) return x + 0.05;
+                            else return x + 0.1;
+                        })
+                        .limit(100)
+                        .filter(x -> x < 1)
+                        .forEach(probability -> {
+                            RandomFillingType randomFillingType = new RandomFillingType();
+                            randomFillingType.setSize(size);
+                            randomFillingType.setPercolationProbability(probability);
+                            System.out.println("    Initializing for percolation probability " + probability + " started");
+                            long startTimePropability = System.currentTimeMillis();
+                            List<Experiment> experiments = null;
+                            try {
+                                experiments = forkJoinPool.submit(() -> experimentManager.initializeExperiments(count, randomFillingType)).get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+//                            List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
 //                    startTimePropability = System.currentTimeMillis();
 //                    System.out.println("        Collecting statistic started");
-                    midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(experiments)));
-                    midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(experiments)));
-                    midRedCellsCount.add(new LineChartNode(probability, statManager.redCellsCountStat(experiments)));
-                    midWayLengths.add(new LineChartNode(probability, statManager.wayLengthStat(experiments)));
+                            midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(experiments)));
+                            midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(experiments)));
+                            midRedCellsCount.add(new LineChartNode(probability, statManager.redCellsCountStat(experiments)));
+                            midWayLengths.add(new LineChartNode(probability, statManager.wayLengthStat(experiments)));
 //                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimePropability));
-                    System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimePropability));
+                            System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimePropability));
 
-                });
+                        });
                 painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
                 painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
                 painter.addSeriesToLineChart(redCellsAdded, "Mat size " + size, midRedCellsCount);
@@ -197,10 +213,9 @@ public class Controller {
         });
     }
 
-
-    private List<Double> generateProbabilities(double start, double end, double step){
+    private List<Double> generateProbabilities(double start, double end, double step) {
         List<Double> probabilities = new ArrayList<>();
-        while(start <= end){
+        while (start <= end) {
             probabilities.add(start);
             start += step;
         }
