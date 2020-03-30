@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class PercolationPathDistances {
+public class PercolationProgramming {
 
     private List<Cell> path;
     private Matrix matrix;
     private List<Cell> usedPercolationObjects;
 
-    public PercolationPathDistances(Matrix matrix, List<Pair<Integer,Integer>> path) {
+    public PercolationProgramming(Matrix matrix, List<Pair<Integer,Integer>> path) {
         this.matrix = matrix;
         this.path = pathConverter(path);
         this.usedPercolationObjects = new ArrayList<>();
@@ -38,8 +38,8 @@ public class PercolationPathDistances {
     }
 
 
-    public List<Double> getDistancesToSetPercolationBlock(){
-        List<Double> distances = new ArrayList<>();
+    public List<PercolationRelation> getProgrammingPercolationList(){
+        List<PercolationRelation> percolationRelations = new ArrayList<>();
 //        System.out.println("begin");
         for(Cell percolationCell: this.path){
 //            System.out.println("current cell" + percolationCell);
@@ -73,7 +73,7 @@ public class PercolationPathDistances {
 //                            String message = MessageFormat.format("Distance added: from [{0}][{1}] to [{2}][{3}] = {4}",
 //                                    x0, y0, goodCell.getX(), goodCell.getY(), distance);
 //                            System.out.println(message);
-                            distances.add(distance);
+                            percolationRelations.add(new PercolationRelation(goodCell,percolationCell,distance));
                             break;
                         }
                     }
@@ -83,7 +83,7 @@ public class PercolationPathDistances {
                 }
             }
         }
-        return distances;
+        return percolationRelations;
     }
 
 }
