@@ -2,12 +2,12 @@ package company;
 
 import company.expirement.Experiment;
 import company.expirement.ExperimentManager;
-import company.filling.*;
+import company.filling.FillingType;
+import company.filling.RandomFillingType;
 import company.filling.customs.*;
 import company.paint.LineChartNode;
 import company.paint.Painter;
 import company.stat.NormalizedStatManager;
-import company.stat.SimpleStatManager;
 import company.stat.StatManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 public class Controller {
 
@@ -158,6 +159,7 @@ public class Controller {
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
             LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
+
             for (Integer size : sizes) {
                 System.out.println("For size " + size + " generating start");
                 long startTimeForSize = System.currentTimeMillis();
@@ -166,15 +168,25 @@ public class Controller {
                 List<LineChartNode> midRedCellsCount = new ArrayList<>();
                 List<LineChartNode> midWayLengths = new ArrayList<>();
                 List<Double> probabilities = new ArrayList<>();
+                probabilities.add(0.0);
                 probabilities.add(0.1);
                 probabilities.add(0.2);
-                probabilities.add(0.25);
+                probabilities.add(0.22);
+                probabilities.add(0.24);
+                probabilities.add(0.26);
+                probabilities.add(0.27);
+                probabilities.add(0.28);
                 probabilities.add(0.3);
                 probabilities.add(0.4);
                 probabilities.add(0.5);
                 probabilities.add(0.7);
                 probabilities.add(0.85);
-                probabilities.forEach(probability -> {
+                DoubleStream.iterate(0, x -> {
+                    if (x < 0.4)
+                        return x + 0.02;
+                    else if (x > 0.4 && x < 0.6) return x + 0.05;
+                    else return x + 0.1;
+                }).limit(100).filter(x -> x < 1).forEach(probability -> {
                     RandomFillingType randomFillingType = new RandomFillingType();
                     randomFillingType.setSize(size);
                     randomFillingType.setPercolationProbability(probability);

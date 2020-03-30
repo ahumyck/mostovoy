@@ -1,6 +1,7 @@
 package company.lightning;
 
 import company.entity.Matrix;
+import org.omg.CORBA.INTERNAL;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,7 +52,6 @@ public class LightningBolt {
 
 
     public LightningBolt calculateShortestPaths() {
-//        long startTime = System.currentTimeMillis();
         for(int currentPos = 0 ; currentPos < this.shiftedSize; currentPos++) {
             Pair<List<Integer>, List<Integer>> inf = findShortestPaths(currentPos);
             List<Integer> distances = inf.getSecond();
@@ -63,77 +63,42 @@ public class LightningBolt {
             paths.add(new Pair<>(path, distances.get(shortest)));
 
         }
-//        System.out.println(System.currentTimeMillis() - startTime);
-//        startTime = System.currentTimeMillis();
         this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
         this.indexOfShortestPath = this.paths.indexOf(shortestPath);
-//        System.out.println("    " + (System.currentTimeMillis() - startTime));
         return this;
     }
 
 
     private Pair<List<Integer>, List<Integer>> findShortestPaths(int start_pos){
-//        List<Integer> distanceToOtherNeighbors = initWith(Integer.MAX_VALUE,this.adjacencyList.size()); v.1
-
-//        List<Integer> distanceToOtherNeighbors = new ArrayList<>(this.adjacencyList.size()); v.2
-//        for (int i = 0; i < this.adjacencyList.size(); i++) {
-//            distanceToOtherNeighbors.add(Integer.MAX_VALUE);
-//        }
         int[] distanceToOtherNeighbors = new int[this.adjacencyList.size()];
         for (int i = 0; i < this.adjacencyList.size(); i++) {
             distanceToOtherNeighbors[i] = Integer.MAX_VALUE;
         }
-
-//        List<Integer> parents = initWith(0,this.adjacencyList.size()); v.1
-//        List<Integer> parents = new ArrayList<>(this.adjacencyList.size()); v.2
+        Set<Integer> distanceToOtherNeighborsMap = new HashSet<>();
         int[] parents = new int[this.adjacencyList.size()];
-//        for (int i = 0; i < this.adjacencyList.size(); i++) {
-//            parents[i] = 0;
-//        }
-//        List<Boolean> visitedNeighbors = initWith(false,this.adjacencyList.size());
-//        List<Boolean> visitedNeighbors = new ArrayList<>(this.adjacencyList.size());
-        boolean[] visitedNeighbors = new boolean[this.adjacencyList.size()];
-//        for (int i = 0; i < this.adjacencyList.size(); i++) {
-//            visitedNeighbors.add(Boolean.FALSE);
-//        }
-
-//        distanceToOtherNeighbors.set(start_pos,0);
+        distanceToOtherNeighborsMap.add(start_pos);
         distanceToOtherNeighbors[start_pos] = 0;
         int n = this.adjacencyList.keySet().size();
         for (int i = 0; i < n ; i++) {
             int v = -1;
-//            long startTime = System.nanoTime();
-            for (int j = 0; j < n; j++) {
-                if(!visitedNeighbors[j] && distanceToOtherNeighbors[j] != Integer.MAX_VALUE && (v == -1 || distanceToOtherNeighbors[j] < distanceToOtherNeighbors[v]))
+            for (Integer j : distanceToOtherNeighborsMap)
+            {
+                if(v == -1 || distanceToOtherNeighbors[j] < distanceToOtherNeighbors[v])
                     v = j;
             }
-//            System.out.println(System.nanoTime() - startTime);
-            if(distanceToOtherNeighbors[v] == Integer.MAX_VALUE)
-                break;
-
-            visitedNeighbors[v] = true;
-//            startTime = System.nanoTime();
             final int v1 = v;
             adjacencyList.get(v).forEach(pair -> {
                 int to = pair.getFirst();
                 int len = pair.getSecond();
-                if (distanceToOtherNeighbors[v1] + len < distanceToOtherNeighbors[to]) {
-                    distanceToOtherNeighbors[to] = distanceToOtherNeighbors[v1] + len;
+                int newValue = distanceToOtherNeighbors[v1] + len;
+                if (newValue < distanceToOtherNeighbors[to]) {
+                    distanceToOtherNeighborsMap.add(to);
+                    distanceToOtherNeighbors[to] = newValue;
                     parents[to] = v1;
                 }
             });
-//            for (int j = 0; j < this.adjacencyList.get(v).size(); j++) {
-//                Pair<Integer,Integer> pair = this.adjacencyList.get(v).get(j);
-//                int to = pair.getFirst();
-//                int len = pair.getSecond();
-//                if (distanceToOtherNeighbors[v] + len < distanceToOtherNeighbors[to]) {
-//                    distanceToOtherNeighbors[to] = distanceToOtherNeighbors[v] + len;
-//                    parents[to] = v;
-//                }
-//            }
-//            System.out.println("    " + (System.nanoTime() - startTime));
+            distanceToOtherNeighborsMap.remove(v);
         }
-
         return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
 

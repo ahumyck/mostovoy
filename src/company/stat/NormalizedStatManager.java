@@ -10,29 +10,31 @@ import java.util.OptionalDouble;
 public class NormalizedStatManager implements StatManager {
 
     public double clusterCountStat(List<Experiment> experiments) {
-        int size = experiments.get(0).getMatrix().getSize();
+        int size = experiments.get(0).getMatrix().getSize() - 2;
         OptionalDouble midClusterCount = experiments.stream().map(Experiment::getMatrix).mapToInt(Matrix::getClusterCounter).average();
-        return midClusterCount.getAsDouble() / (size*size) ;
+        return midClusterCount.getAsDouble() / (size * size);
     }
 
     public double clusterSizeStat(List<Experiment> experiments) {
-        int size = experiments.get(0).getMatrix().getSize();
+        int size = experiments.get(0).getMatrix().getSize() - 2;
         return experiments.stream()
                 .map(Experiment::getMatrix)
-                .mapToDouble(matrix -> ((double) matrix.stream().filter(Cell::hasClusterMark).count()) / matrix.getClusterCounter())
-                .average()
-                .getAsDouble() / size ;
+                .mapToDouble(matrix -> {
+                    if (matrix.getClusterCounter() > 0)
+                        return (double) matrix.stream().filter(Cell::hasClusterMark).count()/matrix.getClusterCounter();
+                    else return 0;
+                }).average().orElse(0) / (size *size);
     }
 
-    public double redCellsCountStat(List<Experiment> experiments){
-        int size = experiments.get(0).getMatrix().getSize();
-        return experiments.stream().mapToDouble(Experiment::getRedCellsCounter).average().getAsDouble()/ size ;
+    public double redCellsCountStat(List<Experiment> experiments) {
+        int size = experiments.get(0).getMatrix().getSize() - 2;
+        return experiments.stream().mapToDouble(Experiment::getRedCellsCounter).average().getAsDouble() / size;
 
     }
 
-    public double wayLengthStat(List<Experiment> experiments){
-        int size = experiments.get(0).getMatrix().getSize();
-        return experiments.stream().mapToDouble(Experiment::getDistance).average().getAsDouble()/size ;
+    public double wayLengthStat(List<Experiment> experiments) {
+        int size = experiments.get(0).getMatrix().getSize() - 2;
+        return experiments.stream().mapToDouble(Experiment::getDistance).average().getAsDouble() / size;
     }
 
 }
