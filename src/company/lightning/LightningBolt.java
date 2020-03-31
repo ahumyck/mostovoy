@@ -6,7 +6,6 @@ import company.entity.Matrix;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class LightningBolt {
 
@@ -107,8 +106,7 @@ public class LightningBolt {
     private List<Cell> getPath(int start, int end, List<Integer> parents){
         List<Cell> path = new ArrayList<>();
         for (int v = end; ; v = parents.get(v)) {
-            buildPath(v,path);
-            countRedCells(start,v);
+            smartPathBuilder(v,path, start);
             if(v == start) break;
         }
         return path;
@@ -120,17 +118,11 @@ public class LightningBolt {
         return new Pair<>(i,j);
     }
 
-    private void buildPath(int currentPosition, List<Cell> path){
+    private void smartPathBuilder(int currentPosition, List<Cell> path,int startPosition){
         Pair<Integer, Integer> indecies = getIndecies(currentPosition);
         int i = indecies.getFirst();
         int j = indecies.getSecond();
         path.add(0,this.matrix.getCell(i + Matrix.OFFSET,j + Matrix.OFFSET));
-    }
-
-    private void countRedCells(int startPosition, int currentPosition){
-        Pair<Integer, Integer> indecies = getIndecies(currentPosition);
-        int i = indecies.getFirst();
-        int j = indecies.getSecond();
         if(this.matrix.getCell(i + Matrix.OFFSET, j + Matrix.OFFSET).isWhite())
             this.redCellCounters[startPosition]++;
     }
