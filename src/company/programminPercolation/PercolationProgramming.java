@@ -17,9 +17,9 @@ public class PercolationProgramming {
     private Matrix matrix;
     private List<Cell> usedPercolationObjects;
 
-    public PercolationProgramming(Matrix matrix, List<Pair<Integer,Integer>> path) {
+    public PercolationProgramming(Matrix matrix, List<Cell> path) {
         this.matrix = matrix;
-        this.path = pathConverter(path);
+        this.path = path;
         this.usedPercolationObjects = new ArrayList<>();
     }
 
@@ -29,20 +29,10 @@ public class PercolationProgramming {
         return Math.sqrt(dx*dx + dy*dy);
     }
 
-    private List<Cell> pathConverter(List<Pair<Integer,Integer>> path){
-        List<Cell> cells = new ArrayList<>();
-        for (Pair brick: path){
-            cells.add(this.matrix.getCell(brick));
-        }
-        return cells;
-    }
-
 
     public List<PercolationRelation> getProgrammingPercolationList(){
         List<PercolationRelation> percolationRelations = new ArrayList<>();
-//        System.out.println("begin");
         for(Cell percolationCell: this.path){
-//            System.out.println("current cell" + percolationCell);
             int x0 = percolationCell.getX();
             int y0 = percolationCell.getY();
             if(percolationCell.isWhite()){
@@ -50,15 +40,12 @@ public class PercolationProgramming {
                 while(true){
                     if(boundary > 2*(matrix.getSize() - 2*Matrix.OFFSET))
                         break;
-//                    System.out.println("boundary " + boundary);
                     BoundaryCellsGenerator generator = new BoundaryCellsGenerator(boundary,percolationCell,matrix);
                     List<Cell> potentialCells = generator.generate();
-//                    System.out.println("potential: " + potentialCells);
                     List<Cell> optimalCellsCollection = potentialCells.stream()
                             .filter(Cell::isBlack)
                             .filter(cell -> !path.contains(cell))
                             .collect(Collectors.toList());
-//                    System.out.println("after filter: " + optimalCellsCollection);
                     if(!optimalCellsCollection.isEmpty()){
                         optimalCellsCollection.sort(Comparator.comparingDouble(a -> getDistance(x0, y0, a.getX(), a.getY())));
                         Optional<Cell> optionalCell = Optional.empty();
@@ -72,16 +59,11 @@ public class PercolationProgramming {
                         if(optionalCell.isPresent()){
                             Cell goodCell = optionalCell.get();
                             double distance = getDistance(x0,y0,goodCell.getX(),goodCell.getY());
-//                            String message = MessageFormat.format("Distance added: from [{0}][{1}] to [{2}][{3}] = {4}",
-//                                    x0, y0, goodCell.getX(), goodCell.getY(), distance);
-//                            System.out.println(message);
                             percolationRelations.add(new PercolationRelation(goodCell,percolationCell,distance));
                             break;
                         }
                     }
                     boundary++;
-//                    System.out.println();
-//                    System.out.println();
                 }
             }
         }

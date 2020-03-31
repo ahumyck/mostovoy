@@ -1,5 +1,6 @@
 package company.expirement;
 
+import company.entity.Cell;
 import company.entity.Matrix;
 import company.lightning.LightningBolt;
 import company.lightning.Pair;
@@ -12,7 +13,7 @@ public class Experiment {
 
     private String name;
     private Matrix matrix;
-    private Pair<List<Pair<Integer, Integer>>, Integer> path = null;
+    private Pair<List<Cell>, Integer> path = null;
     private Integer redCellsCounter;
     private List<PercolationRelation> programmings = null;
 
@@ -30,7 +31,7 @@ public class Experiment {
         this.matrix = matrix;
     }
 
-    public List<Pair<Integer, Integer>> getPath() {
+    public List<Cell> getPath() {
         if (path == null) calculatePath();
         return path.getFirst();
 

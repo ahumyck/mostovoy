@@ -92,7 +92,7 @@ public class Painter {
         chart.getData().add(series);
     }
 
-    public void paintLightningBoltCanvas(AnchorPane pane, List<Pair<Integer,Integer>> path,List<PercolationRelation> relations, Matrix matrix)
+    public void paintLightningBoltCanvas(AnchorPane pane, List<Cell> path,List<PercolationRelation> relations, Matrix matrix)
     {
         double size = pane.getHeight()/ (matrix.getSize() - 2);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
@@ -108,8 +108,7 @@ public class Painter {
             graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
             graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
         });
-        path.forEach(dot -> {
-            Cell cell = matrix.getCell(dot.getFirst() + Matrix.OFFSET, dot.getSecond()+ Matrix.OFFSET);
+        path.forEach(cell -> {
             graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
             graphicsContext2D.setFill(Color.GRAY);

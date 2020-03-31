@@ -1,5 +1,6 @@
 package company.lightning;
 
+import company.entity.Cell;
 import company.entity.Matrix;
 
 
@@ -14,8 +15,8 @@ public class LightningBolt {
     private int[] redCellCounters;
     private int shiftedSize;
     private int indexOfShortestPath;
-    private List<Pair<List<Pair<Integer,Integer>>,Integer>> paths;
-    private Pair<List<Pair<Integer, Integer>>, Integer> shortestPath = null;
+    private List<Pair<List<Cell>,Integer>> paths;
+    private Pair<List<Cell>, Integer> shortestPath = null;
 
     public LightningBolt(Matrix matrix) {
         this.matrix = matrix;
@@ -42,11 +43,11 @@ public class LightningBolt {
         return this.paths.size() == 0 ? -1 /*error code */ : this.paths.get(index).getFirst().size();
     }
 
-    public Optional<Pair<List<Pair<Integer, Integer>>, Integer>> getShortestPath(){
+    public Optional<Pair<List<Cell>, Integer>> getShortestPath(){
         return Optional.of(this.shortestPath);
     }
 
-    public Optional<Pair<List<Pair<Integer, Integer>>, Integer>> getPathByIndex(int index){
+    public Optional<Pair<List<Cell>, Integer>> getPathByIndex(int index){
         return this.paths.size() != 0 ? Optional.of(this.paths.get(index)): Optional.empty();
     }
 
@@ -59,7 +60,7 @@ public class LightningBolt {
 
             int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
             int endPos = this.shiftedSize * (this.shiftedSize - 1) + shortest;
-            List<Pair<Integer, Integer>> path = getPath(currentPos, endPos, parents);
+            List<Cell> path = getPath(currentPos, endPos, parents);
             paths.add(new Pair<>(path, distances.get(shortest)));
 
         }
@@ -103,15 +104,22 @@ public class LightningBolt {
         return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
 
+    private List<Cell> pathConverter(List<Pair<Integer,Integer>> path){
+        List<Cell> cells = new ArrayList<>();
+        for (Pair brick: path){
+            cells.add(this.matrix.getCell(brick));
+        }
+        return cells;
+    }
 
-    private List<Pair<Integer,Integer>> getPath(int start, int end, List<Integer> parents){
+    private List<Cell> getPath(int start, int end, List<Integer> parents){
         List<Pair<Integer,Integer>> path = new ArrayList<>();
         for (int v = end; ; v = parents.get(v)) {
             buildPath(v,path);
             countRedCells(start,v);
             if(v == start) break;
         }
-        return path;
+        return pathConverter(path);
     }
 
     private Pair<Integer,Integer> getIndecies(int currentPosition){

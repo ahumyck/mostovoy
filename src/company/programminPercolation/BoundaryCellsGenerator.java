@@ -28,25 +28,13 @@ public class BoundaryCellsGenerator {
         }
     }
 
-    private void print(int x0,int y0){
-        System.out.println("check [" + x0 + "][" + y0 + "]");
-    }
-
     public List<Cell> generate(){
         this.list = new ArrayList<>();
-//        print(x - boundary, y);
-//        print(x + boundary, y);
-//        print(x, y + boundary);
-//        print(x, y - boundary);
         addIfCondition(x - boundary + Matrix.OFFSET, y + Matrix.OFFSET);
         addIfCondition(x + boundary + Matrix.OFFSET, y + Matrix.OFFSET);
         addIfCondition(x + Matrix.OFFSET, y + boundary + Matrix.OFFSET);
         addIfCondition(x + Matrix.OFFSET, y - boundary + Matrix.OFFSET);
         for (int i = 1; i < boundary; i++){
-//            print(x - (boundary - i), y - i);
-//            print(x - (boundary - i), y + i);
-//            print(x + (boundary - i), y - i);
-//            print(x + (boundary - i), y + i);
             addIfCondition(x - (boundary - i) + Matrix.OFFSET, y - i + Matrix.OFFSET);
             addIfCondition(x - (boundary - i) + Matrix.OFFSET, y + i + Matrix.OFFSET);
             addIfCondition(x + (boundary - i) + Matrix.OFFSET, y - i + Matrix.OFFSET);

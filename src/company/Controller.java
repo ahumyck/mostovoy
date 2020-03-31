@@ -188,9 +188,7 @@ public class Controller {
                             List<Experiment> experiments = null;
                             try {
                                 experiments = forkJoinPool.submit(() -> experimentManager.initializeExperiments(count, randomFillingType)).get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
+                            } catch (InterruptedException | ExecutionException e) {
                                 e.printStackTrace();
                             }
 //                            List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
