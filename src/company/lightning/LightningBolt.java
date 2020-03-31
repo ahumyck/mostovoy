@@ -104,22 +104,14 @@ public class LightningBolt {
         return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
 
-    private List<Cell> pathConverter(List<Pair<Integer,Integer>> path){
-        List<Cell> cells = new ArrayList<>();
-        for (Pair brick: path){
-            cells.add(this.matrix.getCell(brick));
-        }
-        return cells;
-    }
-
     private List<Cell> getPath(int start, int end, List<Integer> parents){
-        List<Pair<Integer,Integer>> path = new ArrayList<>();
+        List<Cell> path = new ArrayList<>();
         for (int v = end; ; v = parents.get(v)) {
             buildPath(v,path);
             countRedCells(start,v);
             if(v == start) break;
         }
-        return pathConverter(path);
+        return path;
     }
 
     private Pair<Integer,Integer> getIndecies(int currentPosition){
@@ -128,11 +120,11 @@ public class LightningBolt {
         return new Pair<>(i,j);
     }
 
-    private void buildPath(int currentPosition, List<Pair<Integer,Integer>> path){
+    private void buildPath(int currentPosition, List<Cell> path){
         Pair<Integer, Integer> indecies = getIndecies(currentPosition);
         int i = indecies.getFirst();
         int j = indecies.getSecond();
-        path.add(0,new Pair<>(i,j));
+        path.add(0,this.matrix.getCell(i + Matrix.OFFSET,j + Matrix.OFFSET));
     }
 
     private void countRedCells(int startPosition, int currentPosition){
