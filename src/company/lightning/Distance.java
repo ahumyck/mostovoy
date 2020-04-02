@@ -3,8 +3,8 @@ package company.lightning;
 import java.util.Objects;
 
 public class Distance implements Comparable<Distance>{
-    private Integer vertex;
-    private Integer distance;
+    private int vertex;
+    private int distance;
 
     public Distance(int vertex, int distance) {
         this.vertex = vertex;
@@ -29,8 +29,7 @@ public class Distance implements Comparable<Distance>{
 
     @Override
     public int compareTo(Distance o) {
-        if(o.vertex.equals(this.vertex)) return 0;
-        return o.distance < this.distance ? 1 : -1;
+        return o.distance == distance ? vertex - o.vertex : o.distance < this.distance ? 1 : -1;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class Distance implements Comparable<Distance>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Distance distance = (Distance) o;
-        return vertex.equals(distance.vertex);
+        return vertex == distance.vertex;
     }
 
     @Override
