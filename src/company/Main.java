@@ -3,11 +3,16 @@ package company;
 import company.entity.Matrix;
 import company.filling.FillingType;
 import company.filling.customs.SquareFillingType;
+import company.lightning.Distance;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Main extends Application {
 

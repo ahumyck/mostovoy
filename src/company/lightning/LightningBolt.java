@@ -75,8 +75,16 @@ public class LightningBolt {
         }
         TreeSet<Distance> distanceToOtherNeighborsMap = new TreeSet<>();
         int[] parents = new int[this.adjacencyList.size()];
-        distanceToOtherNeighborsMap.add(new Distance(start_pos, 0));
-        distanceToOtherNeighbors[start_pos] = 0;
+
+        if(this.matrix.getCell(Matrix.OFFSET, Matrix.OFFSET + start_pos).isWhite()) {
+            distanceToOtherNeighborsMap.add(new Distance(start_pos, this.shiftedSize * this.shiftedSize + 1));
+            distanceToOtherNeighbors[start_pos] = this.shiftedSize * this.shiftedSize + 1;
+        }
+        else{
+            distanceToOtherNeighborsMap.add(new Distance(start_pos, 0));
+            distanceToOtherNeighbors[start_pos] = 0;
+        }
+
         int n = this.adjacencyList.keySet().size();
         for (int i = 0; i < n ; i++) {
             final Distance distance = distanceToOtherNeighborsMap.first();
