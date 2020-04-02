@@ -1,6 +1,6 @@
 package company.lightning;
 
-public class Pair<V,T> {
+public class Pair<V,T>{
     private V first;
     private T second;
 

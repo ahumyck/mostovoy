@@ -68,44 +68,6 @@ public class LightningBolt {
         return this;
     }
 
-
-    public static class Distance implements Comparable<Distance>{
-        Integer vertex;
-        Integer distance;
-
-        public Distance(int vertex, int distance) {
-            this.vertex = vertex;
-            this.distance = distance;
-        }
-
-        @Override
-        public int compareTo(Distance o) {
-            if(o.vertex.equals(this.vertex)) return 0;
-            return o.distance < this.distance ? 1 : -1;
-        }
-
-        @Override
-        public String toString() {
-            return "Distance{" +
-                    "vertex=" + vertex +
-                    ", distance=" + distance +
-                    '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Distance distance = (Distance) o;
-            return vertex.equals(distance.vertex);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(vertex);
-        }
-    }
-
     private Pair<List<Integer>, List<Integer>> findShortestPaths(int start_pos){
         int[] distanceToOtherNeighbors = new int[this.adjacencyList.size()];
         for (int i = 0; i < this.adjacencyList.size(); i++) {
@@ -123,7 +85,7 @@ public class LightningBolt {
 //                if(v == -1 || distanceToOtherNeighbors[j] < distanceToOtherNeighbors[v])
 //                    v = j;
 //            }
-            final int v = distanceToOtherNeighborsMap.first().vertex;
+            final int v = distanceToOtherNeighborsMap.first().getVertex();
             adjacencyList.get(v).forEach(pair -> {
                 int to = pair.getFirst();
                 int len = pair.getSecond();
