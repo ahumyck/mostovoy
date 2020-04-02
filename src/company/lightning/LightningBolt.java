@@ -69,37 +69,74 @@ public class LightningBolt {
     }
 
 
+    public static class Distance implements Comparable<Distance>{
+        Integer vertex;
+        Integer distance;
+
+        public Distance(int vertex, int distance) {
+            this.vertex = vertex;
+            this.distance = distance;
+        }
+
+        @Override
+        public int compareTo(Distance o) {
+            if(o.vertex.equals(this.vertex)) return 0;
+            return o.distance < this.distance ? 1 : -1;
+        }
+
+        @Override
+        public String toString() {
+            return "Distance{" +
+                    "vertex=" + vertex +
+                    ", distance=" + distance +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Distance distance = (Distance) o;
+            return vertex.equals(distance.vertex);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(vertex);
+        }
+    }
+
     private Pair<List<Integer>, List<Integer>> findShortestPaths(int start_pos){
         int[] distanceToOtherNeighbors = new int[this.adjacencyList.size()];
         for (int i = 0; i < this.adjacencyList.size(); i++) {
             distanceToOtherNeighbors[i] = Integer.MAX_VALUE;
         }
-        Set<Integer> distanceToOtherNeighborsMap = new HashSet<>();
+        TreeSet<Distance> distanceToOtherNeighborsMap = new TreeSet<>();
         int[] parents = new int[this.adjacencyList.size()];
-        distanceToOtherNeighborsMap.add(start_pos);
+        distanceToOtherNeighborsMap.add(new Distance(start_pos, 0));
         distanceToOtherNeighbors[start_pos] = 0;
         int n = this.adjacencyList.keySet().size();
         for (int i = 0; i < n ; i++) {
-            int v = -1;
-            for (Integer j : distanceToOtherNeighborsMap)
-            {
-                if(v == -1 || distanceToOtherNeighbors[j] < distanceToOtherNeighbors[v])
-                    v = j;
-            }
-            final int v1 = v;
+//            int v = -1;
+//            for (Integer j : distanceToOtherNeighborsMap)
+//            {
+//                if(v == -1 || distanceToOtherNeighbors[j] < distanceToOtherNeighbors[v])
+//                    v = j;
+//            }
+            final int v = distanceToOtherNeighborsMap.first().vertex;
             adjacencyList.get(v).forEach(pair -> {
                 int to = pair.getFirst();
                 int len = pair.getSecond();
-                int newValue = distanceToOtherNeighbors[v1] + len;
+                int newValue = distanceToOtherNeighbors[v] + len;
                 if (newValue < distanceToOtherNeighbors[to]) {
-                    distanceToOtherNeighborsMap.add(to);
+                    distanceToOtherNeighborsMap.remove(new Distance(to, 0));
+                    distanceToOtherNeighborsMap.add(new Distance(to, newValue));
                     distanceToOtherNeighbors[to] = newValue;
-                    parents[to] = v1;
+                    parents[to] = v;
                 }
             });
-            distanceToOtherNeighborsMap.remove(v);
+            distanceToOtherNeighborsMap.remove(distanceToOtherNeighborsMap.first());
         }
-
         return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
 
