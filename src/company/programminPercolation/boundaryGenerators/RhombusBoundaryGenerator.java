@@ -1,4 +1,4 @@
-package company.programminPercolation;
+package company.programminPercolation.boundaryGenerators;
 
 import company.entity.Cell;
 import company.entity.Matrix;
@@ -8,14 +8,14 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoundaryCellsGenerator {
+public class RhombusBoundaryGenerator implements BoundaryGenerator {
 
     private int boundary;
     private int x,y;
     private Matrix matrix;
     private List<Cell> list;
 
-    public BoundaryCellsGenerator(int boundary, Cell centerCell, Matrix matrix) {
+    public RhombusBoundaryGenerator(int boundary, Cell centerCell, Matrix matrix) {
         this.boundary = boundary;
         this.matrix = matrix;
         this.x = centerCell.getX();
@@ -28,6 +28,7 @@ public class BoundaryCellsGenerator {
         }
     }
 
+    @Override
     public List<Cell> generate(){
         this.list = new ArrayList<>();
         addIfCondition(x - boundary + Matrix.OFFSET, y + Matrix.OFFSET);
