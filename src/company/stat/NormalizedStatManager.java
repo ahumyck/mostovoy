@@ -45,7 +45,6 @@ public class NormalizedStatManager implements StatManager {
     @Override
     public double redCellStationDistanceForPythagoras(List<Experiment> experiments) {
         double res = redCellStationDistance(experiments, PYTHAGORAS);
-        System.out.println("res: " + res);
         return res;
     }
 
