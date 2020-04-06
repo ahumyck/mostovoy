@@ -56,7 +56,7 @@ public class NormalizedStatManager implements StatManager {
     }
 
 
-    public double redCellStationDistance(List<Experiment> experiments, String type) {
+    private double redCellStationDistance(List<Experiment> experiments, String type) {
         return experiments.stream().flatMapToDouble(experiment -> experiment.getProgrammings(type).stream().mapToDouble(PercolationRelation::getDistance)).average().orElse(0);
     }
 

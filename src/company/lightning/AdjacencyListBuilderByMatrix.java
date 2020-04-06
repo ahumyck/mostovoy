@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdjacencyListBuilderByMatrix {
+class AdjacencyListBuilderByMatrix {
 
     private Map<Integer, List<Pair<Integer,Integer>>> map = new HashMap<>();
 
@@ -30,7 +30,7 @@ public class AdjacencyListBuilderByMatrix {
         return cost;
     }
 
-    void add(Cell startCell, int startShiftedPosition, int i, int j, Matrix matrix){
+    private void add(Cell startCell, int startShiftedPosition, int i, int j, Matrix matrix){
         int shiftedSize = matrix.getSize() - 2*Matrix.OFFSET;
         Cell endCell = matrix.getCell(i,j);
         if(!endCell.isEmpty()){
@@ -40,7 +40,7 @@ public class AdjacencyListBuilderByMatrix {
         }
     }
 
-    public Map<Integer, List<Pair<Integer,Integer>>> build(Matrix matrix){
+    Map<Integer, List<Pair<Integer,Integer>>> build(Matrix matrix){
         int size = matrix.getSize();
         for (int i = 0; i < size ; i++) {
             for (int j = 0; j < size; j++) {

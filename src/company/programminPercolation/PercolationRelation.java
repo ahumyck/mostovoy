@@ -7,7 +7,7 @@ public class PercolationRelation {
     private Cell redCell;
     private double distance;
 
-    public PercolationRelation(Cell blackCell, Cell redCell, double distance) {
+    PercolationRelation(Cell blackCell, Cell redCell, double distance) {
         this.blackCell = blackCell;
         this.redCell = redCell;
         this.distance = distance;

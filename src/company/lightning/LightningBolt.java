@@ -30,6 +30,11 @@ public class LightningBolt {
         return this.indexOfShortestPath == -1 ? -1 /*error code*/ : this.redCellCounters[this.indexOfShortestPath];
     }
 
+
+    public Optional<Pair<List<Cell>, Integer>> getShortestPath() {
+        return Optional.of(this.shortestPath);
+    }
+
     public int getDistanceForShortestPath() {
         return this.shortestPath == null ? -1 /*error code */ : this.shortestPath.getFirst().size();
     }
@@ -40,14 +45,6 @@ public class LightningBolt {
 
     public int getDistanceForPathByIndex(int index) {
         return this.paths.size() == 0 ? -1 /*error code */ : this.paths.get(index).getFirst().size();
-    }
-
-    public Optional<Pair<List<Cell>, Integer>> getShortestPath() {
-        return Optional.of(this.shortestPath);
-    }
-
-    public Optional<Pair<List<Cell>, Integer>> getPathByIndex(int index) {
-        return this.paths.size() != 0 ? Optional.of(this.paths.get(index)) : Optional.empty();
     }
 
 
@@ -93,7 +90,7 @@ public class LightningBolt {
             do {
                 distance = distanceToOtherNeighborsMap.poll();
                 v = distance.getVertex();
-            }while(visited[v]);
+            } while(visited[v]);
             visited[v] = true;
             final int f_v = v;
             adjacencyList.get(v).forEach(pair -> {

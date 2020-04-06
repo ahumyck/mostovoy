@@ -23,11 +23,11 @@ public class Experiment {
     }
 
 
-    public Experiment(String name) {
+    Experiment(String name) {
         this.name = name;
     }
 
-    public Experiment(String name, Matrix matrix) {
+    Experiment(String name, Matrix matrix) {
         this.name = name;
         this.matrix = matrix;
     }
@@ -46,7 +46,7 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    public void calculatePath() {
+    private void calculatePath() {
         LightningBolt lightningBolt = new LightningBolt(matrix);
 //        System.out.println(System.currentTimeMillis() - startTime);
 //        startTime = System.currentTimeMillis();
@@ -61,7 +61,7 @@ public class Experiment {
         return programmings;
     }
 
-    void calculateProgrammingPercolation(String distanceCalculatorType) {
+    private void calculateProgrammingPercolation(String distanceCalculatorType) {
         this.programmings = new PercolationProgramming(matrix, getPath())
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType)).getProgrammingPercolationList();
     }

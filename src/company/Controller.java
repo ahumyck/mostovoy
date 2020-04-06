@@ -187,7 +187,7 @@ public class Controller {
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
             LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
             LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
-            ForkJoinPool forkJoinPool = new ForkJoinPool(2);
+            ForkJoinPool forkJoinPool = new ForkJoinPool(8);
             for (Integer size : sizes) {
                 System.out.println("For size " + size + " generating start");
                 long startTimeForSize = System.currentTimeMillis();
@@ -197,13 +197,8 @@ public class Controller {
                 List<LineChartNode> midWayLengths = new ArrayList<>();
                 List<LineChartNode> redCellsStationDistancesPythagoras = new ArrayList<>();
                 List<LineChartNode> redCellsStationDistancesDiscrete = new ArrayList<>();
-                DoubleStream.iterate(0.02,
-                        x -> {
-                            if (x < 0.4)
-                                return x + 0.02;
-                            else if (x > 0.4 && x < 0.6) return x + 0.05;
-                            else return x + 0.1;
-                        })
+                DoubleStream.iterate(0.01,
+                        x -> x + 0.01)
                         .limit(100)
                         .filter(x -> x < 1)
                         .forEach(probability -> {
