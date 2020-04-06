@@ -4,7 +4,8 @@ import company.entity.Cell;
 import company.entity.Matrix;
 import company.lightning.Pair;
 import company.programminPercolation.boundaryGenerators.BoundaryGenerator;
-import company.programminPercolation.boundaryGenerators.RhombusBoundaryGenerator;
+import company.programminPercolation.distance.DistanceCalculator;
+import company.programminPercolation.distance.impl.PythagoreanTheoremCalculator;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,15 +14,24 @@ import java.util.stream.Stream;
 public class PercolationProgramming {
 
     private List<Cell> path;
-    private Matrix matrix;
     private List<Cell> usedPercolationObjects;
     private int neighborhood;
+    private DistanceCalculator calculator;
+    private BoundaryGenerator generator;
+    private Random random = new Random();
+
 
     public PercolationProgramming(Matrix matrix, List<Cell> path) {
-        this.matrix = matrix;
         this.path = path;
         this.usedPercolationObjects = new ArrayList<>();
         this.neighborhood = 3;
+        this.calculator = new PythagoreanTheoremCalculator();
+        generator = new BoundaryGenerator(matrix);
+    }
+
+    public PercolationProgramming setDistanceCalculator(DistanceCalculator calculator){
+        this.calculator = calculator;
+        return this;
     }
 
     public PercolationProgramming setNeighborhoodValue(int neighborhood){
@@ -34,12 +44,6 @@ public class PercolationProgramming {
         return this;
     }
 
-    private double getDistance(Cell a, Cell b){
-        int dx = a.getX() - b.getX();
-        int dy = a.getY() - b.getY();
-        return Math.sqrt(dx*dx + dy*dy);
-    }
-
     public List<Pair<Long,Long>> getRatio(){
         List<Pair<Long,Long>> ratio = new ArrayList<>();
         for(Cell percolationCell: this.path){
@@ -48,8 +52,7 @@ public class PercolationProgramming {
             if(percolationCell.isWhite())
                 redCellsCounter++;
             for (int boundary = 1; boundary <= this.neighborhood ; boundary++) {
-                RhombusBoundaryGenerator generator = new RhombusBoundaryGenerator(boundary, percolationCell, matrix);
-                List<Cell> potentialCells = generator.generate();
+                List<Cell> potentialCells = generator.generate(boundary,percolationCell);
                 blackCellsCounter += streamBlackCells(potentialCells).count();
                 redCellsCounter += streamRedCells(potentialCells).count();
                 boundary++;
@@ -70,45 +73,45 @@ public class PercolationProgramming {
         List<PercolationRelation> percolationRelations = new ArrayList<>();
         for(Cell percolationCell: this.path){
             if(percolationCell.isWhite()){
-                for (int boundary = 1; boundary <= this.neighborhood ; boundary++) {
-                    Optional<PercolationRelation> relationForCurrentCell = findRelationForCurrentCell(percolationCell, boundary);
-                    if(relationForCurrentCell.isPresent()){
-                        percolationRelations.add(relationForCurrentCell.get());
-                        break;
-                    }
-                }
+                Optional<List<PercolationRelation>> relationForCurrentCell = findRelationForCurrentCell(percolationCell);
+                relationForCurrentCell.ifPresent(percolationRelations::addAll);
             }
         }
         return percolationRelations;
     }
 
-    private Optional<PercolationRelation> findRelationForCurrentCell(Cell percolationCell, int boundary){
-        RhombusBoundaryGenerator generator = new RhombusBoundaryGenerator(boundary,percolationCell,matrix);
-        List<Cell> optimalCellsCollection = getOptimalCellsCollection(generator,percolationCell);
+    private Optional<List<PercolationRelation>> findRelationForCurrentCell(Cell percolationCell){
+        List<Cell> optimalCellsCollection = getOptimalCellsCollection(percolationCell);
         if(!optimalCellsCollection.isEmpty()){
-            Optional<Cell> optionalCell = findOptionalCell(optimalCellsCollection);
-            if(optionalCell.isPresent()){
-                Cell goodCell = optionalCell.get();
-                double distance = getDistance(percolationCell,goodCell);
-                return Optional.of(new PercolationRelation(goodCell,percolationCell,distance));
+            List<Cell> bestOptimalCells = getBestOptimalCells(optimalCellsCollection);
+            List<PercolationRelation> result = new ArrayList<>();
+            for (Cell goodCell: bestOptimalCells) {
+                double distance = calculator.calculateDistance(percolationCell,goodCell);
+                result.add(new PercolationRelation(goodCell,percolationCell,distance));
             }
+            return Optional.of(result);
         }
         return Optional.empty();
     }
 
-    private Optional<Cell> findOptionalCell(List<Cell> optimalCellsCollection){
-        for (Cell optimalCell : optimalCellsCollection){
-            if(!this.usedPercolationObjects.contains(optimalCell)){
+    private List<Cell> getBestOptimalCells(List<Cell> optimalCellsCollection){
+        int howMany = random.nextInt(3) + 1; // random from [1...3]
+        int count = 0;
+        List<Cell> bestOptimalCells = new ArrayList<>();
+        for (Cell optimalCell : optimalCellsCollection) {
+            if (!this.usedPercolationObjects.contains(optimalCell)) {
                 this.usedPercolationObjects.add(optimalCell);
-                return Optional.of(optimalCell);
+                bestOptimalCells.add(optimalCell);
+                count++;
             }
+            if (count == howMany) break;
         }
-        return Optional.empty();
+        return bestOptimalCells;
     }
 
-    private List<Cell> getOptimalCellsCollection(BoundaryGenerator generator, Cell percolationCell){
-        return streamBlackCells(generator.generate())
-                .sorted(Comparator.comparingDouble(a -> getDistance(a, percolationCell)))
+    private List<Cell> getOptimalCellsCollection(Cell percolationCell){
+        return streamBlackCells(generator.generate(this.neighborhood,percolationCell))
+                .sorted(Comparator.comparingDouble(a -> calculator.calculateDistance(a, percolationCell)))
                 .collect(Collectors.toList());
     }
 
