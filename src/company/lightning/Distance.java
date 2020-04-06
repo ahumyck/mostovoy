@@ -6,12 +6,12 @@ public class Distance implements Comparable<Distance>{
     private int vertex;
     private int distance;
 
-    public Distance(int vertex, int distance) {
+    Distance(int vertex, int distance) {
         this.vertex = vertex;
         this.distance = distance;
     }
 
-    public Integer getVertex() {
+    Integer getVertex() {
         return vertex;
     }
 

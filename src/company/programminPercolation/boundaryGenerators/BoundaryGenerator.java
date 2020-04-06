@@ -39,7 +39,7 @@ public class BoundaryGenerator {
         this.list.add(this.matrix.getCell(x,y));
     }
 
-    private List<Integer> getBoundary(int bound){
+    private List<Integer> getBoundaries(int bound){
         List<Integer> boundaries = new ArrayList<>();
         for (int i = 1; i <= bound; i++) {
             boundaries.add(i);
@@ -52,7 +52,7 @@ public class BoundaryGenerator {
         list = new ArrayList<>();
         int x = centerCell.getX();
         int y = centerCell.getY();
-        List<Integer> boundaries = getBoundary(bound);
+        List<Integer> boundaries = getBoundaries(bound);
         for (Integer boundary: boundaries) {
             checkPredicates(centerCell, x - boundary + Matrix.OFFSET, y + Matrix.OFFSET);
             checkPredicates(centerCell, x + boundary + Matrix.OFFSET, y + Matrix.OFFSET);

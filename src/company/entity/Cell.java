@@ -41,11 +41,11 @@ public class Cell {
         return type;
     }
 
-    public int getIntType() {
+    int getIntType() {
         return type.getValue();
     }
 
-    public void setType(CellType type) {
+    void setType(CellType type) {
         this.type = type;
     }
 
@@ -57,7 +57,7 @@ public class Cell {
         return clusterMark > 0;
     }
 
-    public void setClusterMark(int clusterMark) {
+    void setClusterMark(int clusterMark) {
         this.clusterMark = clusterMark;
     }
 
