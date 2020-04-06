@@ -23,6 +23,9 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
+import static company.programminPercolation.DistancePercolationTypeResolver.NE_PIFAGOR;
+import static company.programminPercolation.DistancePercolationTypeResolver.PIFAGOR;
+
 public class Controller {
 
     private ExperimentManager experimentManager = new ExperimentManager();
@@ -31,6 +34,11 @@ public class Controller {
 
     @FXML
     public Label currentClustersCount;
+
+    @FXML
+    public AnchorPane objectStationDistance1;
+    @FXML
+    public AnchorPane objectStationDistance2;
 
     @FXML
     public Button distanceCalculatorType;
@@ -119,21 +127,20 @@ public class Controller {
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             painter.paintCanvas(gridPane, experiment.getMatrix());
-            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(),experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
+            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
             redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
-        distanceCalculatorType.setOnAction(actionEvent ->{
-            if(distanceCalculatorType.getText().equals("Пифагор")) {
+        distanceCalculatorType.setOnAction(actionEvent -> {
+            if (distanceCalculatorType.getText().equals(PIFAGOR)) {
                 final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+                distanceCalculatorType.setText(NE_PIFAGOR);
                 painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
-                distanceCalculatorType.setText("Не пифагор");
-            }
-            else if(distanceCalculatorType.getText().equals("Не пифагор")) {
+            } else if (distanceCalculatorType.getText().equals(NE_PIFAGOR)) {
                 final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+                distanceCalculatorType.setText(PIFAGOR);
                 painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
-                distanceCalculatorType.setText("Пифагор");
             }
 
         });
@@ -178,6 +185,8 @@ public class Controller {
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
             LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
+            LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Пифагор");
+            LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Не пифагор");
             ForkJoinPool forkJoinPool = new ForkJoinPool(4);
             for (Integer size : sizes) {
                 System.out.println("For size " + size + " generating start");
@@ -186,12 +195,11 @@ public class Controller {
                 List<LineChartNode> midClustersSize = new ArrayList<>();
                 List<LineChartNode> midRedCellsCount = new ArrayList<>();
                 List<LineChartNode> midWayLengths = new ArrayList<>();
-                DoubleStream.iterate(0,
+                List<LineChartNode> redCellsStationDistancesPi = new ArrayList<>();
+                List<LineChartNode> redCellsStationDistancesNePi = new ArrayList<>();
+                DoubleStream.iterate(0.02,
                         x -> {
-                            if (x < 0.4)
-                                return x + 0.02;
-                            else if (x > 0.4 && x < 0.6) return x + 0.05;
-                            else return x + 0.1;
+                            return x + 0.1;
                         })
                         .limit(100)
                         .filter(x -> x < 1)
@@ -214,6 +222,8 @@ public class Controller {
                             midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(experiments)));
                             midRedCellsCount.add(new LineChartNode(probability, statManager.redCellsCountStat(experiments)));
                             midWayLengths.add(new LineChartNode(probability, statManager.wayLengthStat(experiments)));
+//                            redCellsStationDistancesPi.add(new LineChartNode(probability, statManager.redCellStationDistanceForPifagor(experiments)));
+//                            redCellsStationDistancesNePi.add(new LineChartNode(probability, statManager.redCellStationDistanceForNePifagor(experiments)));
 //                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimePropability));
                             System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimePropability));
 
@@ -222,6 +232,8 @@ public class Controller {
                 painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
                 painter.addSeriesToLineChart(redCellsAdded, "Mat size " + size, midRedCellsCount);
                 painter.addSeriesToLineChart(wayLengths, "Mat size " + size, midWayLengths);
+                painter.addSeriesToLineChart(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPi);
+                painter.addSeriesToLineChart(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesNePi);
                 System.out.println("For size " + size + " generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });

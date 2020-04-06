@@ -13,4 +13,8 @@ public interface StatManager {
     double redCellsCountStat(List<Experiment> experiments);
 
     double wayLengthStat(List<Experiment> experiments);
+
+    double redCellStationDistanceForPifagor(List<Experiment> experiments);
+
+    double redCellStationDistanceForNePifagor(List<Experiment> experiments);
 }

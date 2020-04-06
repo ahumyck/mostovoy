@@ -11,7 +11,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="company.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0"
+      prefWidth="908.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="company.Controller">
     <children>
         <TabPane prefHeight="900.0" prefWidth="908.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -19,102 +21,144 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="871.0" prefWidth="944.0">
                             <children>
-                                <TextField fx:id="experimentNumber" layoutX="14.0" layoutY="35.0" prefHeight="25.0" prefWidth="159.0" />
-                                <Label layoutX="14.0" layoutY="1.0" prefHeight="31.0" prefWidth="157.0" text="Количество экспериментов:" />
-                                <Label fx:id="gridSizeLabel" layoutX="209.0" layoutY="1.0" prefHeight="27.0" prefWidth="149.0" text="Размер матрицы:" />
-                                <Label layoutX="393.0" layoutY="1.0" prefHeight="26.0" prefWidth="145.0" text="Тип заполнения:" />
-                                <Label fx:id="probabilityLabel" layoutX="570.0" layoutY="2.0" prefHeight="24.0" prefWidth="146.0" text="Концентрация:" />
-                                <TextField fx:id="fillingProbability" layoutX="568.0" layoutY="35.0" />
-                                <ComboBox fx:id="fillingTypes" layoutX="390.0" layoutY="35.0" prefWidth="150.0" />
-                                <Button fx:id="applyConfiguration" layoutX="14.0" layoutY="70.0" mnemonicParsing="false" text="Apply" />
-                                <ComboBox fx:id="gridSize" layoutX="208.0" layoutY="35.0" prefWidth="150.0" />
-                          <ListView fx:id="experimentListView" layoutY="107.0" prefHeight="764.0" prefWidth="208.0" />
-                          <TabPane layoutX="208.0" layoutY="107.0" prefHeight="765.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
-                              <tabs>
-                                  <Tab fx:id="gridTab" text="Матрица">
-                                      <content>
-                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="595.0">
-                                       <children>
-                                          <Label fx:id="currentClustersCount" layoutY="701.0" prefHeight="34.0" prefWidth="186.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <AnchorPane fx:id="gridPane" prefHeight="700.0" prefWidth="700.0" />
-                                       </children></AnchorPane>
-                                      </content>
-                                  </Tab>
-                                  <Tab fx:id="lightningBoltTab" text="Молния">
-                                      <content>
-                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <Label fx:id="redCellsLabel" layoutY="702.0" prefHeight="34.0" prefWidth="157.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="shortestPathLabel" layoutX="262.0" layoutY="702.0" prefHeight="34.0" prefWidth="157.0">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <AnchorPane fx:id="lightningBoltPane" prefHeight="700.0" prefWidth="700.0" />
-                                       </children></AnchorPane>
-                                      </content>
-                                  </Tab>
-                              </tabs>
-                          </TabPane>
-                        <Button fx:id="distanceCalculatorType" layoutX="765.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Пифагор" />
-                            </children></AnchorPane>
+                                <TextField fx:id="experimentNumber" layoutX="14.0" layoutY="35.0" prefHeight="25.0"
+                                           prefWidth="159.0"/>
+                                <Label layoutX="14.0" layoutY="1.0" prefHeight="31.0" prefWidth="157.0"
+                                       text="Количество экспериментов:"/>
+                                <Label fx:id="gridSizeLabel" layoutX="209.0" layoutY="1.0" prefHeight="27.0"
+                                       prefWidth="149.0" text="Размер матрицы:"/>
+                                <Label layoutX="393.0" layoutY="1.0" prefHeight="26.0" prefWidth="145.0"
+                                       text="Тип заполнения:"/>
+                                <Label fx:id="probabilityLabel" layoutX="570.0" layoutY="2.0" prefHeight="24.0"
+                                       prefWidth="146.0" text="Концентрация:"/>
+                                <TextField fx:id="fillingProbability" layoutX="568.0" layoutY="35.0"/>
+                                <ComboBox fx:id="fillingTypes" layoutX="390.0" layoutY="35.0" prefWidth="150.0"/>
+                                <Button fx:id="applyConfiguration" layoutX="14.0" layoutY="70.0" mnemonicParsing="false"
+                                        text="Apply"/>
+                                <ComboBox fx:id="gridSize" layoutX="208.0" layoutY="35.0" prefWidth="150.0"/>
+                                <ListView fx:id="experimentListView" layoutY="107.0" prefHeight="764.0"
+                                          prefWidth="208.0"/>
+                                <TabPane layoutX="208.0" layoutY="107.0" prefHeight="765.0" prefWidth="700.0"
+                                         tabClosingPolicy="UNAVAILABLE">
+                                    <tabs>
+                                        <Tab fx:id="gridTab" text="Матрица">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0"
+                                                            prefWidth="595.0">
+                                                    <children>
+                                                        <Label fx:id="currentClustersCount" layoutY="701.0"
+                                                               prefHeight="34.0" prefWidth="186.0">
+                                                            <font>
+                                                                <Font size="14.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <AnchorPane fx:id="gridPane" prefHeight="700.0"
+                                                                    prefWidth="700.0"/>
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab fx:id="lightningBoltTab" text="Молния">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                                            prefWidth="200.0">
+                                                    <children>
+                                                        <Label fx:id="redCellsLabel" layoutY="702.0" prefHeight="34.0"
+                                                               prefWidth="157.0">
+                                                            <font>
+                                                                <Font size="14.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="shortestPathLabel" layoutX="262.0" layoutY="702.0"
+                                                               prefHeight="34.0" prefWidth="157.0">
+                                                            <font>
+                                                                <Font size="14.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <AnchorPane fx:id="lightningBoltPane" prefHeight="700.0"
+                                                                    prefWidth="700.0"/>
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                                <Button fx:id="distanceCalculatorType" layoutX="765.0" layoutY="35.0"
+                                        mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Пифагор"/>
+                            </children>
+                        </AnchorPane>
                     </content>
                 </Tab>
                 <Tab text="Общий эксперимент">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0">
-                     <children>
-                        <Button fx:id="applyExperiment" layoutX="8.0" layoutY="122.0" mnemonicParsing="false" text="Apply" />
-                        <!--<TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-                        <!--<Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />-->
-                        <!--<Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />-->
-                        <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-                        <!--<TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-                        <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
-                        <Label layoutX="9.0" layoutY="58.0" prefHeight="20.0" prefWidth="170.0" text="Размер матрицы:" />
-                        <TextField fx:id="matrixSize" layoutX="9.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
-                        <TextField fx:id="matrixCount" layoutX="196.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
-                        <Label layoutX="196.0" layoutY="56.0" prefHeight="25.0" prefWidth="170.0" text="Количество матриц:" />
-                        <TabPane layoutY="155.0" prefHeight="716.0" prefWidth="908.0" tabClosingPolicy="UNAVAILABLE">
-                          <tabs>
-                            <Tab text="Количество кластеров">
-                              <content>
-                                <AnchorPane fx:id="clusterCountChartPane" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                              </content>
-                            </Tab>
-                            <Tab text="Размер кластеров">
-                              <content>
-                                <AnchorPane fx:id="clusterSizeChartPane" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                              </content>
-                            </Tab>
-                              <Tab text="Количество красных клеток">
-                                <content>
-                                  <AnchorPane fx:id="redCellsCountLineChart" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                </content>
-                              </Tab>
-                              <Tab text="Длина пути">
-                                <content>
-                                  <AnchorPane fx:id="wayLengthLineChart" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                </content>
-                              </Tab>
-                          </tabs>
-                        </TabPane>
-                     </children></AnchorPane>
+                            <children>
+                                <Button fx:id="applyExperiment" layoutX="8.0" layoutY="122.0" mnemonicParsing="false"
+                                        text="Apply"/>
+                                <!--<TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+                                <!--<Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />-->
+                                <!--<Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />-->
+                                <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+                                <!--<TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+                                <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
+                                <Label layoutX="9.0" layoutY="58.0" prefHeight="20.0" prefWidth="170.0"
+                                       text="Размер матрицы:"/>
+                                <TextField fx:id="matrixSize" layoutX="9.0" layoutY="84.0" prefHeight="25.0"
+                                           prefWidth="160.0"/>
+                                <TextField fx:id="matrixCount" layoutX="196.0" layoutY="84.0" prefHeight="25.0"
+                                           prefWidth="160.0"/>
+                                <Label layoutX="196.0" layoutY="56.0" prefHeight="25.0" prefWidth="170.0"
+                                       text="Количество матриц:"/>
+                                <TabPane layoutY="155.0" prefHeight="716.0" prefWidth="908.0"
+                                         tabClosingPolicy="UNAVAILABLE">
+                                    <tabs>
+                                        <Tab text="Количество кластеров">
+                                            <content>
+                                                <AnchorPane fx:id="clusterCountChartPane" minHeight="0.0" minWidth="0.0"
+                                                            prefHeight="686.0" prefWidth="908.0"/>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Размер кластеров">
+                                            <content>
+                                                <AnchorPane fx:id="clusterSizeChartPane" minHeight="0.0" minWidth="0.0"
+                                                            prefHeight="686.0" prefWidth="908.0"/>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Количество красных клеток">
+                                            <content>
+                                                <AnchorPane fx:id="redCellsCountLineChart" minHeight="0.0"
+                                                            minWidth="0.0" prefHeight="686.0" prefWidth="908.0"/>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Длина пути">
+                                            <content>
+                                                <AnchorPane fx:id="wayLengthLineChart" minHeight="0.0" minWidth="0.0"
+                                                            prefHeight="686.0" prefWidth="908.0"/>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Расстояние установки 1">
+                                            <content>
+                                                <AnchorPane fx:id="objectStationDistance1" minHeight="0.0" minWidth="0.0"
+                                                            prefHeight="686.0" prefWidth="908.0"/>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Расстояние установки 2">
+                                            <content>
+                                                <AnchorPane fx:id="objectStationDistance2" minHeight="0.0" minWidth="0.0"
+                                                            prefHeight="686.0" prefWidth="908.0"/>
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                            </children>
+                        </AnchorPane>
                     </content>
                 </Tab>
-            <Tab text="Untitled Tab">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
-            </Tab>
+                <Tab text="Untitled Tab">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </children>

@@ -31,4 +31,14 @@ public class SimpleStatManager implements StatManager {
         return experiments.stream().mapToDouble(Experiment::getDistance).average().getAsDouble();
     }
 
+    @Override
+    public double redCellStationDistanceForPifagor(List<Experiment> experiments) {
+        return 0;
+    }
+
+    @Override
+    public double redCellStationDistanceForNePifagor(List<Experiment> experiments) {
+        return 0;
+    }
+
 }

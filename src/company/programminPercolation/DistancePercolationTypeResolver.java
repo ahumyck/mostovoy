@@ -6,11 +6,13 @@ import company.programminPercolation.distance.impl.PythagoreanTheoremCalculator;
 
 public class DistancePercolationTypeResolver {
 
+    public static final String PIFAGOR = "Пифагор";
+    public static final String NE_PIFAGOR = "Не пифагор";
     public static DistanceCalculator getDistanceCalculator(String type) {
-        if(type.equals("Пифагор")){
+        if(type.equals(PIFAGOR)){
             return new PythagoreanTheoremCalculator();
         }
-        else if (type.equals("Не пифагор")){
+        else if (type.equals(NE_PIFAGOR)){
             return new EdgeDistanceCalculator();
         }
         else
