@@ -20,7 +20,6 @@ public class PercolationProgramming {
     private int neighborhood;
     private DistanceCalculator calculator;
     private BoundaryGenerator generator;
-//    private Random random = new Random();
 
 
     public PercolationProgramming(Matrix matrix, List<Cell> path) {
@@ -68,18 +67,16 @@ public class PercolationProgramming {
         List<Cell> optimalCellsCollection = getOptimalCellsCollection(percolationCell);
         if(!optimalCellsCollection.isEmpty()){
             List<Cell> bestOptimalCells = getBestOptimalCells(optimalCellsCollection);
-            List<PercolationRelation> result = new ArrayList<>();
-            for (Cell goodCell: bestOptimalCells) {
-                double distance = calculator.calculateDistance(percolationCell,goodCell);
-                result.add(new PercolationRelation(goodCell,percolationCell,distance));
-            }
-            return Optional.of(result);
+            return Optional.of(bestOptimalCells.stream()
+                    .map(goodCell -> new PercolationRelation(goodCell, percolationCell,
+                            calculator.calculateDistance(percolationCell, goodCell)))
+                    .collect(Collectors.toList()));
         }
         return Optional.empty();
     }
 
     private List<Cell> getBestOptimalCells(List<Cell> optimalCellsCollection){
-        int howMany = 1; //random.nextInt(3) + 1; // random from [1...3]
+        int howMany = 1;
         int count = 0;
         List<Cell> bestOptimalCells = new ArrayList<>();
         for (Cell optimalCell : optimalCellsCollection) {
