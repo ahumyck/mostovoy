@@ -18,7 +18,7 @@ public class PercolationProgramming {
     private int neighborhood;
     private DistanceCalculator calculator;
     private BoundaryGenerator generator;
-    private Random random = new Random();
+//    private Random random = new Random();
 
 
     public PercolationProgramming(Matrix matrix, List<Cell> path) {
@@ -44,20 +44,18 @@ public class PercolationProgramming {
         return this;
     }
 
-    public List<Pair<Long,Long>> getRatio(){
-        List<Pair<Long,Long>> ratio = new ArrayList<>();
+    @Deprecated
+    public List<Cell> getRatio(){
+        List<Cell> ratio = new ArrayList<>();
         for(Cell percolationCell: this.path){
             long blackCellsCounter = 0;
             long redCellsCounter = 0;
             if(percolationCell.isWhite())
                 redCellsCounter++;
-            for (int boundary = 1; boundary <= this.neighborhood ; boundary++) {
-                List<Cell> potentialCells = generator.generate(boundary,percolationCell);
-                blackCellsCounter += streamBlackCells(potentialCells).count();
-                redCellsCounter += streamRedCells(potentialCells).count();
-                boundary++;
-            }
-            ratio.add(new Pair<>(blackCellsCounter,redCellsCounter));
+            List<Cell> potentialCells = generator.generate(this.neighborhood, percolationCell);
+            blackCellsCounter += streamBlackCells(potentialCells).count();
+            redCellsCounter += streamRedCells(potentialCells).count();
+//            ratio.add(new Pair<>(blackCellsCounter,redCellsCounter));
         }
         return ratio;
     }
@@ -95,7 +93,7 @@ public class PercolationProgramming {
     }
 
     private List<Cell> getBestOptimalCells(List<Cell> optimalCellsCollection){
-        int howMany = random.nextInt(3) + 1; // random from [1...3]
+        int howMany = 1; //random.nextInt(3) + 1; // random from [1...3]
         int count = 0;
         List<Cell> bestOptimalCells = new ArrayList<>();
         for (Cell optimalCell : optimalCellsCollection) {
