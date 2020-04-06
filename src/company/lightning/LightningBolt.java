@@ -73,7 +73,8 @@ public class LightningBolt {
         for (int i = 0; i < this.adjacencyList.size(); i++) {
             distanceToOtherNeighbors[i] = Integer.MAX_VALUE;
         }
-        TreeSet<Distance> distanceToOtherNeighborsMap = new TreeSet<>();
+        boolean[] visited = new boolean[this.adjacencyList.size()];
+        PriorityQueue<Distance> distanceToOtherNeighborsMap = new PriorityQueue<>();
         int[] parents = new int[this.adjacencyList.size()];
 
         if(this.matrix.getCell(Matrix.OFFSET, Matrix.OFFSET + start_pos).isWhite()) {
@@ -87,20 +88,24 @@ public class LightningBolt {
 
         int n = this.adjacencyList.keySet().size();
         for (int i = 0; i < n ; i++) {
-            final Distance distance = distanceToOtherNeighborsMap.first();
-            final int v = distance.getVertex();
+            int v;
+            Distance distance;
+            do {
+                distance = distanceToOtherNeighborsMap.poll();
+                v = distance.getVertex();
+            }while(visited[v]);
+            visited[v] = true;
+            final int f_v = v;
             adjacencyList.get(v).forEach(pair -> {
                 int to = pair.getFirst();
                 int len = pair.getSecond();
-                int newValue = distanceToOtherNeighbors[v] + len;
+                int newValue = distanceToOtherNeighbors[f_v] + len;
                 if (newValue < distanceToOtherNeighbors[to]) {
-                    distanceToOtherNeighborsMap.remove(new Distance(to, distanceToOtherNeighbors[to]));
                     distanceToOtherNeighborsMap.add(new Distance(to, newValue));
                     distanceToOtherNeighbors[to] = newValue;
-                    parents[to] = v;
+                    parents[to] = f_v;
                 }
             });
-            distanceToOtherNeighborsMap.remove(distance);
         }
         return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }

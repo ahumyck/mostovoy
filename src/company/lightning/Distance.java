@@ -29,7 +29,8 @@ public class Distance implements Comparable<Distance>{
 
     @Override
     public int compareTo(Distance o) {
-        return o.distance == distance ? vertex - o.vertex : o.distance < this.distance ? 1 : -1;
+//        return o.distance == distance ? vertex - o.vertex : o.distance < this.distance ? 1 : -1;
+        return distance -o.distance;
     }
 
     @Override
