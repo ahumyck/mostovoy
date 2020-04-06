@@ -14,7 +14,7 @@ public interface StatManager {
 
     double wayLengthStat(List<Experiment> experiments);
 
-    double redCellStationDistanceForPifagor(List<Experiment> experiments);
+    double redCellStationDistanceForPythagoras(List<Experiment> experiments);
 
-    double redCellStationDistanceForNePifagor(List<Experiment> experiments);
+    double redCellStationDistanceForDiscrete(List<Experiment> experiments);
 }

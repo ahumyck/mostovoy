@@ -136,13 +136,13 @@
                                                             prefHeight="686.0" prefWidth="908.0"/>
                                             </content>
                                         </Tab>
-                                        <Tab text="Расстояние установки 1">
+                                        <Tab text="Расстояние установки способ 1">
                                             <content>
                                                 <AnchorPane fx:id="objectStationDistance1" minHeight="0.0" minWidth="0.0"
                                                             prefHeight="686.0" prefWidth="908.0"/>
                                             </content>
                                         </Tab>
-                                        <Tab text="Расстояние установки 2">
+                                        <Tab text="Расстояние установки способ 2">
                                             <content>
                                                 <AnchorPane fx:id="objectStationDistance2" minHeight="0.0" minWidth="0.0"
                                                             prefHeight="686.0" prefWidth="908.0"/>
