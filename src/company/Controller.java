@@ -33,6 +33,9 @@ public class Controller {
     public Label currentClustersCount;
 
     @FXML
+    public Button distanceCalculatorType;
+
+    @FXML
     public Label redCellsLabel;
 
     @FXML
@@ -116,10 +119,23 @@ public class Controller {
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             painter.paintCanvas(gridPane, experiment.getMatrix());
-            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(),experiment.getProgrammings(), experiment.getMatrix());
+            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(),experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
             redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
+        });
+        distanceCalculatorType.setOnAction(actionEvent ->{
+            if(distanceCalculatorType.getText().equals("Пифагор")) {
+                final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+                painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
+                distanceCalculatorType.setText("Не пифагор");
+            }
+            else if(distanceCalculatorType.getText().equals("Не пифагор")) {
+                final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+                painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
+                distanceCalculatorType.setText("Пифагор");
+            }
+
         });
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);

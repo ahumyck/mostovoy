@@ -4,6 +4,7 @@ import company.entity.Cell;
 import company.entity.Matrix;
 import company.lightning.LightningBolt;
 import company.lightning.Pair;
+import company.programminPercolation.DistancePercolationTypeResolver;
 import company.programminPercolation.PercolationProgramming;
 import company.programminPercolation.PercolationRelation;
 
@@ -55,14 +56,13 @@ public class Experiment {
         this.redCellsCounter = lightningBolt.getRedCellCounterForShortestPath();
     }
 
-    public List<PercolationRelation> getProgrammings() {
-        if (programmings == null)
-            calculateProgrammingPercolation();
+    public List<PercolationRelation> getProgrammings(String distanceCalculatorType) {
+        calculateProgrammingPercolation(distanceCalculatorType);
         return programmings;
     }
 
-    private void calculateProgrammingPercolation() {
-        this.programmings = new PercolationProgramming(matrix, getPath()).getProgrammingPercolationList();
+    void calculateProgrammingPercolation(String distanceCalculatorType) {
+        this.programmings = new PercolationProgramming(matrix, getPath()).setDistanceCalculator(DistancePercolationTypeResolver.getDistanceCalculator(distanceCalculatorType)).getProgrammingPercolationList();
     }
 
     public Matrix getMatrix() {

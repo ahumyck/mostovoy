@@ -92,7 +92,7 @@ public class Painter {
         chart.getData().add(series);
     }
 
-    public void paintLightningBoltCanvas(AnchorPane pane, List<Cell> path,List<PercolationRelation> relations, Matrix matrix)
+    public void paintLightningBoltCanvas(AnchorPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix)
     {
         double size = pane.getHeight()/ (matrix.getSize() - 2);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
