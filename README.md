@@ -1,2 +1,0 @@
-# mostovoy
-kursovoy project
