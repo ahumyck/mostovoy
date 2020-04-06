@@ -4,9 +4,9 @@ import company.entity.Cell;
 import company.entity.Matrix;
 import company.lightning.LightningBolt;
 import company.lightning.Pair;
-import company.programminPercolation.DistancePercolationTypeResolver;
 import company.programminPercolation.PercolationProgramming;
 import company.programminPercolation.PercolationRelation;
+import company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 
 import java.util.List;
 
@@ -62,7 +62,8 @@ public class Experiment {
     }
 
     void calculateProgrammingPercolation(String distanceCalculatorType) {
-        this.programmings = new PercolationProgramming(matrix, getPath()).setDistanceCalculator(DistancePercolationTypeResolver.getDistanceCalculator(distanceCalculatorType)).getProgrammingPercolationList();
+        this.programmings = new PercolationProgramming(matrix, getPath())
+                .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType)).getProgrammingPercolationList();
     }
 
     public Matrix getMatrix() {

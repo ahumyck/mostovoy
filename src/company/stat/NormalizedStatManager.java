@@ -8,8 +8,9 @@ import company.programminPercolation.PercolationRelation;
 import java.util.List;
 import java.util.OptionalDouble;
 
-import static company.programminPercolation.DistancePercolationTypeResolver.NE_PIFAGOR;
-import static company.programminPercolation.DistancePercolationTypeResolver.PIFAGOR;
+import static company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
+import static company.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
+
 
 public class NormalizedStatManager implements StatManager {
 
@@ -42,16 +43,16 @@ public class NormalizedStatManager implements StatManager {
     }
 
     @Override
-    public double redCellStationDistanceForPifagor(List<Experiment> experiments) {
-        double res = redCellStationDistance(experiments, PIFAGOR);
+    public double redCellStationDistanceForPythagoras(List<Experiment> experiments) {
+        double res = redCellStationDistance(experiments, PYTHAGORAS);
         System.out.println("res: " + res);
         return res;
     }
 
 
     @Override
-    public double redCellStationDistanceForNePifagor(List<Experiment> experiments) {
-        return redCellStationDistance(experiments, NE_PIFAGOR);
+    public double redCellStationDistanceForDiscrete(List<Experiment> experiments) {
+        return redCellStationDistance(experiments, DISCRETE);
     }
 
 

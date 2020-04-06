@@ -44,22 +44,6 @@ public class PercolationProgramming {
         return this;
     }
 
-    @Deprecated
-    public List<Cell> getRatio(){
-        List<Cell> ratio = new ArrayList<>();
-        for(Cell percolationCell: this.path){
-            long blackCellsCounter = 0;
-            long redCellsCounter = 0;
-            if(percolationCell.isWhite())
-                redCellsCounter++;
-            List<Cell> potentialCells = generator.generate(this.neighborhood, percolationCell);
-            blackCellsCounter += streamBlackCells(potentialCells).count();
-            redCellsCounter += streamRedCells(potentialCells).count();
-//            ratio.add(new Pair<>(blackCellsCounter,redCellsCounter));
-        }
-        return ratio;
-    }
-
     private Stream<Cell> streamRedCells(List<Cell> cells){
         return cells.stream().filter(Cell::isWhite).filter(cell -> path.contains(cell));
     }

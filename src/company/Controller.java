@@ -2,13 +2,13 @@ package company;
 
 import company.expirement.Experiment;
 import company.expirement.ExperimentManager;
-import company.filling.*;
+import company.filling.FillingType;
+import company.filling.RandomFillingType;
 import company.filling.customs.*;
 import company.paint.LineChartNode;
 import company.paint.Painter;
 import company.stat.NormalizedStatManager;
 import company.stat.StatManager;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -23,8 +23,8 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-import static company.programminPercolation.DistancePercolationTypeResolver.NE_PIFAGOR;
-import static company.programminPercolation.DistancePercolationTypeResolver.PIFAGOR;
+import static company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
+import static company.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
 
 public class Controller {
 
@@ -133,13 +133,13 @@ public class Controller {
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
         distanceCalculatorType.setOnAction(actionEvent -> {
-            if (distanceCalculatorType.getText().equals(PIFAGOR)) {
+            if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
                 final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-                distanceCalculatorType.setText(NE_PIFAGOR);
+                distanceCalculatorType.setText(DISCRETE);
                 painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
-            } else if (distanceCalculatorType.getText().equals(NE_PIFAGOR)) {
+            } else if (distanceCalculatorType.getText().equals(DISCRETE)) {
                 final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-                distanceCalculatorType.setText(PIFAGOR);
+                distanceCalculatorType.setText(PYTHAGORAS);
                 painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
             }
 
@@ -185,9 +185,9 @@ public class Controller {
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
             LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
-            LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Пифагор");
-            LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Не пифагор");
-            ForkJoinPool forkJoinPool = new ForkJoinPool(4);
+            LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
+            LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
+            ForkJoinPool forkJoinPool = new ForkJoinPool(2);
             for (Integer size : sizes) {
                 System.out.println("For size " + size + " generating start");
                 long startTimeForSize = System.currentTimeMillis();
@@ -195,11 +195,14 @@ public class Controller {
                 List<LineChartNode> midClustersSize = new ArrayList<>();
                 List<LineChartNode> midRedCellsCount = new ArrayList<>();
                 List<LineChartNode> midWayLengths = new ArrayList<>();
-                List<LineChartNode> redCellsStationDistancesPi = new ArrayList<>();
-                List<LineChartNode> redCellsStationDistancesNePi = new ArrayList<>();
+                List<LineChartNode> redCellsStationDistancesPythagoras = new ArrayList<>();
+                List<LineChartNode> redCellsStationDistancesDiscrete = new ArrayList<>();
                 DoubleStream.iterate(0.02,
                         x -> {
-                            return x + 0.1;
+                            if (x < 0.4)
+                                return x + 0.02;
+                            else if (x > 0.4 && x < 0.6) return x + 0.05;
+                            else return x + 0.1;
                         })
                         .limit(100)
                         .filter(x -> x < 1)
@@ -208,7 +211,7 @@ public class Controller {
                             randomFillingType.setSize(size);
                             randomFillingType.setPercolationProbability(probability);
                             System.out.println("    Initializing for percolation probability " + probability + " started");
-                            long startTimePropability = System.currentTimeMillis();
+                            long startTimeProbability = System.currentTimeMillis();
                             List<Experiment> experiments = null;
                             try {
                                 experiments = forkJoinPool.submit(() -> experimentManager.initializeExperiments(count, randomFillingType)).get();
@@ -216,36 +219,27 @@ public class Controller {
                                 e.printStackTrace();
                             }
 //                            List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
-//                    startTimePropability = System.currentTimeMillis();
+//                    startTimeProbability = System.currentTimeMillis();
 //                    System.out.println("        Collecting statistic started");
                             midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(experiments)));
                             midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(experiments)));
                             midRedCellsCount.add(new LineChartNode(probability, statManager.redCellsCountStat(experiments)));
                             midWayLengths.add(new LineChartNode(probability, statManager.wayLengthStat(experiments)));
-//                            redCellsStationDistancesPi.add(new LineChartNode(probability, statManager.redCellStationDistanceForPifagor(experiments)));
-//                            redCellsStationDistancesNePi.add(new LineChartNode(probability, statManager.redCellStationDistanceForNePifagor(experiments)));
-//                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimePropability));
-                            System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimePropability));
+                            redCellsStationDistancesPythagoras.add(new LineChartNode(probability, statManager.redCellStationDistanceForPythagoras(experiments)));
+                            redCellsStationDistancesDiscrete.add(new LineChartNode(probability, statManager.redCellStationDistanceForDiscrete(experiments)));
+//                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimeProbability));
+                            System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
 
                         });
                 painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
                 painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
                 painter.addSeriesToLineChart(redCellsAdded, "Mat size " + size, midRedCellsCount);
                 painter.addSeriesToLineChart(wayLengths, "Mat size " + size, midWayLengths);
-                painter.addSeriesToLineChart(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPi);
-                painter.addSeriesToLineChart(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesNePi);
+                painter.addSeriesToLineChart(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
+                painter.addSeriesToLineChart(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
                 System.out.println("For size " + size + " generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });
-    }
-
-    private List<Double> generateProbabilities(double start, double end, double step) {
-        List<Double> probabilities = new ArrayList<>();
-        while (start <= end) {
-            probabilities.add(start);
-            start += step;
-        }
-        return probabilities;
     }
 
 

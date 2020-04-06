@@ -32,12 +32,12 @@ public class SimpleStatManager implements StatManager {
     }
 
     @Override
-    public double redCellStationDistanceForPifagor(List<Experiment> experiments) {
+    public double redCellStationDistanceForPythagoras(List<Experiment> experiments) {
         return 0;
     }
 
     @Override
-    public double redCellStationDistanceForNePifagor(List<Experiment> experiments) {
+    public double redCellStationDistanceForDiscrete(List<Experiment> experiments) {
         return 0;
     }
 
