@@ -1,7 +1,6 @@
-package com.mostovoy_company.programminPercolation.distance.impl;
+package com.mostovoy_company.programminPercolation.distance.calculator;
 
 import com.mostovoy_company.entity.Cell;
-import com.mostovoy_company.programminPercolation.distance.DistanceCalculator;
 
 public class PythagoreanTheoremCalculator implements DistanceCalculator {
     @Override

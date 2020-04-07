@@ -1,7 +1,6 @@
-package com.mostovoy_company.programminPercolation.distance.impl;
+package com.mostovoy_company.programminPercolation.distance.calculator;
 
 import com.mostovoy_company.entity.Cell;
-import com.mostovoy_company.programminPercolation.distance.DistanceCalculator;
 
 public class EdgeDistanceCalculator implements DistanceCalculator {
     @Override

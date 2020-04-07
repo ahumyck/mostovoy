@@ -1,4 +1,4 @@
-package com.mostovoy_company.programminPercolation.distance;
+package com.mostovoy_company.programminPercolation.distance.calculator;
 
 import com.mostovoy_company.entity.Cell;
 

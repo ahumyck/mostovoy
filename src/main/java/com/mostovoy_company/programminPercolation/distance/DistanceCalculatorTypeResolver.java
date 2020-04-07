@@ -1,7 +1,8 @@
 package com.mostovoy_company.programminPercolation.distance;
 
-import com.mostovoy_company.programminPercolation.distance.impl.EdgeDistanceCalculator;
-import com.mostovoy_company.programminPercolation.distance.impl.PythagoreanTheoremCalculator;
+import com.mostovoy_company.programminPercolation.distance.calculator.DistanceCalculator;
+import com.mostovoy_company.programminPercolation.distance.calculator.EdgeDistanceCalculator;
+import com.mostovoy_company.programminPercolation.distance.calculator.PythagoreanTheoremCalculator;
 
 public class DistanceCalculatorTypeResolver {
 
