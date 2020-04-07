@@ -6,9 +6,11 @@ import com.mostovoy_company.lightning.LightningBolt;
 import com.mostovoy_company.lightning.Pair;
 import com.mostovoy_company.programminPercolation.PercolationProgramming;
 import com.mostovoy_company.programminPercolation.PercolationRelation;
+import com.mostovoy_company.programminPercolation.TapeGenerator;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Experiment {
 
@@ -65,6 +67,14 @@ public class Experiment {
         this.programmings = new PercolationProgramming(matrix, getPath())
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
                 .getProgrammingPercolationList();
+    }
+
+    public List<Cell> generateTape(int bound){
+        TapeGenerator generator = new TapeGenerator(matrix);
+        return generator.generateTape(bound, getPath())
+                .stream()
+                .filter(cell -> !getPath().contains(cell))
+                .collect(Collectors.toList());
     }
 
     public Matrix getMatrix() {
