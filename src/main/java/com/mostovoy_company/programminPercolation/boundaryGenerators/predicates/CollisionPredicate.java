@@ -1,8 +1,7 @@
-package com.mostovoy_company.programminPercolation.boundaryGenerators.predicates.impl;
+package com.mostovoy_company.programminPercolation.boundaryGenerators.predicates;
 
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
-import com.mostovoy_company.programminPercolation.boundaryGenerators.predicates.Predicate;
 
 import java.util.List;
 
