@@ -4,12 +4,10 @@ import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.programminPercolation.PercolationRelation;
+import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 
 import java.util.List;
-import java.util.OptionalDouble;
 
-import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
-import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
 
 
 public class NormalizedStatManager implements StatManager {
@@ -51,13 +49,13 @@ public class NormalizedStatManager implements StatManager {
 
     @Override
     public double redCellStationDistanceForPythagoras(List<Experiment> experiments) {
-        return redCellStationDistance(experiments, PYTHAGORAS);
+        return redCellStationDistance(experiments, DistanceCalculatorTypeResolver.PYTHAGORAS);
     }
 
 
     @Override
     public double redCellStationDistanceForDiscrete(List<Experiment> experiments) {
-        return redCellStationDistance(experiments, DISCRETE);
+        return redCellStationDistance(experiments, DistanceCalculatorTypeResolver.DISCRETE);
     }
 
 
