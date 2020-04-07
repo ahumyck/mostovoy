@@ -2,9 +2,9 @@ package com.mostovoy_company.programminPercolation;
 
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
-import com.mostovoy_company.programminPercolation.boundaryGenerators.BoundaryGenerator;
-import com.mostovoy_company.programminPercolation.distance.DistanceCalculator;
-import com.mostovoy_company.programminPercolation.distance.impl.PythagoreanTheoremCalculator;
+import com.mostovoy_company.programminPercolation.boundaryGenerators.RhombusBoundaryGenerator;
+import com.mostovoy_company.programminPercolation.distance.calculator.DistanceCalculator;
+import com.mostovoy_company.programminPercolation.distance.calculator.PythagoreanTheoremCalculator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,7 +19,8 @@ public class PercolationProgramming {
     private List<Cell> usedPercolationObjects;
     private int neighborhood;
     private DistanceCalculator calculator;
-    private BoundaryGenerator generator;
+    private RhombusBoundaryGenerator generator;
+    private TapeGenerator tapeGenerator;
 
 
     public PercolationProgramming(Matrix matrix, List<Cell> path) {
@@ -27,7 +28,8 @@ public class PercolationProgramming {
         this.usedPercolationObjects = new ArrayList<>();
         this.neighborhood = 3;
         this.calculator = new PythagoreanTheoremCalculator();
-        generator = new BoundaryGenerator(matrix);
+        this.generator = new RhombusBoundaryGenerator(matrix);
+        this.tapeGenerator = new TapeGenerator(matrix);
     }
 
     public PercolationProgramming setDistanceCalculator(DistanceCalculator calculator){
@@ -45,11 +47,16 @@ public class PercolationProgramming {
         return this;
     }
 
-    private Stream<Cell> streamRedCells(List<Cell> cells){
-        return cells.stream().filter(Cell::isWhite).filter(cell -> path.contains(cell));
-    }
     private Stream<Cell> streamBlackCells(List<Cell> cells){
        return cells.stream().filter(Cell::isBlack).filter(cell -> !path.contains(cell));
+    }
+
+    public double getRatio(){
+        List<Cell> tape = this.tapeGenerator.generateWideTape(this.neighborhood, this.path);
+        Stream<Cell> cellStream = streamBlackCells(tape);
+        double countBlackCells = cellStream.count();
+        double countDarkRedCells = cellStream.filter(cell -> usedPercolationObjects.contains(cell)).count();
+        return countDarkRedCells/countBlackCells;
     }
 
     public List<PercolationRelation> getProgrammingPercolationList(){
@@ -85,7 +92,7 @@ public class PercolationProgramming {
     }
 
     private List<Cell> getOptimalCellsCollection(Cell percolationCell){
-        return streamBlackCells(generator.generate(this.neighborhood,percolationCell))
+        return streamBlackCells(generator.generateFilledArea(this.neighborhood,percolationCell))
                 .sorted(Comparator.comparingDouble(a -> calculator.calculateDistance(a, percolationCell)))
                 .collect(Collectors.toList());
     }
