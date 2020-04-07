@@ -3,6 +3,8 @@ package com.mostovoy_company.programminPercolation.boundaryGenerators;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 
+import java.util.List;
+
 public class SquareBoundaryGenerator extends BoundaryGenerator {
     public SquareBoundaryGenerator(Matrix matrix) {
         super(matrix);
@@ -54,5 +56,10 @@ public class SquareBoundaryGenerator extends BoundaryGenerator {
         buildLeftWall(centerCell, x, y, boundary);
         buildTopWall(centerCell, x, y, boundary);
         buildBotWall(centerCell, x, y, boundary);
+    }
+
+    @Override
+    public List<Cell> generateFilledArea(int bound, Cell centerCell){
+        return generateAreaPerimeter(bound, centerCell);
     }
 }
