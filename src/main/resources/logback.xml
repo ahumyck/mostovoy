@@ -2,7 +2,6 @@
     <timestamp key="ymd" datePattern="{yyyy MM dd}"/>
     <timestamp key="hours" datePattern="HH"/>
     <timestamp key="minutes" datePattern="mm"/>
-    <timestamp key="seconds" datePattern="ss"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
@@ -14,7 +13,7 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>info</level>
         </filter>
-        <file>src/main/resources/logs/log by date ${ymd} {${hours} h ${minutes} m ${seconds} s} detailed.log</file>
+        <file>src/main/resources/logs/log by date ${ymd} {${hours} h ${minutes} m} detailed.log</file>
         <append>true</append>
         <encoder>
             <pattern>%msg%n</pattern>
@@ -25,7 +24,7 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>warn</level>
         </filter>
-        <file>src/main/resources/logs/log by date ${ymd} {${hours} h ${minutes} m ${seconds} s} main.log</file>
+        <file>src/main/resources/logs/log by date ${ymd} {${hours} h ${minutes} m} main.log</file>
         <append>true</append>
         <encoder>
             <pattern>%msg%n</pattern>
