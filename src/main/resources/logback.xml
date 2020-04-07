@@ -27,7 +27,7 @@
         <file>src/main/resources/logs/log by date ${ymd} {${hours} h ${minutes} m} main.log</file>
         <append>true</append>
         <encoder>
-            <pattern>%msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} - %msg%n</pattern>
         </encoder>
     </appender>
 
