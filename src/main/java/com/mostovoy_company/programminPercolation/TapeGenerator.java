@@ -8,14 +8,14 @@ import com.mostovoy_company.programminPercolation.boundaryGenerators.SquareBound
 import java.util.ArrayList;
 import java.util.List;
 
-class TapeGenerator {
+public class TapeGenerator {
     private BoundaryGenerator generator;
 
-    TapeGenerator(Matrix matrix) {
+    public TapeGenerator(Matrix matrix) {
         generator = new SquareBoundaryGenerator(matrix);
     }
 
-    List<Cell> generateWideTape(int bound, List<Cell> path){
+    public List<Cell> generateWideTape(int bound, List<Cell> path){
         List<Cell> wideTape = new ArrayList<>();
         for (Cell current: path) {
             List<Cell> square = generator.generateFilledArea(bound, current);
@@ -25,6 +25,19 @@ class TapeGenerator {
             }
         }
         return wideTape;
+    }
+
+    public List<Cell> generateTape(int bound, List<Cell> path){
+        if(bound == 1){
+            return generateWideTape(1,path);
+        }
+        else {
+            List<Cell> outer = generateWideTape(bound,path);
+            List<Cell> inner = generateWideTape(bound - 1, path);
+            for (Cell in: inner)
+                outer.remove(in);
+            return outer;
+        }
     }
 
 }
