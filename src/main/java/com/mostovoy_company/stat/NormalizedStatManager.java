@@ -16,36 +16,42 @@ public class NormalizedStatManager implements StatManager {
 
     public double clusterCountStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
-        OptionalDouble midClusterCount = experiments.stream().map(Experiment::getMatrix).mapToInt(Matrix::getClusterCounter).average();
-        return midClusterCount.getAsDouble() / (size * size);
+        return experiments.stream()
+                .map(Experiment::getMatrix)
+                .mapToInt(Matrix::getClusterCounter)
+                .average()
+                .orElse(0) / (size * size);
     }
 
     public double clusterSizeStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
         return experiments.stream()
                 .map(Experiment::getMatrix)
-                .mapToDouble(matrix -> {
-                    if (matrix.getClusterCounter() > 0)
-                        return (double) matrix.stream().filter(Cell::hasClusterMark).count() / matrix.getClusterCounter();
-                    else return 0;
-                }).average().orElse(0) / (size * size);
+                .mapToDouble(matrix -> ((double) matrix.stream().filter(Cell::hasClusterMark).count()) / matrix.getClusterCounter())
+                .average()
+                .orElse(0) / (size * size) ;
     }
 
     public double redCellsCountStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
-        return experiments.stream().mapToDouble(Experiment::getRedCellsCounter).average().getAsDouble() / size;
+        return experiments.stream()
+                .mapToDouble(Experiment::getRedCellsCounter)
+                .average()
+                .orElse(0) / size;
 
     }
 
     public double wayLengthStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
-        return experiments.stream().mapToDouble(Experiment::getDistance).average().getAsDouble() / size;
+        return experiments.stream()
+                .mapToDouble(Experiment::getDistance)
+                .average()
+                .orElse(0) / size;
     }
 
     @Override
     public double redCellStationDistanceForPythagoras(List<Experiment> experiments) {
-        double res = redCellStationDistance(experiments, PYTHAGORAS);
-        return res;
+        return redCellStationDistance(experiments, PYTHAGORAS);
     }
 
 
@@ -56,7 +62,11 @@ public class NormalizedStatManager implements StatManager {
 
 
     private double redCellStationDistance(List<Experiment> experiments, String type) {
-        return experiments.stream().flatMapToDouble(experiment -> experiment.getProgrammings(type).stream().mapToDouble(PercolationRelation::getDistance)).average().orElse(0);
+        return experiments.stream()
+                .flatMapToDouble(experiment -> experiment.getProgrammings(type).stream()
+                        .mapToDouble(PercolationRelation::getDistance))
+                .average()
+                .orElse(0);
     }
 
 }

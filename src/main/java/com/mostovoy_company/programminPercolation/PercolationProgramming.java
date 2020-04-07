@@ -55,10 +55,8 @@ public class PercolationProgramming {
     public List<PercolationRelation> getProgrammingPercolationList(){
         List<PercolationRelation> percolationRelations = new ArrayList<>();
         for(Cell percolationCell: this.path){
-            if(percolationCell.isWhite()){
-                Optional<List<PercolationRelation>> relationForCurrentCell = findRelationForCurrentCell(percolationCell);
-                relationForCurrentCell.ifPresent(percolationRelations::addAll);
-            }
+            Optional<List<PercolationRelation>> relationForCurrentCell = findRelationForCurrentCell(percolationCell);
+            relationForCurrentCell.ifPresent(percolationRelations::addAll);
         }
         return percolationRelations;
     }
@@ -66,8 +64,7 @@ public class PercolationProgramming {
     private Optional<List<PercolationRelation>> findRelationForCurrentCell(Cell percolationCell){
         List<Cell> optimalCellsCollection = getOptimalCellsCollection(percolationCell);
         if(!optimalCellsCollection.isEmpty()){
-            List<Cell> bestOptimalCells = getBestOptimalCells(optimalCellsCollection);
-            return Optional.of(bestOptimalCells.stream()
+            return Optional.of(getBestOptimalCells(optimalCellsCollection).stream()
                     .map(goodCell -> new PercolationRelation(goodCell, percolationCell,
                             calculator.calculateDistance(percolationCell, goodCell)))
                     .collect(Collectors.toList()));
@@ -76,16 +73,13 @@ public class PercolationProgramming {
     }
 
     private List<Cell> getBestOptimalCells(List<Cell> optimalCellsCollection){
-        int howMany = 1;
-        int count = 0;
         List<Cell> bestOptimalCells = new ArrayList<>();
         for (Cell optimalCell : optimalCellsCollection) {
             if (!this.usedPercolationObjects.contains(optimalCell)) {
                 this.usedPercolationObjects.add(optimalCell);
                 bestOptimalCells.add(optimalCell);
-                count++;
+                break;
             }
-            if (count == howMany) break;
         }
         return bestOptimalCells;
     }

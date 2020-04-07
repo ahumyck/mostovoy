@@ -1,0 +1,40 @@
+<configuration debug="false">
+    <timestamp key="ymd" datePattern="{yyyy MM dd}"/>
+    <timestamp key="hours" datePattern="HH"/>
+    <timestamp key="minutes" datePattern="mm"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="detailsAppender" class="ch.qos.logback.core.FileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>info</level>
+        </filter>
+        <file>src/main/resources/logs/detailed log by date ${ymd} {${hours} h ${minutes} m}.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="mainAppender" class="ch.qos.logback.core.FileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>warn</level>
+        </filter>
+        <file>src/main/resources/logs/main log by date ${ymd} {${hours} h ${minutes} m}.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="detailsAppender"/>
+        <appender-ref ref="mainAppender"/>
+    </root>
+</configuration>

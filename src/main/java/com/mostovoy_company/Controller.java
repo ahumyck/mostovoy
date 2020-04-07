@@ -15,6 +15,8 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class Controller {
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
     private StatManager statManager = new NormalizedStatManager();
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+
 
     @FXML
     public Label currentClustersCount;
@@ -232,7 +236,8 @@ public class Controller {
                             redCellsStationDistancesPythagoras.add(new LineChartNode(probability, statManager.redCellStationDistanceForPythagoras(experiments)));
                             redCellsStationDistancesDiscrete.add(new LineChartNode(probability, statManager.redCellStationDistanceForDiscrete(experiments)));
 //                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimeProbability));
-                            System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
+//                            System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
+                            logger.info("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
 
                         });
                 painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
@@ -241,7 +246,7 @@ public class Controller {
                 painter.addSeriesToLineChart(wayLengths, "Mat size " + size, midWayLengths);
                 painter.addSeriesToLineChart(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
                 painter.addSeriesToLineChart(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
-                System.out.println("For size " + size + " generated time=" + (System.currentTimeMillis() - startTimeForSize));
+                logger.warn("For size " + size + " with " + count + " matrices generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });
     }

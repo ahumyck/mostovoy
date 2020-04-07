@@ -46,7 +46,7 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    public void calculatePath() {
+    void calculatePath() {
         LightningBolt lightningBolt = new LightningBolt(matrix);
 //        System.out.println(System.currentTimeMillis() - startTime);
 //        startTime = System.currentTimeMillis();
@@ -63,7 +63,8 @@ public class Experiment {
 
     private void calculateProgrammingPercolation(String distanceCalculatorType) {
         this.programmings = new PercolationProgramming(matrix, getPath())
-                .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType)).getProgrammingPercolationList();
+                .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
+                .getProgrammingPercolationList();
     }
 
     public Matrix getMatrix() {
