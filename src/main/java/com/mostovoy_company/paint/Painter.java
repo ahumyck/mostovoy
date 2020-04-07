@@ -22,43 +22,6 @@ public class Painter {
 
     private ColorGradientRepository colorRepository = new ColorGradientRepository();
 
-    public void paintCanvas(AnchorPane grid, Matrix matrix) {
-        double size = grid.getHeight() / (matrix.getSize() - 2);
-        Canvas canvas = new Canvas(grid.getWidth(), grid.getHeight());
-        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
-        graphicsContext2D.setFill(Color.WHITE);
-        graphicsContext2D.fillRect(0, 0, grid.getWidth(), grid.getHeight());
-        matrix.stream().filter(Cell::isNotEmpty).forEach(cell -> {
-            graphicsContext2D.setFill(colorRepository.getRandomColorForCluster(cell.getClusterMark()));
-            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size , size, size );
-            graphicsContext2D.setFill(Color.GRAY);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
-            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
-        });
-        grid.getChildren().clear();
-        grid.getChildren().add(canvas);
-    }
-
-    public void paintLineChart(AnchorPane pane, List<LineChartNode> nodes, String title) {
-        NumberAxis x = new NumberAxis();
-        NumberAxis y = new NumberAxis();
-        LineChart<Number, Number> numberLineChart = new LineChart<>(x, y);
-        numberLineChart.setPrefHeight(pane.getPrefHeight());
-        numberLineChart.setPrefWidth(pane.getPrefWidth());
-        numberLineChart.setTitle(title);
-        XYChart.Series series = new XYChart.Series();
-        series.setName(title);
-//        numberLineChart.getStylesheets().add(".chart-line-symbol {}");
-        ObservableList<XYChart.Data> datas = FXCollections.observableArrayList();
-        nodes.forEach(node -> datas.add(new XYChart.Data(node.x, node.y)));
-        series.setData(datas);
-        numberLineChart.getData().add(series);
-        pane.getChildren().clear();
-        pane.getChildren().add(numberLineChart);
-    }
-
     public LineChart<Number, Number> paintEmptyLineChart(AnchorPane pane, String title)
     {
         pane.getChildren().clear();
@@ -90,78 +53,94 @@ public class Painter {
         chart.getData().add(series);
     }
 
-    public void paintLightningBoltCanvas(AnchorPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix)
-    {
+    private void paintClusterMatrix(double size, Matrix matrix, GraphicsContext graphicsContext2D){
+        matrix.stream().forEach(cell -> {
+            graphicsContext2D.setFill(colorRepository.getRandomColorForCluster(cell.getClusterMark()));
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+    }
+
+    private void drawLines(double size, Matrix matrix, GraphicsContext graphicsContext2D){
+        matrix.stream().forEach(cell -> {
+            graphicsContext2D.setFill(Color.GRAY);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
+            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
+            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
+        });
+    }
+
+    private void paintMatrix(double size, Matrix matrix, GraphicsContext graphicsContext2D){
+        matrix.stream().forEach(cell -> {
+            graphicsContext2D.setFill(colorRepository.getColorForCell(cell.getClusterMark()));
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+    }
+
+    private void paintPath(double size, List<Cell> path, GraphicsContext graphicsContext2D){
+        path.forEach(cell -> {
+            graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+    }
+
+    private void paintTape(double size, List<Cell> path, GraphicsContext graphicsContext2D){
+        path.forEach(cell -> {
+            graphicsContext2D.setFill(Color.DARKSLATEBLUE);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+    }
+
+    private void paintRelations(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D){
+        relations.stream().map(PercolationRelation::getBlackCell).forEach(cell -> {
+            graphicsContext2D.setFill(Color.DARKRED);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+    }
+
+    public void paintCanvas(AnchorPane grid, Matrix matrix) {
+        double size = grid.getHeight() / (matrix.getSize() - 2);
+        Canvas canvas = new Canvas(grid.getWidth(), grid.getHeight());
+        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+        graphicsContext2D.setFill(Color.WHITE);
+        graphicsContext2D.fillRect(0, 0, grid.getWidth(), grid.getHeight());
+
+        paintClusterMatrix(size, matrix, graphicsContext2D);
+        drawLines(size, matrix, graphicsContext2D);
+
+        grid.getChildren().clear();
+        grid.getChildren().add(canvas);
+    }
+
+    public void paintLightningBoltAndTape(AnchorPane pane, List<Cell> path, List<Cell> tape, Matrix matrix){
         double size = pane.getHeight()/ (matrix.getSize() - 2);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
-        matrix.stream().forEach(cell -> {
-            graphicsContext2D.setFill(colorRepository.getColorForCell(cell.getClusterMark()));
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
-            graphicsContext2D.setFill(Color.GRAY);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
-            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
-        });
-        path.forEach(cell -> {
-            graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
-            graphicsContext2D.setFill(Color.GRAY);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
-            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
-        });
-        relations.stream().map(PercolationRelation::getBlackCell).forEach(cell -> {
-            graphicsContext2D.setFill(Color.DARKRED);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
-            graphicsContext2D.setFill(Color.GRAY);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
-            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
-        });
-        //line drawing section
-//        relations.stream().forEach(relation -> {
-//            graphicsContext2D.moveTo(relation.getBlackCell().getX()* size + size/2, relation.getBlackCell().getY()* size+ size/2);
-//            graphicsContext2D.lineTo(relation.getRedCell().getX()* size+ size/2, relation.getRedCell().getY()* size+ size/2);
-//            graphicsContext2D.stroke();
-//        });
+
+        paintMatrix(size, matrix, graphicsContext2D);
+        paintPath(size, path, graphicsContext2D);
+        paintTape(size, tape, graphicsContext2D);
+        drawLines(size, matrix, graphicsContext2D);
+
         pane.getChildren().clear();
         pane.getChildren().add(canvas);
-
     }
 
-//    public void paintPercolationProgramming(AnchorPane pane, List<PercolationRelation> relations, Matrix matrix)
-//    {
-//        double size = pane.getHeight()/ (matrix.getSize() - 2);
-//        Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
-//        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
-//        graphicsContext2D.setFill(Color.WHITE);
-//        graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
-//        matrix.stream().forEach(cell -> {
-//            graphicsContext2D.setFill(colorRepository.getColorForCell(cell.getClusterMark()));
-//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
-//            graphicsContext2D.setFill(Color.GRAY);
-//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
-//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
-//            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
-//            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
-//        });
-//        relations.stream().map(PercolationRelation::getBlackCell).forEach(cell -> {
-//            graphicsContext2D.setFill(Color.DARKRED);
-//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
-//            graphicsContext2D.setFill(Color.GRAY);
-//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
-//            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
-//            graphicsContext2D.fillRect(cell.getX() * size , cell.getY() * size + size - 0.5, size, 0.5);
-//            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size , 0.5, size);
-//        });
-//        pane.getChildren().clear();
-//        pane.getChildren().add(canvas);
-//
-//    }
+    public void paintLightningBoltAndRelations(AnchorPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix){
+        double size = pane.getHeight()/ (matrix.getSize() - 2);
+        Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
+        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+        graphicsContext2D.setFill(Color.WHITE);
+        graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
+
+        paintMatrix(size, matrix, graphicsContext2D);
+        paintPath(size,path, graphicsContext2D);
+        paintRelations(size,relations,graphicsContext2D);
+        drawLines(size, matrix, graphicsContext2D);
+
+        pane.getChildren().clear();
+        pane.getChildren().add(canvas);
+    }
 }

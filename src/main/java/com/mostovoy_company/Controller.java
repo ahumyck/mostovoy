@@ -45,6 +45,7 @@ public class Controller {
 
     @FXML
     public AnchorPane objectStationDistance1;
+
     @FXML
     public AnchorPane objectStationDistance2;
 
@@ -123,7 +124,14 @@ public class Controller {
     public AnchorPane wayLengthLineChart;
 
     @FXML
+    public CheckBox tapeCheckBox;
+
+    @FXML
+    public TextField tapeCount;
+
+    @FXML
     public void initialize() {
+        tapeCheckBox.setSelected(false);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
                 new MaltTestFillingType(),
@@ -134,23 +142,16 @@ public class Controller {
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            painter.paintCanvas(gridPane, experiment.getMatrix());
-            painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
+            paintByCheckBox(experiment, PYTHAGORAS);
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
             redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
+        tapeCheckBox.setOnAction(event -> {
+            paintByDistanceResolverAndCheckBox();
+        });
         distanceCalculatorType.setOnAction(actionEvent -> {
-            if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
-                final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-                distanceCalculatorType.setText(DISCRETE);
-                painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
-            } else if (distanceCalculatorType.getText().equals(DISCRETE)) {
-                final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-                distanceCalculatorType.setText(PYTHAGORAS);
-                painter.paintLightningBoltCanvas(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(distanceCalculatorType.getText()), experiment.getMatrix());
-            }
-
+            paintByDistanceResolverAndCheckBox();
         });
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);
@@ -249,6 +250,33 @@ public class Controller {
                 logger.warn("For size " + size + " with " + count + " matrices generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });
+    }
+
+    void paintByDistanceResolverAndCheckBox(){
+        if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
+            distanceCalculatorType.setText(DISCRETE);
+            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+            paintByCheckBox(experiment, PYTHAGORAS);
+        } else if (distanceCalculatorType.getText().equals(DISCRETE)) {
+            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+            distanceCalculatorType.setText(PYTHAGORAS);
+            paintByCheckBox(experiment, DISCRETE);
+        }
+    }
+
+    void paintByCheckBox(Experiment experiment, String type) {
+        int tape = parseInt(tapeCount.getText());
+        painter.paintCanvas(gridPane, experiment.getMatrix());
+        if (tapeCheckBox.isSelected()) {
+            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape), experiment.getMatrix());
+        } else {
+            painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
+        }
+    }
+
+    int parseInt(String s){
+        try{ return Integer.parseInt(s); }
+        catch (NumberFormatException e){ return  1;}
     }
 
 
