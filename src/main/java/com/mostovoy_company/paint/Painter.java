@@ -2,6 +2,7 @@ package com.mostovoy_company.paint;
 
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
+import com.mostovoy_company.kafka.dto.LineChartNode;
 import com.mostovoy_company.programminPercolation.PercolationRelation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,6 +50,13 @@ public class Painter {
             dot.setNode(rect);
             data.add(dot);
         });
+        series.setData(data);
+        chart.getData().add(series);
+    }
+
+    public void addObservableSeries(LineChart<Number, Number> chart, String title, ObservableList<XYChart.Data> data){
+        XYChart.Series series = new XYChart.Series();
+        series.setName(title);
         series.setData(data);
         chart.getData().add(series);
     }

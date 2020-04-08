@@ -5,13 +5,16 @@ import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.filling.customs.*;
-import com.mostovoy_company.paint.LineChartNode;
+import com.mostovoy_company.kafka.MainService;
+import com.mostovoy_company.kafka.dto.LineChartNode;
 import com.mostovoy_company.paint.Painter;
 import com.mostovoy_company.stat.NormalizedStatManager;
 import com.mostovoy_company.stat.StatManager;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -34,6 +37,7 @@ import static com.mostovoy_company.programminPercolation.distance.DistanceCalcul
 @FxmlView("sample.fxml")
 public class Controller {
 
+    private MainService mainService;
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
     private StatManager statManager = new NormalizedStatManager();
@@ -129,6 +133,10 @@ public class Controller {
     @FXML
     public TextField tapeCount;
 
+    public Controller(MainService mainService) {
+        this.mainService = mainService;
+    }
+
     @FXML
     public void initialize() {
         tapeCheckBox.setSelected(false);
@@ -196,58 +204,84 @@ public class Controller {
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
             LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
             LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
-            ForkJoinPool forkJoinPool = new ForkJoinPool(8);
+//            ForkJoinPool forkJoinPool = new ForkJoinPool(8);
+//            for (Integer size : sizes) {
+//                System.out.println("For size " + size + " generating start");
+//                long startTimeForSize = System.currentTimeMillis();
+//                List<LineChartNode> midClustersCounts = new ArrayList<>();
+//                List<LineChartNode> midClustersSize = new ArrayList<>();
+//                List<LineChartNode> midRedCellsCount = new ArrayList<>();
+//                List<LineChartNode> midWayLengths = new ArrayList<>();
+//                List<LineChartNode> redCellsStationDistancesPythagoras = new ArrayList<>();
+//                List<LineChartNode> redCellsStationDistancesDiscrete = new ArrayList<>();
+//                DoubleStream.iterate(0.01,
+//                        x -> {
+////                            if (x < 0.4)
+////                                return x + 0.02;
+////                            else if (x > 0.4 && x < 0.6) return x + 0.05;
+//                            return x + 0.01;
+//                        })
+//                        .limit(100)
+//                        .filter(x -> x < 1)
+//                        .forEach(probability -> {
+//                            RandomFillingType randomFillingType = new RandomFillingType();
+//                            randomFillingType.setSize(size);
+//                            randomFillingType.setPercolationProbability(probability);
+//                            System.out.println("    Initializing for percolation probability " + probability + " started");
+//                            long startTimeProbability = System.currentTimeMillis();
+//                            List<Experiment> experiments = null;
+//                            try {
+//                                experiments = forkJoinPool.submit(() -> experimentManager.initializeExperiments(count, randomFillingType)).get();
+//                            } catch (InterruptedException | ExecutionException e) {
+//                                e.printStackTrace();
+//                            }
+////                            List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
+////                    startTimeProbability = System.currentTimeMillis();
+////                    System.out.println("        Collecting statistic started");
+//                            midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(experiments)));
+//                            midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(experiments)));
+//                            midRedCellsCount.add(new LineChartNode(probability, statManager.redCellsCountStat(experiments)));
+//                            midWayLengths.add(new LineChartNode(probability, statManager.wayLengthStat(experiments)));
+//                            redCellsStationDistancesPythagoras.add(new LineChartNode(probability, statManager.redCellStationDistanceForPythagoras(experiments)));
+//                            redCellsStationDistancesDiscrete.add(new LineChartNode(probability, statManager.redCellStationDistanceForDiscrete(experiments)));
+////                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimeProbability));
+////                            System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
+//                            logger.info("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
+//
+//                        });
+//                painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
+//                painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
+//                painter.addSeriesToLineChart(redCellsAdded, "Mat size " + size, midRedCellsCount);
+//                painter.addSeriesToLineChart(wayLengths, "Mat size " + size, midWayLengths);
+//                painter.addSeriesToLineChart(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
+//                painter.addSeriesToLineChart(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
+//                logger.warn("For size " + size + " with " + count + " matrices generated time=" + (System.currentTimeMillis() - startTimeForSize));
+//            }
             for (Integer size : sizes) {
-                System.out.println("For size " + size + " generating start");
-                long startTimeForSize = System.currentTimeMillis();
-                List<LineChartNode> midClustersCounts = new ArrayList<>();
-                List<LineChartNode> midClustersSize = new ArrayList<>();
-                List<LineChartNode> midRedCellsCount = new ArrayList<>();
-                List<LineChartNode> midWayLengths = new ArrayList<>();
-                List<LineChartNode> redCellsStationDistancesPythagoras = new ArrayList<>();
-                List<LineChartNode> redCellsStationDistancesDiscrete = new ArrayList<>();
-                DoubleStream.iterate(0.01,
-                        x -> {
-//                            if (x < 0.4)
-//                                return x + 0.02;
-//                            else if (x > 0.4 && x < 0.6) return x + 0.05;
-                            return x + 0.01;
-                        })
+                ObservableList<XYChart.Data> midClustersCounts = FXCollections.observableArrayList();
+                ObservableList<XYChart.Data> midClustersSize = FXCollections.observableArrayList();
+                ObservableList<XYChart.Data> midRedCellsCount = FXCollections.observableArrayList();
+                ObservableList<XYChart.Data> midWayLengths = FXCollections.observableArrayList();
+                ObservableList<XYChart.Data> redCellsStationDistancesPythagoras = FXCollections.observableArrayList();
+                ObservableList<XYChart.Data> redCellsStationDistancesDiscrete = FXCollections.observableArrayList();
+                mainService.putMidClustersCounts(size, midClustersCounts);
+                mainService.putMidClustersSize(size, midClustersSize);
+                mainService.putMidRedCellsCount(size, midRedCellsCount);
+                mainService.putMidWayLengths(size, midWayLengths);
+                mainService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
+                mainService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
+                painter.addObservableSeries(clusterCountChart, "Mat size " + size, midClustersCounts);
+                painter.addObservableSeries(clusterSizeChart, "Mat size " + size, midClustersSize);
+                painter.addObservableSeries(redCellsAdded, "Mat size " + size, midRedCellsCount);
+                painter.addObservableSeries(wayLengths, "Mat size " + size, midWayLengths);
+                painter.addObservableSeries(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
+                painter.addObservableSeries(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
+                DoubleStream.iterate(0.01, x -> x + 0.01)
                         .limit(100)
-                        .filter(x -> x < 1)
+                        .filter(x -> x <= 0.8500001)
                         .forEach(probability -> {
-                            RandomFillingType randomFillingType = new RandomFillingType();
-                            randomFillingType.setSize(size);
-                            randomFillingType.setPercolationProbability(probability);
-                            System.out.println("    Initializing for percolation probability " + probability + " started");
-                            long startTimeProbability = System.currentTimeMillis();
-                            List<Experiment> experiments = null;
-                            try {
-                                experiments = forkJoinPool.submit(() -> experimentManager.initializeExperiments(count, randomFillingType)).get();
-                            } catch (InterruptedException | ExecutionException e) {
-                                e.printStackTrace();
-                            }
-//                            List<Experiment> experiments = experimentManager.initializeExperiments(count, randomFillingType);
-//                    startTimeProbability = System.currentTimeMillis();
-//                    System.out.println("        Collecting statistic started");
-                            midClustersCounts.add(new LineChartNode(probability, statManager.clusterCountStat(experiments)));
-                            midClustersSize.add(new LineChartNode(probability, statManager.clusterSizeStat(experiments)));
-                            midRedCellsCount.add(new LineChartNode(probability, statManager.redCellsCountStat(experiments)));
-                            midWayLengths.add(new LineChartNode(probability, statManager.wayLengthStat(experiments)));
-                            redCellsStationDistancesPythagoras.add(new LineChartNode(probability, statManager.redCellStationDistanceForPythagoras(experiments)));
-                            redCellsStationDistancesDiscrete.add(new LineChartNode(probability, statManager.redCellStationDistanceForDiscrete(experiments)));
-//                    System.out.println("    Collecting statistic finished time=" + (System.currentTimeMillis() - startTimeProbability));
-//                            System.out.println("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
-                            logger.info("    Initializing for percolation probability " + probability + " finished time=" + (System.currentTimeMillis() - startTimeProbability));
-
+                            mainService.send(count, size, probability);
                         });
-                painter.addSeriesToLineChart(clusterCountChart, "Mat size " + size, midClustersCounts);
-                painter.addSeriesToLineChart(clusterSizeChart, "Mat size " + size, midClustersSize);
-                painter.addSeriesToLineChart(redCellsAdded, "Mat size " + size, midRedCellsCount);
-                painter.addSeriesToLineChart(wayLengths, "Mat size " + size, midWayLengths);
-                painter.addSeriesToLineChart(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
-                painter.addSeriesToLineChart(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
-                logger.warn("For size " + size + " with " + count + " matrices generated time=" + (System.currentTimeMillis() - startTimeForSize));
             }
         });
     }

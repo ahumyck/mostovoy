@@ -5,11 +5,12 @@ import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.programminPercolation.PercolationRelation;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 
-
+@Component
 public class NormalizedStatManager implements StatManager {
 
     public double clusterCountStat(List<Experiment> experiments) {
