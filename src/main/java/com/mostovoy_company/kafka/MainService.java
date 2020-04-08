@@ -76,7 +76,7 @@ public class MainService {
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setPercolationProbability(dto.getProbability());
         fillingType.setSize(dto.getSize());
-        ForkJoinPool forkJoinPool = new ForkJoinPool(6);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(8);
         int size = dto.getSize();
         double probability = dto.getProbability();
         List<Experiment> experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(dto.getCount(), fillingType)).get();
