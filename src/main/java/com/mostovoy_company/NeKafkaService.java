@@ -1,10 +1,9 @@
-package com.mostovoy_company.kafka;
+package com.mostovoy_company;
 
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.kafka.dto.LineChartNode;
-import com.mostovoy_company.kafka.dto.Message;
 import com.mostovoy_company.kafka.dto.Response;
 import com.mostovoy_company.stat.NormalizedStatManager;
 import javafx.application.Platform;
@@ -12,10 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.shape.Rectangle;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,20 +19,20 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
-//@Service
+@Component
 @Slf4j
-public class MainService {
-
-    private final KafkaTemplate<Long, Response> kafkaResponseTemplate;
-    private final KafkaTemplate<Long, Message> kafkaMessageTemplate;
+public class NeKafkaService {
     private NormalizedStatManager normalizedStatManager;
-
     private Map<Integer, ObservableList<XYChart.Data>> midClustersCounts = new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> midClustersSize= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> midRedCellsCount= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>>midWayLengths= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesPythagoras= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesDiscrete= new HashMap<>();
+
+    public NeKafkaService(NormalizedStatManager normalizedStatManager) {
+        this.normalizedStatManager = normalizedStatManager;
+    }
 
     public void putMidClustersCounts(int size, ObservableList<XYChart.Data> midClustersCounts) {
         this.midClustersCounts.put(size, midClustersCounts);
@@ -62,25 +58,22 @@ public class MainService {
         this.redCellsStationDistancesDiscrete.put(size, redCellsStationDistancesDiscrete);
     }
 
-    @Autowired
-    public MainService(KafkaTemplate<Long, Response> kafkaResponseTemplate, KafkaTemplate<Long, Message> kafkaMessageTemplate, NormalizedStatManager normalizedStatManager) {
-        this.kafkaResponseTemplate = kafkaResponseTemplate;
-        this.kafkaMessageTemplate = kafkaMessageTemplate;
-        this.normalizedStatManager = normalizedStatManager;
-    }
-
-    @KafkaListener(topics = {"server.experiments"}, containerFactory = "messageFactory")
-    public void consumeMessage(Message dto) throws ExecutionException, InterruptedException {
-        log.info("=> start consume {}", dto);
+    public void consume(int count, int size, double probability){
+        log.info("=> start consume count: " + count + " size: " + size + " probability: " + probability);
         long startTime = System.currentTimeMillis();
         RandomFillingType fillingType = new RandomFillingType();
-        fillingType.setPercolationProbability(dto.getProbability());
-        fillingType.setSize(dto.getSize());
+        fillingType.setPercolationProbability(probability);
+        fillingType.setSize(size);
         ForkJoinPool forkJoinPool = new ForkJoinPool(6);
-        int size = dto.getSize();
-        double probability = dto.getProbability();
-        List<Experiment> experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(dto.getCount(), fillingType)).get();
-        kafkaResponseTemplate.send("server.response", Response.builder()
+        List<Experiment> experiments = null;
+        try {
+            experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(count, fillingType)).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        Response dto = Response.builder()
                 .size(size)
                 .midClustersCounts(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(experiments)))
                 .midClustersSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(experiments)))
@@ -88,13 +81,8 @@ public class MainService {
                 .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)))
                 .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)))
                 .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)))
-                .build());
-        log.info("=> end consume time:{}, {}", System.currentTimeMillis() - startTime, dto);
-    }
-
-    @KafkaListener(topics = {"server.response"}, containerFactory = "responseFactory")
-    public void consumeResponse(Response dto) throws ExecutionException, InterruptedException {
-        log.info("=> consumed {}", dto);
+                .build();
+        log.info("=> end consume count: " + count + " size: " + size + " probability: " + probability + " time:" + (System.currentTimeMillis() - startTime));
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -106,12 +94,6 @@ public class MainService {
                 redCellsStationDistancesDiscrete.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesDiscrete()));
             }
         });
-
-//        log.info("insert to cache {}", experiments.size());
-    }
-
-    public void send(int count, int size, double percolation) {
-        kafkaMessageTemplate.send("server.experiments", new Message(count, size, percolation));
     }
 
     private XYChart.Data convertToXYChartData(LineChartNode node) {

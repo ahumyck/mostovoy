@@ -6,7 +6,6 @@ import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.filling.customs.*;
 import com.mostovoy_company.kafka.MainService;
-import com.mostovoy_company.kafka.dto.LineChartNode;
 import com.mostovoy_company.paint.Painter;
 import com.mostovoy_company.stat.NormalizedStatManager;
 import com.mostovoy_company.stat.StatManager;
@@ -22,11 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -37,7 +33,8 @@ import static com.mostovoy_company.programminPercolation.distance.DistanceCalcul
 @FxmlView("sample.fxml")
 public class Controller {
 
-    private MainService mainService;
+//    private MainService mainService;
+    private NeKafkaService neKafkaService;
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
     private StatManager statManager = new NormalizedStatManager();
@@ -133,8 +130,14 @@ public class Controller {
     @FXML
     public TextField tapeCount;
 
-    public Controller(MainService mainService) {
-        this.mainService = mainService;
+//    public Controller(MainService mainService, NeKafkaService neKafkaService) {
+//        this.mainService = mainService;
+//        this.neKafkaService = neKafkaService;
+//    }
+
+
+    public Controller(NeKafkaService neKafkaService) {
+        this.neKafkaService = neKafkaService;
     }
 
     @FXML
@@ -264,54 +267,59 @@ public class Controller {
                 ObservableList<XYChart.Data> midWayLengths = FXCollections.observableArrayList();
                 ObservableList<XYChart.Data> redCellsStationDistancesPythagoras = FXCollections.observableArrayList();
                 ObservableList<XYChart.Data> redCellsStationDistancesDiscrete = FXCollections.observableArrayList();
-                mainService.putMidClustersCounts(size, midClustersCounts);
-                mainService.putMidClustersSize(size, midClustersSize);
-                mainService.putMidRedCellsCount(size, midRedCellsCount);
-                mainService.putMidWayLengths(size, midWayLengths);
-                mainService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
-                mainService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
+                neKafkaService.putMidClustersCounts(size, midClustersCounts);
+                neKafkaService.putMidClustersSize(size, midClustersSize);
+                neKafkaService.putMidRedCellsCount(size, midRedCellsCount);
+                neKafkaService.putMidWayLengths(size, midWayLengths);
+                neKafkaService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
+                neKafkaService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
                 painter.addObservableSeries(clusterCountChart, "Mat size " + size, midClustersCounts);
                 painter.addObservableSeries(clusterSizeChart, "Mat size " + size, midClustersSize);
                 painter.addObservableSeries(redCellsAdded, "Mat size " + size, midRedCellsCount);
                 painter.addObservableSeries(wayLengths, "Mat size " + size, midWayLengths);
                 painter.addObservableSeries(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
                 painter.addObservableSeries(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
-                DoubleStream.iterate(0.01, x -> x + 0.01)
-                        .limit(100)
-                        .filter(x -> x <= 0.8500001)
-                        .forEach(probability -> {
-                            mainService.send(count, size, probability);
-                        });
+                new Thread(() -> {
+                    DoubleStream.iterate(0.01, x -> x + 0.01)
+                            .limit(100)
+                            .filter(x -> x <= 0.8500001)
+                            .forEach(probability -> {
+                                neKafkaService.consume(count, size, probability);
+                            });
+                }).start();
             }
         });
     }
 
-    void paintByDistanceResolverAndCheckBox(){
-        if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
-            distanceCalculatorType.setText(DISCRETE);
-            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            paintByCheckBox(experiment, PYTHAGORAS);
-        } else if (distanceCalculatorType.getText().equals(DISCRETE)) {
-            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            distanceCalculatorType.setText(PYTHAGORAS);
-            paintByCheckBox(experiment, DISCRETE);
+        void paintByDistanceResolverAndCheckBox () {
+            if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
+                distanceCalculatorType.setText(DISCRETE);
+                final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+                paintByCheckBox(experiment, PYTHAGORAS);
+            } else if (distanceCalculatorType.getText().equals(DISCRETE)) {
+                final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+                distanceCalculatorType.setText(PYTHAGORAS);
+                paintByCheckBox(experiment, DISCRETE);
+            }
         }
-    }
 
-    void paintByCheckBox(Experiment experiment, String type) {
-        int tape = parseInt(tapeCount.getText());
-        painter.paintCanvas(gridPane, experiment.getMatrix());
-        if (tapeCheckBox.isSelected()) {
-            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape), experiment.getMatrix());
-        } else {
-            painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
+        void paintByCheckBox (Experiment experiment, String type){
+            int tape = parseInt(tapeCount.getText());
+            painter.paintCanvas(gridPane, experiment.getMatrix());
+            if (tapeCheckBox.isSelected()) {
+                painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape), experiment.getMatrix());
+            } else {
+                painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
+            }
         }
+
+        int parseInt (String s){
+            try {
+                return Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                return 1;
+            }
+        }
+
+
     }
-
-    int parseInt(String s){
-        try{ return Integer.parseInt(s); }
-        catch (NumberFormatException e){ return  1;}
-    }
-
-
-}
