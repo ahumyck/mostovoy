@@ -25,7 +25,11 @@ public class NormalizedStatManager implements StatManager {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
         return experiments.stream()
                 .map(Experiment::getMatrix)
-                .mapToDouble(matrix -> ((double) matrix.stream().filter(Cell::hasClusterMark).count()) / matrix.getClusterCounter())
+                .mapToDouble(matrix -> {
+                    if (matrix.getClusterCounter() > 0)
+                        return (double) matrix.stream().filter(Cell::hasClusterMark).count() / matrix.getClusterCounter();
+                    else return 0;
+                })
                 .average()
                 .orElse(0) / (size * size) ;
     }
