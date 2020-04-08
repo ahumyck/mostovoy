@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
-@Service
+//@Service
 @Slf4j
 public class MainService {
 
@@ -32,11 +32,11 @@ public class MainService {
     private NormalizedStatManager normalizedStatManager;
 
     private Map<Integer, ObservableList<XYChart.Data>> midClustersCounts = new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> midClustersSize= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> midRedCellsCount= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>>midWayLengths= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesPythagoras= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesDiscrete= new HashMap<>();
+    private Map<Integer, ObservableList<XYChart.Data>> midClustersSize = new HashMap<>();
+    private Map<Integer, ObservableList<XYChart.Data>> midRedCellsCount = new HashMap<>();
+    private Map<Integer, ObservableList<XYChart.Data>> midWayLengths = new HashMap<>();
+    private Map<Integer, ObservableList<XYChart.Data>> redCellsStationDistancesPythagoras = new HashMap<>();
+    private Map<Integer, ObservableList<XYChart.Data>> redCellsStationDistancesDiscrete = new HashMap<>();
 
     public void putMidClustersCounts(int size, ObservableList<XYChart.Data> midClustersCounts) {
         this.midClustersCounts.put(size, midClustersCounts);
@@ -76,10 +76,10 @@ public class MainService {
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setPercolationProbability(dto.getProbability());
         fillingType.setSize(dto.getSize());
-        ForkJoinPool forkJoinPool = new ForkJoinPool(6);
+//        ForkJoinPool forkJoinPool = new ForkJoinPool(7);
         int size = dto.getSize();
         double probability = dto.getProbability();
-        List<Experiment> experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(dto.getCount(), fillingType)).get();
+        List<Experiment> experiments = /*forkJoinPool.submit(() -> */new ExperimentManager().initializeExperiments(dto.getCount(), fillingType)/*).get()*/;
         kafkaResponseTemplate.send("server.response", Response.builder()
                 .size(size)
                 .midClustersCounts(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(experiments)))
@@ -93,18 +93,15 @@ public class MainService {
     }
 
     @KafkaListener(topics = {"server.response"}, containerFactory = "responseFactory")
-    public void consumeResponse(Response dto) throws ExecutionException, InterruptedException {
+    public void consumeResponse(Response dto) {
         log.info("=> consumed {}", dto);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                midClustersCounts.get(dto.getSize()).add(convertToXYChartData(dto.getMidClustersCounts()));
-                midClustersSize.get(dto.getSize()).add(convertToXYChartData(dto.getMidClustersSize()));
-                midRedCellsCount.get(dto.getSize()).add(convertToXYChartData(dto.getMidRedCellsCount()));
-                midWayLengths.get(dto.getSize()).add(convertToXYChartData(dto.getMidWayLengths()));
-                redCellsStationDistancesPythagoras.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesPythagoras()));
-                redCellsStationDistancesDiscrete.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesDiscrete()));
-            }
+        Platform.runLater(() -> {
+            midClustersCounts.get(dto.getSize()).add(convertToXYChartData(dto.getMidClustersCounts()));
+            midClustersSize.get(dto.getSize()).add(convertToXYChartData(dto.getMidClustersSize()));
+            midRedCellsCount.get(dto.getSize()).add(convertToXYChartData(dto.getMidRedCellsCount()));
+            midWayLengths.get(dto.getSize()).add(convertToXYChartData(dto.getMidWayLengths()));
+            redCellsStationDistancesPythagoras.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesPythagoras()));
+            redCellsStationDistancesDiscrete.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesDiscrete()));
         });
 
 //        log.info("insert to cache {}", experiments.size());

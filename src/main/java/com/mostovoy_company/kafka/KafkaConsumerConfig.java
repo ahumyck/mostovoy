@@ -3,6 +3,12 @@ package com.mostovoy_company.kafka;
 import com.mostovoy_company.kafka.dto.Message;
 import com.mostovoy_company.kafka.dto.Response;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.internals.AbstractPartitionAssignor;
+import org.apache.kafka.clients.consumer.internals.PartitionAssignor;
+import org.apache.kafka.common.Cluster;
+import org.apache.kafka.common.Configurable;
+import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.message.CreatePartitionsRequestData;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +21,11 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-@Configuration
+//@Configuration
 public class KafkaConsumerConfig {
 
     @Value("${kafka.server}")
@@ -61,7 +69,6 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(responseConfigs());
     }
 
-
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
@@ -81,7 +88,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "group2");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, Integer.MAX_VALUE);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);

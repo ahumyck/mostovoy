@@ -19,8 +19,6 @@ import java.util.List;
 
 public class Painter {
 
-    private static final int SIZE = 15;
-
     private ColorGradientRepository colorRepository = new ColorGradientRepository();
 
     public LineChart<Number, Number> paintEmptyLineChart(AnchorPane pane, String title)
