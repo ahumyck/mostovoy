@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
-//@Service
+@Service
 @Slf4j
 public class MainService {
 

@@ -5,6 +5,7 @@ import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.filling.customs.*;
+import com.mostovoy_company.kafka.MainService;
 import com.mostovoy_company.paint.Painter;
 import com.mostovoy_company.stat.NormalizedStatManager;
 import com.mostovoy_company.stat.StatManager;
@@ -15,7 +16,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,8 @@ import static com.mostovoy_company.programminPercolation.distance.DistanceCalcul
 @FxmlView("sample.fxml")
 public class Controller {
 
-    private DefaultService defaultService;
+//    private DefaultService defaultService;
+    private MainService mainService;
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
     private StatManager statManager = new NormalizedStatManager();
@@ -133,7 +134,7 @@ public class Controller {
 
 
     public Controller(DefaultService defaultService) {
-        this.defaultService = defaultService;
+        this.mainService = mainService;
     }
 
     @FXML
@@ -263,12 +264,12 @@ public class Controller {
                 ObservableList<XYChart.Data> midWayLengths = FXCollections.observableArrayList();
                 ObservableList<XYChart.Data> redCellsStationDistancesPythagoras = FXCollections.observableArrayList();
                 ObservableList<XYChart.Data> redCellsStationDistancesDiscrete = FXCollections.observableArrayList();
-                defaultService.putMidClustersCounts(size, midClustersCounts);
-                defaultService.putMidClustersSize(size, midClustersSize);
-                defaultService.putMidRedCellsCount(size, midRedCellsCount);
-                defaultService.putMidWayLengths(size, midWayLengths);
-                defaultService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
-                defaultService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
+                mainService.putMidClustersCounts(size, midClustersCounts);
+                mainService.putMidClustersSize(size, midClustersSize);
+                mainService.putMidRedCellsCount(size, midRedCellsCount);
+                mainService.putMidWayLengths(size, midWayLengths);
+                mainService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
+                mainService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
                 painter.addObservableSeries(clusterCountChart, "Mat size " + size, midClustersCounts);
                 painter.addObservableSeries(clusterSizeChart, "Mat size " + size, midClustersSize);
                 painter.addObservableSeries(redCellsAdded, "Mat size " + size, midRedCellsCount);
@@ -280,7 +281,7 @@ public class Controller {
                             .limit(100)
                             .filter(x -> x <= 0.8500001)
                             .forEach(probability -> {
-                                defaultService.consume(count, size, probability);
+                                mainService.send(count, size, probability);
                             });
                 }).start();
             }
