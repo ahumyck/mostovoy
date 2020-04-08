@@ -21,7 +21,7 @@ import java.util.concurrent.ForkJoinPool;
 
 @Component
 @Slf4j
-public class NeKafkaService {
+public class DefaultService {
     private NormalizedStatManager normalizedStatManager;
     private Map<Integer, ObservableList<XYChart.Data>> midClustersCounts = new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> midClustersSize= new HashMap<>();
@@ -30,7 +30,7 @@ public class NeKafkaService {
     private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesPythagoras= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesDiscrete= new HashMap<>();
 
-    public NeKafkaService(NormalizedStatManager normalizedStatManager) {
+    public DefaultService(NormalizedStatManager normalizedStatManager) {
         this.normalizedStatManager = normalizedStatManager;
     }
 
@@ -68,9 +68,7 @@ public class NeKafkaService {
         List<Experiment> experiments = null;
         try {
             experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(count, fillingType)).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         Response dto = Response.builder()
