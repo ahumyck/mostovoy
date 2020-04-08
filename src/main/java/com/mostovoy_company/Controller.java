@@ -133,12 +133,40 @@ public class Controller {
 //    }
 
 
-    public Controller(DefaultService defaultService) {
+    public Controller(MainService mainService) {
         this.mainService = mainService;
     }
 
     @FXML
     public void initialize() {
+        LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Зависимость количество кластеров от концентрации");
+        LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
+        LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
+        LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
+        LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
+        LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
+        int[] sia = new int[]{30,50,100};
+        for (int size: sia) {
+            ObservableList<XYChart.Data> midClustersCounts = FXCollections.observableArrayList();
+            ObservableList<XYChart.Data> midClustersSize = FXCollections.observableArrayList();
+            ObservableList<XYChart.Data> midRedCellsCount = FXCollections.observableArrayList();
+            ObservableList<XYChart.Data> midWayLengths = FXCollections.observableArrayList();
+            ObservableList<XYChart.Data> redCellsStationDistancesPythagoras = FXCollections.observableArrayList();
+            ObservableList<XYChart.Data> redCellsStationDistancesDiscrete = FXCollections.observableArrayList();
+            mainService.putMidClustersCounts(size, midClustersCounts);
+            mainService.putMidClustersSize(size, midClustersSize);
+            mainService.putMidRedCellsCount(size, midRedCellsCount);
+            mainService.putMidWayLengths(size, midWayLengths);
+            mainService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
+            mainService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
+            painter.addObservableSeries(clusterCountChart, "Mat size " + size, midClustersCounts);
+            painter.addObservableSeries(clusterSizeChart, "Mat size " + size, midClustersSize);
+            painter.addObservableSeries(redCellsAdded, "Mat size " + size, midRedCellsCount);
+            painter.addObservableSeries(wayLengths, "Mat size " + size, midWayLengths);
+            painter.addObservableSeries(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
+            painter.addObservableSeries(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
+        }
+
         tapeCheckBox.setSelected(false);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
@@ -198,12 +226,12 @@ public class Controller {
 //            double stepProbability = Double.parseDouble(this.stepProbability.getText());
             int count = Integer.parseInt(this.matrixCount.getText());
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
-            LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Зависимость количество кластеров от концентрации");
-            LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
-            LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
-            LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
-            LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
-            LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
+//            LineChart<Number, Number> clusterCountChart = painter.paintEmptyLineChart(clusterCountChartPane, "Зависимость количество кластеров от концентрации");
+//            LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
+//            LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
+//            LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
+//            LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
+//            LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
 //            ForkJoinPool forkJoinPool = new ForkJoinPool(8);
 //            for (Integer size : sizes) {
 //                System.out.println("For size " + size + " generating start");
@@ -258,24 +286,24 @@ public class Controller {
 //                logger.warn("For size " + size + " with " + count + " matrices generated time=" + (System.currentTimeMillis() - startTimeForSize));
 //            }
             for (Integer size : sizes) {
-                ObservableList<XYChart.Data> midClustersCounts = FXCollections.observableArrayList();
-                ObservableList<XYChart.Data> midClustersSize = FXCollections.observableArrayList();
-                ObservableList<XYChart.Data> midRedCellsCount = FXCollections.observableArrayList();
-                ObservableList<XYChart.Data> midWayLengths = FXCollections.observableArrayList();
-                ObservableList<XYChart.Data> redCellsStationDistancesPythagoras = FXCollections.observableArrayList();
-                ObservableList<XYChart.Data> redCellsStationDistancesDiscrete = FXCollections.observableArrayList();
-                mainService.putMidClustersCounts(size, midClustersCounts);
-                mainService.putMidClustersSize(size, midClustersSize);
-                mainService.putMidRedCellsCount(size, midRedCellsCount);
-                mainService.putMidWayLengths(size, midWayLengths);
-                mainService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
-                mainService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
-                painter.addObservableSeries(clusterCountChart, "Mat size " + size, midClustersCounts);
-                painter.addObservableSeries(clusterSizeChart, "Mat size " + size, midClustersSize);
-                painter.addObservableSeries(redCellsAdded, "Mat size " + size, midRedCellsCount);
-                painter.addObservableSeries(wayLengths, "Mat size " + size, midWayLengths);
-                painter.addObservableSeries(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
-                painter.addObservableSeries(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
+//                ObservableList<XYChart.Data> midClustersCounts = FXCollections.observableArrayList();
+//                ObservableList<XYChart.Data> midClustersSize = FXCollections.observableArrayList();
+//                ObservableList<XYChart.Data> midRedCellsCount = FXCollections.observableArrayList();
+//                ObservableList<XYChart.Data> midWayLengths = FXCollections.observableArrayList();
+//                ObservableList<XYChart.Data> redCellsStationDistancesPythagoras = FXCollections.observableArrayList();
+//                ObservableList<XYChart.Data> redCellsStationDistancesDiscrete = FXCollections.observableArrayList();
+//                mainService.putMidClustersCounts(size, midClustersCounts);
+//                mainService.putMidClustersSize(size, midClustersSize);
+//                mainService.putMidRedCellsCount(size, midRedCellsCount);
+//                mainService.putMidWayLengths(size, midWayLengths);
+//                mainService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
+//                mainService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
+//                painter.addObservableSeries(clusterCountChart, "Mat size " + size, midClustersCounts);
+//                painter.addObservableSeries(clusterSizeChart, "Mat size " + size, midClustersSize);
+//                painter.addObservableSeries(redCellsAdded, "Mat size " + size, midRedCellsCount);
+//                painter.addObservableSeries(wayLengths, "Mat size " + size, midWayLengths);
+//                painter.addObservableSeries(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
+//                painter.addObservableSeries(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
                 new Thread(() -> {
                     DoubleStream.iterate(0.01, x -> x + 0.01)
                             .limit(100)
