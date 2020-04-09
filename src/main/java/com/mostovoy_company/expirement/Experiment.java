@@ -4,9 +4,10 @@ import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.lightning.LightningBolt;
 import com.mostovoy_company.lightning.Pair;
-import com.mostovoy_company.programminPercolation.PercolationProgramming;
-import com.mostovoy_company.programminPercolation.PercolationRelation;
-import com.mostovoy_company.programminPercolation.TapeGenerator;
+import com.mostovoy_company.programminPercolation.percolation.PercolationProgramming;
+import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
+import com.mostovoy_company.programminPercolation.tape.Tape;
+import com.mostovoy_company.programminPercolation.tape.TapeGenerator;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 
 import java.util.List;
@@ -17,13 +18,13 @@ public class Experiment {
     private String name;
     private Matrix matrix;
     private Pair<List<Cell>, Integer> path = null;
-    private Integer redCellsCounter;
+    private int redCellsCounter;
     private List<PercolationRelation> programmings = null;
+    private int neighborhood = 3;
 
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
     }
-
 
     Experiment(String name) {
         this.name = name;
@@ -50,11 +51,7 @@ public class Experiment {
 
     void calculatePath() {
         LightningBolt lightningBolt = new LightningBolt(matrix);
-//        System.out.println(System.currentTimeMillis() - startTime);
-//        startTime = System.currentTimeMillis();
-//        long startTime = System.currentTimeMillis();
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
-//        System.out.println("    " + (System.currentTimeMillis() - startTime));
         this.redCellsCounter = lightningBolt.getRedCellCounterForShortestPath();
     }
 
@@ -66,15 +63,11 @@ public class Experiment {
     private void calculateProgrammingPercolation(String distanceCalculatorType) {
         this.programmings = new PercolationProgramming(matrix, getPath())
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
-                .getProgrammingPercolationList();
+                .getProgrammingPercolationList(this.neighborhood);
     }
 
     public List<Cell> generateTape(int bound){
-        TapeGenerator generator = new TapeGenerator(matrix);
-        return generator.generateTape(bound, getPath())
-                .stream()
-                .filter(cell -> !getPath().contains(cell))
-                .collect(Collectors.toList());
+        return new Tape(matrix, getPath()).generateTape(bound);
     }
 
     public Matrix getMatrix() {
