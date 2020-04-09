@@ -56,7 +56,7 @@ public class KafkaProducerConfig {
      */
     @Bean
     public ProducerFactory<Long, RequestMessage> requestMessageProducerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
+        return new DefaultKafkaProducerFactory<>(requestProducerConfigs());
     }
 
     @Bean
@@ -73,7 +73,7 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, kafkaProducerId);
-        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RequestPartitioner.class);
+        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RequestPartitioner.class.getCanonicalName());
         return props;
     }
 

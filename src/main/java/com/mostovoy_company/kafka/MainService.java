@@ -76,7 +76,7 @@ public class MainService {
 
     @KafkaListener(topics = {"server.response"}, containerFactory = "responseMessageKafkaListenerContainerFactory")
     public void consumeResponseMessage(ResponseMessage message) {
-        if(message.getSessionId() == sessionManager.getCurrentSessionId()) {
+        if (message.getSessionId() == sessionManager.getCurrentSessionId()) {
             Platform.runLater(() -> {
                 chartsDataRepository.addAll(message.getSize(), parseResponseMessage(message));
             });
@@ -95,19 +95,21 @@ public class MainService {
         } else if (message.getAction().equals(SessionManager.READY_ACTION)) {
             if (message.getSessionId() == sessionManager.getCurrentSessionId() && sessionManager.getCurrentSessionData().isMaster()) {
                 RequestMessage response = sessionManager.getCurrentSessionData().nextMessage();
-                if(response == null)
+                if (response == null) {
                     kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), "node0", SessionManager.END_SESSION_ACTION));
-                else kafkaRequestTemplate.send("server.request", response);
+                } else {
+                    response.setNodeName(message.getNodeName());
+                    kafkaRequestTemplate.send("server.request", response);
+                }
             }
-        } else if (message.getAction().equals(SessionManager.END_SESSION_ACTION))
-        {
+        } else if (message.getAction().equals(SessionManager.END_SESSION_ACTION)) {
             sessionManager.closeSession();
         }
         log.info("=> consumed control message {}", message);
     }
 
     public void startNewSession() {
-        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.initNewSession(),"node0", SessionManager.START_SESSION_ACTION));
+        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.initNewSession(), "node0", SessionManager.START_SESSION_ACTION));
     }
 
     public void initNewSession() {
@@ -118,7 +120,7 @@ public class MainService {
         sessionManager.getCurrentSessionData().addMessage(count, size, probability);
     }
 
-    private void sendReadyMessage(){
+    private void sendReadyMessage() {
         kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), "node0", SessionManager.READY_ACTION));
     }
 

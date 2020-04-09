@@ -19,7 +19,7 @@ public class SessionData {
     }
 
     public void addMessage(int count, int size, double probability){
-        queue.add(new RequestMessage(sessionId, count, size, probability ));
+        queue.add(new RequestMessage(sessionId,null, count, size, probability));
     }
 
     public RequestMessage nextMessage(){

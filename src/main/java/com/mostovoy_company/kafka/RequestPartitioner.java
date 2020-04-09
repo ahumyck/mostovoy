@@ -35,8 +35,7 @@ public class RequestPartitioner implements Partitioner {
 
     //This method will get called once for each message
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
-        log.info("value type: " + value.getClass() + " value string: " + value.toString());
-        return 0;
+        return nameToPartitionMap.getOrDefault(((RequestMessage) value).getNodeName(), 0);
     }
     // This method will get called at the end and gives your partitioner class chance to cleanup
     public void close() {}

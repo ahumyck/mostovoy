@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestMessage {
     private long sessionId;
+    private String nodeName;
     private int count;
     private int size;
     private double probability;
