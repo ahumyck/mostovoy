@@ -3,6 +3,7 @@ package com.mostovoy_company.stat;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
+import com.mostovoy_company.lightning.Pair;
 
 import java.util.List;
 import java.util.OptionalDouble;
@@ -39,6 +40,15 @@ public class SimpleStatManager implements StatManager {
     @Override
     public double redCellStationDistanceForDiscrete(List<Experiment> experiments) {
         return 0;
+    }
+
+    @Override
+    public double darkRedAndBlackCellsRatio(List<Experiment> experiments) {
+        double top = experiments.stream()
+                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getFirst).sum();
+        double bot = experiments.stream()
+                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getSecond).sum();
+        return top/bot;
     }
 
 }
