@@ -3,11 +3,13 @@ package com.mostovoy_company.stat;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
+import com.mostovoy_company.lightning.Pair;
 import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @Component
@@ -73,6 +75,14 @@ public class NormalizedStatManager implements StatManager {
                         .mapToDouble(PercolationRelation::getDistance))
                 .average()
                 .orElse(0);
+    }
+
+    public double darkRedAndBlackCellsRatio(List<Experiment> experiments){
+        double top = experiments.stream()
+                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getFirst).sum();
+        double bot = experiments.stream()
+                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getSecond).sum();
+        return top/bot;
     }
 
 }

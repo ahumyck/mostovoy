@@ -26,12 +26,17 @@ public class DefaultService {
     private Map<Integer, ObservableList<XYChart.Data>> midClustersCounts = new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> midClustersSize= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> midRedCellsCount= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>>midWayLengths= new HashMap<>();
+    private Map<Integer,ObservableList<XYChart.Data>> midWayLengths= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesPythagoras= new HashMap<>();
     private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesDiscrete= new HashMap<>();
+    private Map<Integer,ObservableList<XYChart.Data>> darkRedAndBlackCellsRatio = new HashMap<>();
 
     public DefaultService(NormalizedStatManager normalizedStatManager) {
         this.normalizedStatManager = normalizedStatManager;
+    }
+
+    public void putDarkRedAndBlackCellsRatioStation(int size, ObservableList<XYChart.Data> darkRedAndBlackCellsRatioStation) {
+        this.darkRedAndBlackCellsRatio.put(size, darkRedAndBlackCellsRatioStation);
     }
 
     public void putMidClustersCounts(int size, ObservableList<XYChart.Data> midClustersCounts) {
@@ -79,6 +84,7 @@ public class DefaultService {
                 .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)))
                 .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)))
                 .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)))
+                .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(experiments)))
                 .build();
         log.info("=> end consume count: " + count + " size: " + size + " probability: " + probability + " time:" + (System.currentTimeMillis() - startTime));
         Platform.runLater(new Runnable() {
@@ -90,6 +96,7 @@ public class DefaultService {
                 midWayLengths.get(dto.getSize()).add(convertToXYChartData(dto.getMidWayLengths()));
                 redCellsStationDistancesPythagoras.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesPythagoras()));
                 redCellsStationDistancesDiscrete.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesDiscrete()));
+                darkRedAndBlackCellsRatio.get(dto.getSize()).add(convertToXYChartData(dto.getDarkRedAndBlackCellsRatio()));
             }
         });
     }

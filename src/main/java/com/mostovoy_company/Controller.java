@@ -47,6 +47,9 @@ public class Controller {
     public AnchorPane objectStationDistance2;
 
     @FXML
+    public AnchorPane ratioDarkRedAndBlackCells;
+
+    @FXML
     public Button distanceCalculatorType;
 
     @FXML
@@ -224,8 +227,9 @@ public class Controller {
             LineChart<Number, Number> clusterSizeChart = painter.paintEmptyLineChart(clusterSizeChartPane, "Средний размер кластеров");
             LineChart<Number, Number> redCellsAdded = painter.paintEmptyLineChart(redCellsCountLineChart, "Количество добавленых красных клеток");
             LineChart<Number, Number> wayLengths = painter.paintEmptyLineChart(wayLengthLineChart, "Средняя длина пути");
-            LineChart<Number, Number> redCellsStationDistancesPiChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
-            LineChart<Number, Number> redCellsStationDistancesNePiChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
+            LineChart<Number, Number> redCellsStationDistancesPythagorasChart = painter.paintEmptyLineChart(objectStationDistance1, "Расстояние вычисляется с помощью теоремы Пифагора");
+            LineChart<Number, Number> redCellsStationDistancesDefaultChart = painter.paintEmptyLineChart(objectStationDistance2, "Расстояние вычисляется как количество переходов");
+            LineChart<Number, Number> ratioDarkRedAndBlackCellsChart = painter.paintEmptyLineChart(ratioDarkRedAndBlackCells, "Отношение темнокрасных и черных клеток");
 //            ForkJoinPool forkJoinPool = new ForkJoinPool(8);
 //            for (Integer size : sizes) {
 //                System.out.println("For size " + size + " generating start");
@@ -286,18 +290,21 @@ public class Controller {
                 ObservableList<XYChart.Data> midWayLengths = FXCollections.observableArrayList();
                 ObservableList<XYChart.Data> redCellsStationDistancesPythagoras = FXCollections.observableArrayList();
                 ObservableList<XYChart.Data> redCellsStationDistancesDiscrete = FXCollections.observableArrayList();
+                ObservableList<XYChart.Data> darkRedAndBlackCellsRationStation = FXCollections.observableArrayList();
                 defaultService.putMidClustersCounts(size, midClustersCounts);
                 defaultService.putMidClustersSize(size, midClustersSize);
                 defaultService.putMidRedCellsCount(size, midRedCellsCount);
                 defaultService.putMidWayLengths(size, midWayLengths);
                 defaultService.putRedCellsStationDistancesDiscrete(size, redCellsStationDistancesDiscrete);
                 defaultService.putRedCellsStationDistancesPythagoras(size, redCellsStationDistancesPythagoras);
+                defaultService.putDarkRedAndBlackCellsRatioStation(size, darkRedAndBlackCellsRationStation);
                 painter.addObservableSeries(clusterCountChart, "Mat size " + size, midClustersCounts);
                 painter.addObservableSeries(clusterSizeChart, "Mat size " + size, midClustersSize);
                 painter.addObservableSeries(redCellsAdded, "Mat size " + size, midRedCellsCount);
                 painter.addObservableSeries(wayLengths, "Mat size " + size, midWayLengths);
-                painter.addObservableSeries(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
-                painter.addObservableSeries(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
+                painter.addObservableSeries(redCellsStationDistancesPythagorasChart, "Mat size " + size, redCellsStationDistancesPythagoras);
+                painter.addObservableSeries(redCellsStationDistancesDefaultChart, "Mat size " + size, redCellsStationDistancesDiscrete);
+                painter.addObservableSeries(ratioDarkRedAndBlackCellsChart, "Mat size " + size, darkRedAndBlackCellsRationStation);
                 new Thread(() -> DoubleStream.iterate(0.01, x -> x + 0.01)
                         .limit(100)
                         .filter(x -> x <= 1)

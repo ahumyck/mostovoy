@@ -10,8 +10,11 @@ import com.mostovoy_company.programminPercolation.tape.Tape;
 import com.mostovoy_company.programminPercolation.tape.TapeGenerator;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Experiment {
 
@@ -21,6 +24,7 @@ public class Experiment {
     private int redCellsCounter;
     private List<PercolationRelation> programmings = null;
     private int neighborhood = 3;
+    private Pair<Integer, Integer> darkRedAndBlackCellsRatio = null;
 
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
@@ -69,6 +73,23 @@ public class Experiment {
     public List<Cell> generateTape(int bound){
         return new Tape(matrix, getPath()).generateTape(bound);
     }
+
+    public Pair<Integer,Integer> getDarkRedAndBlackCellsFromWideTape(){
+        calculateDarkRedAndBlackCellsInTape();
+        return darkRedAndBlackCellsRatio;
+    }
+
+    private void calculateDarkRedAndBlackCellsInTape(){
+        List<Cell> tape = new Tape(matrix, getPath()).generateWideTape(this.neighborhood);
+        int blackCounter = (int)tape.stream().filter(Cell::isBlack).count();
+        List<Cell> darkRedCells = this.programmings.stream()
+                .map(PercolationRelation::getDarkRedCell)
+                .collect(Collectors.toList());
+        int darkRedCounter = (int)tape.stream().filter(Cell::isBlack).filter(darkRedCells::contains).count();
+        darkRedAndBlackCellsRatio = new Pair<>(darkRedCounter, blackCounter);
+    }
+
+
 
     public Matrix getMatrix() {
         return matrix;
