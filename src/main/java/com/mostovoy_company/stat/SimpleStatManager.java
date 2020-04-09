@@ -12,7 +12,7 @@ public class SimpleStatManager implements StatManager {
 
     public double clusterCountStat(List<Experiment> experiments) {
         OptionalDouble midClusterCount = experiments.stream().map(Experiment::getMatrix).mapToInt(Matrix::getClusterCounter).average();
-        return midClusterCount.getAsDouble();
+        return midClusterCount.orElse(0);
     }
 
     public double clusterSizeStat(List<Experiment> experiments) {
@@ -20,16 +20,16 @@ public class SimpleStatManager implements StatManager {
                 .map(Experiment::getMatrix)
                 .mapToDouble(matrix -> ((double) matrix.stream().filter(Cell::hasClusterMark).count()) / matrix.getClusterCounter())
                 .average()
-                .getAsDouble();
+                .orElse(0);
     }
 
     public double redCellsCountStat(List<Experiment> experiments){
-        return experiments.stream().mapToDouble(Experiment::getRedCellsCounter).average().getAsDouble();
+        return experiments.stream().mapToDouble(Experiment::getRedCellsCounter).average().orElse(0);
 
     }
 
     public double wayLengthStat(List<Experiment> experiments){
-        return experiments.stream().mapToDouble(Experiment::getDistance).average().getAsDouble();
+        return experiments.stream().mapToDouble(Experiment::getDistance).average().orElse(0);
     }
 
     @Override
