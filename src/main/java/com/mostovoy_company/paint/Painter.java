@@ -3,7 +3,7 @@ package com.mostovoy_company.paint;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.kafka.dto.LineChartNode;
-import com.mostovoy_company.programminPercolation.PercolationRelation;
+import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Painter {
 
@@ -90,15 +91,23 @@ public class Painter {
         });
     }
 
-    private void paintTape(double size, List<Cell> path, GraphicsContext graphicsContext2D){
-        path.forEach(cell -> {
-            graphicsContext2D.setFill(Color.DARKSLATEBLUE);
+    private void paintTape(double size, List<Cell> tape, GraphicsContext graphicsContext2D){
+        tape.forEach(cell -> {
+            graphicsContext2D.setFill(Color.BLUE);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
         });
     }
 
     private void paintRelations(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D){
-        relations.stream().map(PercolationRelation::getBlackCell).forEach(cell -> {
+        relations.stream().map(PercolationRelation::getDarkRedCell).forEach(cell -> {
+            graphicsContext2D.setFill(Color.DARKRED);
+            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+        });
+    }
+
+    private void paintRelationOnTape(double size, List<PercolationRelation> relations, List<Cell> tape, GraphicsContext graphicsContext2D){
+        List<Cell> darkRedCells = relations.stream().map(PercolationRelation::getDarkRedCell).collect(Collectors.toList());
+        tape.stream().filter(darkRedCells::contains).forEach(cell -> {
             graphicsContext2D.setFill(Color.DARKRED);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
         });
@@ -118,7 +127,7 @@ public class Painter {
         grid.getChildren().add(canvas);
     }
 
-    public void paintLightningBoltAndTape(AnchorPane pane, List<Cell> path, List<Cell> tape, Matrix matrix){
+    public void paintLightningBoltAndTape(AnchorPane pane, List<Cell> path, List<Cell> tape,List<PercolationRelation> relations, Matrix matrix){
         double size = pane.getHeight()/ (matrix.getSize() - 2);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
@@ -128,6 +137,7 @@ public class Painter {
         paintMatrix(size, matrix, graphicsContext2D);
         paintPath(size, path, graphicsContext2D);
         paintTape(size, tape, graphicsContext2D);
+        paintRelationOnTape(size, relations, tape, graphicsContext2D);
         drawLines(size, matrix, graphicsContext2D);
 
         pane.getChildren().clear();

@@ -181,12 +181,8 @@ public class Controller {
             redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
-        tapeCheckBox.setOnAction(event -> {
-            paintByDistanceResolverAndCheckBox();
-        });
-        distanceCalculatorType.setOnAction(actionEvent -> {
-            paintByDistanceResolverAndCheckBox();
-        });
+        tapeCheckBox.setOnAction(event -> paintByDistanceResolverAndCheckBox());
+        distanceCalculatorType.setOnAction(actionEvent -> paintByDistanceResolverAndCheckBox());
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);
         gridSize.setVisible(false);
@@ -302,14 +298,12 @@ public class Controller {
                 painter.addObservableSeries(wayLengths, "Mat size " + size, midWayLengths);
                 painter.addObservableSeries(redCellsStationDistancesPiChart, "Mat size " + size, redCellsStationDistancesPythagoras);
                 painter.addObservableSeries(redCellsStationDistancesNePiChart, "Mat size " + size, redCellsStationDistancesDiscrete);
-                new Thread(() -> {
-                    DoubleStream.iterate(0.01, x -> x + 0.01)
-                            .limit(100)
-                            .filter(x -> x <= 1)
-                            .forEach(probability -> {
-                                defaultService.consume(count, size, probability);
-                            });
-                }).start();
+                new Thread(() -> DoubleStream.iterate(0.01, x -> x + 0.01)
+                        .limit(100)
+                        .filter(x -> x <= 1)
+                        .forEach(probability -> {
+                            defaultService.consume(count, size, probability);
+                        })).start();
             }
         });
     }
@@ -330,7 +324,7 @@ public class Controller {
             int tape = parseInt(tapeCount.getText());
             painter.paintCanvas(gridPane, experiment.getMatrix());
             if (tapeCheckBox.isSelected()) {
-                painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape), experiment.getMatrix());
+                painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
             } else {
                 painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
             }
