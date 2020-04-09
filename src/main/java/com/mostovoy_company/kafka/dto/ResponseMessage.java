@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Response {
+public class ResponseMessage {
+    private long sessionId;
     private int size;
     private LineChartNode midClustersCounts;
     private LineChartNode midClustersSize;

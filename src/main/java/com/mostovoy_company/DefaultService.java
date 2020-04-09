@@ -1,10 +1,12 @@
 package com.mostovoy_company;
 
+import com.mostovoy_company.chart.ChartNames;
+import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.kafka.dto.LineChartNode;
-import com.mostovoy_company.kafka.dto.Response;
+import com.mostovoy_company.kafka.dto.ResponseMessage;
 import com.mostovoy_company.stat.NormalizedStatManager;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -22,40 +24,13 @@ import java.util.concurrent.ForkJoinPool;
 @Component
 @Slf4j
 public class DefaultService {
+
+    private ChartsDataRepository chartsDataRepository;
     private NormalizedStatManager normalizedStatManager;
-    private Map<Integer, ObservableList<XYChart.Data>> midClustersCounts = new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> midClustersSize= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> midRedCellsCount= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>>midWayLengths= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesPythagoras= new HashMap<>();
-    private Map<Integer,ObservableList<XYChart.Data>> redCellsStationDistancesDiscrete= new HashMap<>();
 
-    public DefaultService(NormalizedStatManager normalizedStatManager) {
+    public DefaultService(ChartsDataRepository chartsDataRepository, NormalizedStatManager normalizedStatManager) {
+        this.chartsDataRepository = chartsDataRepository;
         this.normalizedStatManager = normalizedStatManager;
-    }
-
-    public void putMidClustersCounts(int size, ObservableList<XYChart.Data> midClustersCounts) {
-        this.midClustersCounts.put(size, midClustersCounts);
-    }
-
-    public void putMidClustersSize(int size, ObservableList<XYChart.Data> midClustersSize) {
-        this.midClustersSize.put(size, midClustersSize);
-    }
-
-    public void putMidRedCellsCount(int size, ObservableList<XYChart.Data> midRedCellsCount) {
-        this.midRedCellsCount.put(size, midRedCellsCount);
-    }
-
-    public void putMidWayLengths(int size, ObservableList<XYChart.Data> midWayLengths) {
-        this.midWayLengths.put(size, midWayLengths);
-    }
-
-    public void putRedCellsStationDistancesPythagoras(int size, ObservableList<XYChart.Data> redCellsStationDistancesPythagoras) {
-        this.redCellsStationDistancesPythagoras.put(size, redCellsStationDistancesPythagoras);
-    }
-
-    public void putRedCellsStationDistancesDiscrete(int size, ObservableList<XYChart.Data> redCellsStationDistancesDiscrete) {
-        this.redCellsStationDistancesDiscrete.put(size, redCellsStationDistancesDiscrete);
     }
 
     public void consume(int count, int size, double probability){
@@ -71,38 +46,18 @@ public class DefaultService {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        Response dto = Response.builder()
-                .size(size)
-                .midClustersCounts(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(experiments)))
-                .midClustersSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(experiments)))
-                .midRedCellsCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(experiments)))
-                .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)))
-                .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)))
-                .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)))
-                .build();
+        Map<String, LineChartNode> values = new HashMap<>();
+        values.put(ChartNames.CLUSTER_COUNT_CHART, buildLineChartNode(probability, normalizedStatManager.clusterCountStat(experiments)));
+        values.put(ChartNames.CLUSTER_SIZE_CHART, buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(experiments)));
+        values.put(ChartNames.RED_CELLS_ADDED_CHART, buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(experiments)));
+        values.put(ChartNames.WAY_LENGTHS_CHART, buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)));
+        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PI_CHART, buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)));
+        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_NE_PI_CHART, buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)));
         log.info("=> end consume count: " + count + " size: " + size + " probability: " + probability + " time:" + (System.currentTimeMillis() - startTime));
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                midClustersCounts.get(dto.getSize()).add(convertToXYChartData(dto.getMidClustersCounts()));
-                midClustersSize.get(dto.getSize()).add(convertToXYChartData(dto.getMidClustersSize()));
-                midRedCellsCount.get(dto.getSize()).add(convertToXYChartData(dto.getMidRedCellsCount()));
-                midWayLengths.get(dto.getSize()).add(convertToXYChartData(dto.getMidWayLengths()));
-                redCellsStationDistancesPythagoras.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesPythagoras()));
-                redCellsStationDistancesDiscrete.get(dto.getSize()).add(convertToXYChartData(dto.getRedCellsStationDistancesDiscrete()));
-            }
+        Platform.runLater(()->{
+            chartsDataRepository.addAll(size, values);
         });
     }
-
-    private XYChart.Data convertToXYChartData(LineChartNode node) {
-        XYChart.Data dot = new XYChart.Data(node.x, node.y);
-        Rectangle rect = new Rectangle(0, 0);
-        rect.setVisible(false);
-        dot.setNode(rect);
-        return dot;
-    }
-
-
     private LineChartNode buildLineChartNode(double x, double y) {
         return new LineChartNode(x, y);
     }

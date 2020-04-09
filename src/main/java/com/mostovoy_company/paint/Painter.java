@@ -14,9 +14,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class Painter {
 
     private ColorGradientRepository colorRepository = new ColorGradientRepository();

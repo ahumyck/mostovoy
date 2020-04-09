@@ -1,8 +1,8 @@
 package com.mostovoy_company.kafka;
 
-import com.mostovoy_company.kafka.dto.Message;
-import com.mostovoy_company.kafka.dto.Response;
-import org.apache.kafka.clients.admin.NewTopic;
+import com.mostovoy_company.kafka.dto.ControlMessage;
+import com.mostovoy_company.kafka.dto.RequestMessage;
+import com.mostovoy_company.kafka.dto.ResponseMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Configuration
+@Configuration
 public class KafkaProducerConfig {
 
     @Value("${kafka.server}")
@@ -36,29 +36,59 @@ public class KafkaProducerConfig {
         return props;
     }
 
+    /**
+     * Producer configuration for {@link ResponseMessage}
+     */
     @Bean
-    public ProducerFactory<Long, Response> producerResponseFactory() {
+    public ProducerFactory<Long, ResponseMessage> responseMessageProducerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<Long, Response> kafkaTemplateResponse() {
-        KafkaTemplate<Long, Response> template = new KafkaTemplate<>(producerResponseFactory());
+    public KafkaTemplate<Long, ResponseMessage> kafkaTemplateResponseMessage() {
+        KafkaTemplate<Long, ResponseMessage> template = new KafkaTemplate<>(responseMessageProducerFactory());
+        template.setMessageConverter(new StringJsonMessageConverter());
+        return template;
+    }
+
+    /**
+     * Producer configuration for {@link RequestMessage}
+     */
+    @Bean
+    public ProducerFactory<Long, RequestMessage> requestMessageProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
+    public KafkaTemplate<Long, RequestMessage> kafkaTemplateRequestMessage() {
+        KafkaTemplate<Long, RequestMessage> template = new KafkaTemplate<>(requestMessageProducerFactory());
         template.setMessageConverter(new StringJsonMessageConverter());
         return template;
     }
 
     @Bean
-    public ProducerFactory<Long, Message> producerMessagesFactory() {
+    public Map<String, Object> requestProducerConfigs() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        props.put(ProducerConfig.CLIENT_ID_CONFIG, kafkaProducerId);
+        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RequestPartitioner.class);
+        return props;
+    }
+
+    /**
+     * Producer configuration for {@link ControlMessage}
+     */
+    @Bean
+    public ProducerFactory<Long, ControlMessage> controlMessageProducerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<Long, Message> kafkaTemplateMessages() {
-        KafkaTemplate<Long, Message> template = new KafkaTemplate<>(producerMessagesFactory());
+    public KafkaTemplate<Long, ControlMessage> kafkaTemplateControlMessage() {
+        KafkaTemplate<Long, ControlMessage> template = new KafkaTemplate<>(controlMessageProducerFactory());
         template.setMessageConverter(new StringJsonMessageConverter());
         return template;
     }
-
 }
-

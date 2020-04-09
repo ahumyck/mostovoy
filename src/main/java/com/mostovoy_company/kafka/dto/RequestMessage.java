@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Message {
+public class RequestMessage {
+    private long sessionId;
     private int count;
     private int size;
     private double probability;
