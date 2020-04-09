@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +50,11 @@ public class MainService {
         this.chartsDataRepository = chartsDataRepository;
     }
 
-    @KafkaListener(topics = {"server.request"}, containerFactory = "requestMessageKafkaListenerContainerFactory")
+    @KafkaListener(topics = {"server.request"},
+            containerFactory = "requestMessageKafkaListenerContainerFactory",
+            topicPartitions = @TopicPartition(topic = "server.request", partitions = "0"))
     public void consumeRequestMessage(RequestMessage message) throws ExecutionException, InterruptedException {
-        log.info("=> start consume request message {}", message);
+//        log.info("=> start consume request message {}", message);
         long startTime = System.currentTimeMillis();
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setPercolationProbability(message.getProbability());
@@ -71,7 +74,7 @@ public class MainService {
                 .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)))
                 .build());
         sendReadyMessage();
-        log.info("=> end consume request message time:{}, {}", System.currentTimeMillis() - startTime, message);
+//        log.info("=> end consume request message time:{}, {}", System.currentTimeMillis() - startTime, message);
     }
 
     @KafkaListener(topics = {"server.response"}, containerFactory = "responseMessageKafkaListenerContainerFactory")
@@ -105,7 +108,7 @@ public class MainService {
         } else if (message.getAction().equals(SessionManager.END_SESSION_ACTION)) {
             sessionManager.closeSession();
         }
-        log.info("=> consumed control message {}", message);
+//        log.info("=> consumed control message {}", message);
     }
 
     public void startNewSession() {

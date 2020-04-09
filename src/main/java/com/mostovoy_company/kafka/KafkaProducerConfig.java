@@ -74,6 +74,8 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, kafkaProducerId);
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RequestPartitioner.class.getCanonicalName());
+        props.put("partitions.0", "node0");
+        props.put("partitions.1", "node1");
         return props;
     }
 

@@ -55,8 +55,6 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, Integer.MAX_VALUE);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
-        props.put("partitions.0", "node0");
-        props.put("partitions.1", "node1");
         return props;
     }
     /*
