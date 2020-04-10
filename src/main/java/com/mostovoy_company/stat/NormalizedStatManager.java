@@ -3,9 +3,11 @@ package com.mostovoy_company.stat;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
+import com.mostovoy_company.kafka.dto.Message;
 import com.mostovoy_company.lightning.Pair;
 import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -17,6 +19,7 @@ import java.util.stream.Stream;
 
 
 @Component
+@Slf4j
 public class NormalizedStatManager implements StatManager {
 
     public double clusterCountStat(List<Experiment> experiments) {
@@ -40,7 +43,8 @@ public class NormalizedStatManager implements StatManager {
                         hasClusterMarkCounter[0] += matrix.stream().filter(Cell::hasClusterMark).count();
                         clusterCounter[0] += matrix.getClusterCounter();
                 });
-        if(clusterCounter[0] > 0) return hasClusterMarkCounter[0]/(clusterCounter[0]*size*size);
+        double concentration = hasClusterMarkCounter[0]/(size*size*experiments.size());
+        if(clusterCounter[0] > 0) return (concentration)/(clusterCounter[0]);
         else return 0;
     }
 
@@ -56,9 +60,6 @@ public class NormalizedStatManager implements StatManager {
     public double wayLengthStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
         return experiments.stream()
-//                .mapToDouble(Experiment::getDistance)
-//                .average()
-//                .orElse(0) / size;
                 .map(Experiment::getDistances)
                 .flatMap(Collection::stream)
                 .mapToDouble(d -> d)

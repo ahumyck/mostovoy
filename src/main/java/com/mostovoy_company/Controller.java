@@ -313,7 +313,7 @@ public class Controller {
         });
     }
 
-        void paintByDistanceResolverAndCheckBox () {
+        private void paintByDistanceResolverAndCheckBox() {
             if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
                 distanceCalculatorType.setText(DISCRETE);
                 final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
@@ -325,7 +325,7 @@ public class Controller {
             }
         }
 
-        void paintByCheckBox (Experiment experiment, String type){
+        private void paintByCheckBox(Experiment experiment, String type){
 //            int tape = parseInt(tapeCount.getText());
 //            painter.paintCanvas(gridPane, experiment.getMatrix());
 //            if (tapeCheckBox.isSelected()) {
