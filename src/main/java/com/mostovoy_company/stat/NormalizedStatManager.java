@@ -43,7 +43,7 @@ public class NormalizedStatManager implements StatManager {
                         hasClusterMarkCounter[0] += matrix.stream().filter(Cell::hasClusterMark).count();
                         clusterCounter[0] += matrix.getClusterCounter();
                 });
-        double concentration = hasClusterMarkCounter[0]/(size*size*experiments.size());
+        double concentration = hasClusterMarkCounter[0]/(size*size);
         if(clusterCounter[0] > 0) return (concentration)/(clusterCounter[0]);
         else return 0;
     }
