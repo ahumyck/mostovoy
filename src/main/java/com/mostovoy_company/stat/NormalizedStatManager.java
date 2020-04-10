@@ -8,7 +8,11 @@ import com.mostovoy_company.programminPercolation.percolation.PercolationRelatio
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 
@@ -52,9 +56,14 @@ public class NormalizedStatManager implements StatManager {
     public double wayLengthStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
         return experiments.stream()
-                .mapToDouble(Experiment::getDistance)
+//                .mapToDouble(Experiment::getDistance)
+//                .average()
+//                .orElse(0) / size;
+                .map(Experiment::getDistances)
+                .flatMap(Collection::stream)
+                .mapToDouble(d -> d)
                 .average()
-                .orElse(0) / size;
+                .orElse(0)/size;
     }
 
     @Override

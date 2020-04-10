@@ -5,6 +5,8 @@ import com.mostovoy_company.entity.Matrix;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public class LightningBolt {
     private Matrix matrix;
@@ -37,14 +39,13 @@ public class LightningBolt {
         return this.shortestPath == null ? -1 /*error code */ : this.shortestPath.getFirst().size();
     }
 
-    public int getRedCellCounterByIndex(int index) {
-        return this.redCellCounters[index] == 0 ? -1 /*error code*/ : this.redCellCounters[index];
+    public List<List<Cell>> getShortestPaths(){
+        return this.paths.stream().map(Pair::getFirst).collect(Collectors.toList());
     }
 
-    public int getDistanceForPathByIndex(int index) {
-        return this.paths.size() == 0 ? -1 /*error code */ : this.paths.get(index).getFirst().size();
+    public List<Double> getDistances() {
+        return getShortestPaths().stream().map(List::size).mapToDouble(d -> d).boxed().collect(Collectors.toList());
     }
-
 
     public LightningBolt calculateShortestPaths() {
         for (int currentPos = 0; currentPos < this.shiftedSize; currentPos++) {
