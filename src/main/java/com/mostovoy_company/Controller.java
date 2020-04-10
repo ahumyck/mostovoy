@@ -46,6 +46,9 @@ public class Controller {
     public AnchorPane objectStationDistance2;
 
     @FXML
+    public AnchorPane ratioDarkRedAndBlackCells;
+
+    @FXML
     public Button distanceCalculatorType;
 
     @FXML
@@ -133,7 +136,9 @@ public class Controller {
                 clusterCountChartPane,
                 clusterSizeChartPane,
                 redCellsCountLineChart,
-                wayLengthLineChart);
+                wayLengthLineChart,
+                ratioDarkRedAndBlackCells
+                );
         tapeCheckBox.setSelected(false);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
@@ -194,13 +199,14 @@ public class Controller {
             mainService.initNewSession();
             Arrays.stream(this.matrixSize.getText().split(","))
                     .map(Integer::valueOf)
-                    .forEach(size -> new Thread(() -> DoubleStream.iterate(0.01, x -> x + 0.01)
+                    .forEach(size -> /*new Thread(
+                            () ->*/ DoubleStream.iterate(0.01, x -> x + 0.01)
                             .limit(100)
                             .filter(x -> x <= 1)
                             .forEach(probability -> {
                                 mainService.add(count, size, probability);
-                            }))
-                            .start()
+                            })/*)
+                            .start()*/
                     );
             mainService.startNewSession();
         });

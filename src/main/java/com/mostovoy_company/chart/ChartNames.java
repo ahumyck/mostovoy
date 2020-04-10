@@ -13,6 +13,7 @@ public class ChartNames {
     public static final String RED_CELLS_STATION_DISTANCES_NE_PI_CHART = "redCellsStationDistancesNePiChart";
     public static final String RED_CELLS_STATION_DISTANCES_PI_CHART = "redCellsStationDistancesPiChart";
     public static final String WAY_LENGTHS_CHART = "wayLengthsChart";
+    public static final String RATIO_DARK_RED_AND_BLACK_CELLS_CHART = "ratioDarkRedAndBlackCellsChart";
 
     static {
         chartNames.add(CLUSTER_COUNT_CHART);
