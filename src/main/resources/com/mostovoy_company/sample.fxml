@@ -68,8 +68,8 @@
                                     </tabs>
                                 </TabPane>
                                 <Button fx:id="distanceCalculatorType" layoutX="765.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Пифагор" />
-                        <CheckBox fx:id="tapeCheckBox" layoutX="765.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Изолента" />
-                        <TextField fx:id="tapeCount" layoutX="569.0" layoutY="70.0" promptText="Отступ (целое число>0)" />
+<!--                        <CheckBox fx:id="tapeCheckBox" layoutX="765.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Изолента" />-->
+<!--                        <TextField fx:id="tapeCount" layoutX="569.0" layoutY="70.0" promptText="Отступ (целое число>0)" />-->
                             </children>
                         </AnchorPane>
                     </content>
