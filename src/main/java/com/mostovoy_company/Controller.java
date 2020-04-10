@@ -224,11 +224,11 @@ public class Controller {
         }
     }
 
-    void paintByCheckBox(Experiment experiment, String type) {
+    void paintByCheckBox (Experiment experiment, String type){
         int tape = parseInt(tapeCount.getText());
         painter.paintCanvas(gridPane, experiment.getMatrix());
         if (tapeCheckBox.isSelected()) {
-            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape), experiment.getMatrix());
+            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
         } else {
             painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
         }

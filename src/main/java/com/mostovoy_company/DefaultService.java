@@ -53,6 +53,7 @@ public class DefaultService {
         values.put(ChartNames.WAY_LENGTHS_CHART, buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)));
         values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PI_CHART, buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)));
         values.put(ChartNames.RED_CELLS_STATION_DISTANCES_NE_PI_CHART, buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)));
+        values.put(ChartNames.RATIO_DARK_RED_AND_BLACK_CELLS_CHART, buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(experiments)));
         log.info("=> end consume count: " + count + " size: " + size + " probability: " + probability + " time:" + (System.currentTimeMillis() - startTime));
         Platform.runLater(()->{
             chartsDataRepository.addAll(size, values);

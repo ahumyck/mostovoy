@@ -72,6 +72,7 @@ public class MainService {
                 .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)))
                 .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)))
                 .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)))
+                .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(experiments)))
                 .build());
         sendReadyMessage();
 //        log.info("=> end consume request message time:{}, {}", System.currentTimeMillis() - startTime, message);
