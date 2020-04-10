@@ -17,4 +17,6 @@ public interface StatManager {
     double redCellStationDistanceForPythagoras(List<Experiment> experiments);
 
     double redCellStationDistanceForDiscrete(List<Experiment> experiments);
+
+    double darkRedAndBlackCellsRatio(List<Experiment> experiments);
 }

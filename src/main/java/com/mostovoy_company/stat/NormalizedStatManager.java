@@ -3,11 +3,13 @@ package com.mostovoy_company.stat;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
-import com.mostovoy_company.programminPercolation.PercolationRelation;
+import com.mostovoy_company.lightning.Pair;
+import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @Component
@@ -25,12 +27,17 @@ public class NormalizedStatManager implements StatManager {
 
     public double clusterSizeStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
-        return experiments.stream()
+        final double[] hasClusterMarkCounter = {0};
+        final double[] clusterCounter = {0};
+        experiments.stream()
                 .map(Experiment::getMatrix)
                 .filter(matrix -> matrix.getClusterCounter() > 0)
-                .mapToDouble(matrix -> (double) matrix.stream().filter(Cell::hasClusterMark).count() / matrix.getClusterCounter())
-                .average()
-                .orElse(0) / (size * size) ;
+                .forEach(matrix -> {
+                        hasClusterMarkCounter[0] += matrix.stream().filter(Cell::hasClusterMark).count();
+                        clusterCounter[0] += matrix.getClusterCounter();
+                });
+        if(clusterCounter[0] > 0) return hasClusterMarkCounter[0]/(clusterCounter[0]*size*size);
+        else return 0;
     }
 
     public double redCellsCountStat(List<Experiment> experiments) {
@@ -68,6 +75,14 @@ public class NormalizedStatManager implements StatManager {
                         .mapToDouble(PercolationRelation::getDistance))
                 .average()
                 .orElse(0);
+    }
+
+    public double darkRedAndBlackCellsRatio(List<Experiment> experiments){
+        double top = experiments.stream()
+                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getFirst).sum();
+        double bot = experiments.stream()
+                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getSecond).sum();
+        return top/bot;
     }
 
 }

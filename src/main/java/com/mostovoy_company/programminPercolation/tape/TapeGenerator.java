@@ -1,4 +1,4 @@
-package com.mostovoy_company.programminPercolation;
+package com.mostovoy_company.programminPercolation.tape;
 
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;

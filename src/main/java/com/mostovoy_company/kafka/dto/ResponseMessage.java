@@ -18,4 +18,5 @@ public class ResponseMessage {
     private LineChartNode midWayLengths;
     private LineChartNode redCellsStationDistancesPythagoras;
     private LineChartNode redCellsStationDistancesDiscrete;
+    private LineChartNode darkRedAndBlackCellsRatio;
 }
