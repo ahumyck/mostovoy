@@ -113,8 +113,8 @@ public class Controller {
     @FXML
     public AnchorPane wayLengthLineChart;
 
-    @FXML
-    public CheckBox tapeCheckBox;
+//    @FXML
+//    public CheckBox tapeCheckBox;
 
     @FXML
     public TextField tapeCount;
@@ -139,7 +139,7 @@ public class Controller {
                 wayLengthLineChart,
                 ratioDarkRedAndBlackCells
                 );
-        tapeCheckBox.setSelected(false);
+//        tapeCheckBox.setSelected(false);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
                 new MaltTestFillingType(),
@@ -155,9 +155,9 @@ public class Controller {
             redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
-        tapeCheckBox.setOnAction(event -> {
-            paintByDistanceResolverAndCheckBox();
-        });
+//        tapeCheckBox.setOnAction(event -> {
+//            paintByDistanceResolverAndCheckBox();
+//        });
         distanceCalculatorType.setOnAction(actionEvent -> {
             paintByDistanceResolverAndCheckBox();
         });
@@ -227,11 +227,11 @@ public class Controller {
     void paintByCheckBox (Experiment experiment, String type){
         int tape = parseInt(tapeCount.getText());
         painter.paintCanvas(gridPane, experiment.getMatrix());
-        if (tapeCheckBox.isSelected()) {
-            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
-        } else {
+//        if (tapeCheckBox.isSelected()) {
+//            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
+//        } else {
             painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
-        }
+//        }
     }
 
     int parseInt(String s) {
