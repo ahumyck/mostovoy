@@ -58,7 +58,7 @@ public class MainService {
             containerFactory = "requestMessageKafkaListenerContainerFactory",
             topicPartitions = @TopicPartition(topic = "server.request", partitions = "0"))
     public void consumeRequestMessage(RequestMessage message) throws ExecutionException, InterruptedException {
-//        log.info("=> start consume request message {}", message);
+        log.info("=> start consume request message {}", message);
         long startTime = System.currentTimeMillis();
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setPercolationProbability(message.getProbability());
@@ -79,7 +79,7 @@ public class MainService {
                 .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(experiments)))
                 .build());
         sendReadyMessage();
-//        log.info("=> end consume request message time:{}, {}", System.currentTimeMillis() - startTime, message);
+        log.info("=> end consume request message time:{}, {}", System.currentTimeMillis() - startTime, message);
     }
 
     @KafkaListener(topics = {"server.response"}, containerFactory = "responseMessageKafkaListenerContainerFactory")
@@ -89,7 +89,7 @@ public class MainService {
                 chartsDataRepository.addAll(message.getSize(), parseResponseMessage(message));
             });
         }
-        log.info("=> consumed response message {}", message);
+        log.info("=> consumed response  {}", message);
     }
 
     @KafkaListener(topics = {"server.control"}, containerFactory = "controlMessageKafkaListenerContainerFactory")
@@ -103,6 +103,7 @@ public class MainService {
         } else if (message.getAction().equals(SessionManager.READY_ACTION)) {
             if (message.getSessionId() == sessionManager.getCurrentSessionId() && sessionManager.getCurrentSessionData().isMaster()) {
                 RequestMessage response = sessionManager.getCurrentSessionData().nextMessage();
+                log.info("=> consumed ready control message {}", message);
                 if (response == null) {
                     kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), nodeName, SessionManager.END_SESSION_ACTION));
                 } else {
@@ -113,11 +114,10 @@ public class MainService {
         } else if (message.getAction().equals(SessionManager.END_SESSION_ACTION)) {
             sessionManager.closeSession();
         }
-//        log.info("=> consumed control message {}", message);
     }
 
     public void startNewSession() {
-        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.initNewSession(), nodeName, SessionManager.START_SESSION_ACTION));
+        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), nodeName, SessionManager.START_SESSION_ACTION));
     }
 
     public void initNewSession() {

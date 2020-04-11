@@ -14,10 +14,15 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
@@ -25,12 +30,13 @@ import static com.mostovoy_company.programminPercolation.distance.DistanceCalcul
 
 @Component
 @FxmlView("sample.fxml")
+@Slf4j
 public class Controller {
 
     private ChartsDataRepository chartsDataRepository;
 
-//    private DefaultService defaultService;
-        private MainService mainService;
+    //    private DefaultService defaultService;
+    private MainService mainService;
     private ExperimentManager experimentManager = new ExperimentManager();
     private final Painter painter = new Painter();
     private StatManager statManager = new NormalizedStatManager();
@@ -138,7 +144,7 @@ public class Controller {
                 redCellsCountLineChart,
                 wayLengthLineChart,
                 ratioDarkRedAndBlackCells
-                );
+        );
 //        tapeCheckBox.setSelected(false);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
@@ -194,20 +200,22 @@ public class Controller {
         });
 
         applyExperiment.setOnAction(event -> {
-            int count = Integer.parseInt(this.matrixCount.getText());
+            Map<Integer, Integer> map = new HashMap<>();
+            List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            List<Integer> counts = Arrays.stream(this.matrixCount.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
             chartsDataRepository.clear();
+            for (int i = 0; i < sizes.size(); i++) {
+                map.put(sizes.get(i), counts.get(i));
+            }
             mainService.initNewSession();
-            Arrays.stream(this.matrixSize.getText().split(","))
-                    .map(Integer::valueOf)
-                    .forEach(size -> /*new Thread(
-                            () ->*/ DoubleStream.iterate(0.01, x -> x + 0.01)
+            log.info("=> init");
+            map.forEach((size, count) ->
+                    DoubleStream.iterate(0.01, x -> x + 0.01)
                             .limit(100)
                             .filter(x -> x <= 1)
                             .forEach(probability -> {
                                 mainService.add(count, size, probability);
-                            })/*)
-                            .start()*/
-                    );
+                            }));
             mainService.startNewSession();
         });
     }
@@ -224,13 +232,13 @@ public class Controller {
         }
     }
 
-    void paintByCheckBox (Experiment experiment, String type){
+    void paintByCheckBox(Experiment experiment, String type) {
         int tape = parseInt(tapeCount.getText());
         painter.paintCanvas(gridPane, experiment.getMatrix());
 //        if (tapeCheckBox.isSelected()) {
 //            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
 //        } else {
-            painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
+        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
 //        }
     }
 
