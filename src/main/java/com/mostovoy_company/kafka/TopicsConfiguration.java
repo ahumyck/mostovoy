@@ -18,7 +18,7 @@ public class TopicsConfiguration {
     @Bean
     public NewTopic requestTopic() {
         return TopicBuilder.name("server.request")
-                .partitions(2)
+                .partitions(10)
                 .replicas(1)
                 .build();
     }

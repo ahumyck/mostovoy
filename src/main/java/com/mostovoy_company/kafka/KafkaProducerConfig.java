@@ -76,6 +76,11 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RequestPartitioner.class.getCanonicalName());
         props.put("partitions.0", "node0");
         props.put("partitions.1", "node1");
+        props.put("partitions.2", "node2");
+        props.put("partitions.3", "node3");
+        props.put("partitions.4", "node4");
+        props.put("partitions.5", "node5");
+        props.put("partitions.6", "node6");
         return props;
     }
 

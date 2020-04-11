@@ -14,6 +14,7 @@ import com.mostovoy_company.stat.NormalizedStatManager;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -27,6 +28,9 @@ import java.util.concurrent.ExecutionException;
 @Service
 @Slf4j
 public class MainService {
+
+    @Value("server.group")
+    private String nodeName;
 
     private SessionManager sessionManager;
     private final KafkaTemplate<Long, ResponseMessage> kafkaResponseTemplate;
@@ -100,7 +104,7 @@ public class MainService {
             if (message.getSessionId() == sessionManager.getCurrentSessionId() && sessionManager.getCurrentSessionData().isMaster()) {
                 RequestMessage response = sessionManager.getCurrentSessionData().nextMessage();
                 if (response == null) {
-                    kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), "node0", SessionManager.END_SESSION_ACTION));
+                    kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), nodeName, SessionManager.END_SESSION_ACTION));
                 } else {
                     response.setNodeName(message.getNodeName());
                     kafkaRequestTemplate.send("server.request", response);
@@ -113,7 +117,7 @@ public class MainService {
     }
 
     public void startNewSession() {
-        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.initNewSession(), "node0", SessionManager.START_SESSION_ACTION));
+        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.initNewSession(), nodeName, SessionManager.START_SESSION_ACTION));
     }
 
     public void initNewSession() {
@@ -125,7 +129,7 @@ public class MainService {
     }
 
     private void sendReadyMessage() {
-        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), "node0", SessionManager.READY_ACTION));
+        kafkaControlTemplate.send("server.control", new ControlMessage(sessionManager.getCurrentSessionId(), nodeName, SessionManager.READY_ACTION));
     }
 
     private Map<String, LineChartNode> parseResponseMessage(ResponseMessage message) {
