@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 
 @Slf4j
 @Component
@@ -46,24 +47,32 @@ public class RequestService {
             containerFactory = "requestMessageKafkaListenerContainerFactory",
             topicPartitions = @TopicPartition(topic = "server.request", partitions = SessionManager.NODE_NUMBER))
     public void consumeRequestMessage(final RequestMessage message) throws ExecutionException, InterruptedException {
-        log.info("=> consumed request message {}", message);
+        log.info("=>start consumed request message {}", message);
         performCalculationAndSendResponseInNewThread(message.getSize(), message.getCount(), message.getProbability());
     }
 
     private void performCalculationAndSendResponseInNewThread(int size, int count, double probability) {
         new Thread(() -> {
-            performCalculationAndSendResponse(size, count, probability);
+            try {
+                performCalculationAndSendResponse(size, count, probability);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 
-    private void performCalculationAndSendResponse(int size, int count, double probability) {
+    private void performCalculationAndSendResponse(int size, int count, double probability) throws ExecutionException, InterruptedException {
+        long startTime = System.currentTimeMillis();
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setPercolationProbability(probability);
         fillingType.setSize(size);
-//        ForkJoinPool forkJoinPool = new ForkJoinPool(7);
-        List<Experiment> experiments = /*forkJoinPool.submit(() -> */new ExperimentManager().initializeExperiments(count, fillingType)/*).get()*/;
+        ForkJoinPool forkJoinPool = new ForkJoinPool(7);
+        List<Experiment> experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(count, fillingType)).get();
         responseService.sendResponseMessage(collectStatisticAndBuildResponseMessage(size, probability, experiments));
         controlService.sendReadyMessage();
+        log.info("=> end consumed request message: " + (System.currentTimeMillis() - startTime));
     }
 
     private ResponseMessage collectStatisticAndBuildResponseMessage(int size, double probability, List<Experiment> experiments) {
