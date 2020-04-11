@@ -208,7 +208,7 @@ public class Controller {
                 map.put(sizes.get(i), counts.get(i));
             }
             mainService.initNewSession();
-            log.info("=> init");
+            log.info("=> init: " + map);
             map.forEach((size, count) ->
                     DoubleStream.iterate(0.01, x -> x + 0.01)
                             .limit(100)

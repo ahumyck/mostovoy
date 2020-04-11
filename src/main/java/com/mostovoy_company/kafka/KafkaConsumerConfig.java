@@ -3,6 +3,7 @@ package com.mostovoy_company.kafka;
 import com.mostovoy_company.kafka.dto.ControlMessage;
 import com.mostovoy_company.kafka.dto.RequestMessage;
 import com.mostovoy_company.kafka.dto.ResponseMessage;
+import com.mostovoy_company.kafka.session.SessionManager;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -27,8 +28,6 @@ public class KafkaConsumerConfig {
     @Value("${kafka.group.id}")
     private String kafkaGroupId;
 
-    @Value("server.group")
-    private String groupId;
 
     /**
      * Consumer configuration for {@link RequestMessage}
@@ -88,7 +87,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, SessionManager.NODE_NAME);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, Integer.MAX_VALUE);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
@@ -123,7 +122,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, SessionManager.NODE_NAME);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, Integer.MAX_VALUE);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
