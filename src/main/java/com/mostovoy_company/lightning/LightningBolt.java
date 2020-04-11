@@ -59,8 +59,12 @@ public class LightningBolt {
             paths.add(new Pair<>(path, distances.get(shortest)));
 
         }
+//        System.out.println("paths: " + paths);
         this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
+        System.out.println("sortestpath: " + shortestPath);
+
         this.indexOfShortestPath = this.paths.indexOf(shortestPath);
+        System.out.println("index: " + indexOfShortestPath);
         return this;
     }
 

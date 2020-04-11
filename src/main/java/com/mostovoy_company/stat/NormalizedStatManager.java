@@ -26,7 +26,7 @@ public class NormalizedStatManager implements StatManager {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
         return experiments.stream()
                 .map(Experiment::getMatrix)
-                .filter(matrix -> matrix.getClusterCounter() > 0)
+//                .filter(matrix -> matrix.getClusterCounter() > 0)
                 .mapToInt(Matrix::getClusterCounter)
                 .average()
                 .orElse(0) / (size * size);
@@ -87,12 +87,12 @@ public class NormalizedStatManager implements StatManager {
                 .orElse(0);
     }
 
-    public double darkRedAndBlackCellsRatio(List<Experiment> experiments){
+    public double darkRedAndBlackCellsRatio(List<Experiment> experiments) {
         double top = experiments.stream()
                 .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getFirst).sum();
         double bot = experiments.stream()
                 .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getSecond).sum();
-        return top/bot;
+        return top / bot;
     }
 
 }

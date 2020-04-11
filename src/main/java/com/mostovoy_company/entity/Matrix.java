@@ -87,11 +87,12 @@ public class Matrix {
          * so we need to get rid off it
          */
         Set<Integer> set = new HashSet<>();
-        for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
-            for(int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
-                set.add(this.matrix[i][j].getClusterMark());
-            }
-        }
+//        for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
+//            for(int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
+//                set.add(this.matrix[i][j].getClusterMark());
+//            }
+//        }
+        stream().forEach(cell -> set.add(cell.getClusterMark()));
         clusterCounter = set.size() - 1;
 //        System.out.println(this.clusterCounter);
     }
