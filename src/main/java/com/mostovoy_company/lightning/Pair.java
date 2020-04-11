@@ -1,5 +1,8 @@
 package com.mostovoy_company.lightning;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class Pair<V,T>{
     private V first;
     private T second;

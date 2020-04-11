@@ -25,9 +25,11 @@ public class Experiment {
     private List<PercolationRelation> programmings = null;
     private int neighborhood = 3;
     private Pair<Integer, Integer> darkRedAndBlackCellsRatio = null;
+    private LightningBolt lightningBolt;
 
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
+        this.lightningBolt = new LightningBolt(matrix);
     }
 
     Experiment(String name) {
@@ -37,6 +39,7 @@ public class Experiment {
     Experiment(String name, Matrix matrix) {
         this.name = name;
         this.matrix = matrix;
+        this.lightningBolt = new LightningBolt(matrix);
     }
 
     public List<Cell> getPath() {
@@ -53,8 +56,11 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
+    public List<Double> getDistances(){
+        return this.lightningBolt.getDistances();
+    }
+
     void calculatePath() {
-        LightningBolt lightningBolt = new LightningBolt(matrix);
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.redCellsCounter = lightningBolt.getRedCellCounterForShortestPath();
     }

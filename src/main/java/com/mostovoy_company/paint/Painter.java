@@ -116,7 +116,7 @@ public class Painter {
     }
 
     public void paintCanvas(AnchorPane grid, Matrix matrix) {
-        double size = grid.getHeight() / (matrix.getSize() - 2);
+        double size = grid.getHeight() / (matrix.getSize() - 2 * Matrix.OFFSET);
         Canvas canvas = new Canvas(grid.getWidth(), grid.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
@@ -130,7 +130,7 @@ public class Painter {
     }
 
     public void paintLightningBoltAndTape(AnchorPane pane, List<Cell> path, List<Cell> tape,List<PercolationRelation> relations, Matrix matrix){
-        double size = pane.getHeight()/ (matrix.getSize() - 2);
+        double size = pane.getHeight()/ (matrix.getSize() - 2 * Matrix.OFFSET);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
@@ -147,7 +147,7 @@ public class Painter {
     }
 
     public void paintLightningBoltAndRelations(AnchorPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix){
-        double size = pane.getHeight()/ (matrix.getSize() - 2);
+        double size = pane.getHeight()/ (matrix.getSize() - 2 * Matrix.OFFSET);
         Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);

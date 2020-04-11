@@ -44,7 +44,7 @@ public class Matrix {
         for (Cell[] value : this.matrix) {
             cells.addAll(Arrays.asList(value).subList(0, this.matrix.length));
         }
-        return cells.stream();
+        return cells.stream().filter(cell -> !cell.isEmpty());
     }
 
     public int getSize(){
@@ -76,22 +76,25 @@ public class Matrix {
                 cell.setClusterMark(newMarks.get(cell.getClusterMark()));
             }
         }
+//        System.out.println(this.clusterCounter);
     }
 
     private void countClusters(){
         /**
          * Using HashSet to count cluster marks
          *
-         * Output: set.size() - 1 because 0 will count as mark as well
+         * Output: set.size() - 1 because 0 will count as cluster as well
          * so we need to get rid off it
          */
         Set<Integer> set = new HashSet<>();
-        for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
-            for(int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
-                set.add(this.matrix[i][j].getClusterMark());
-            }
-        }
+//        for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
+//            for(int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
+//                set.add(this.matrix[i][j].getClusterMark());
+//            }
+//        }
+        stream().forEach(cell -> set.add(cell.getClusterMark()));
         clusterCounter = set.size() - 1;
+//        System.out.println(this.clusterCounter);
     }
 
     private void markClusters(){
