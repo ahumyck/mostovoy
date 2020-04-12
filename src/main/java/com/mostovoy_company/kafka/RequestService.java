@@ -3,6 +3,7 @@ package com.mostovoy_company.kafka;
 
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
+import com.mostovoy_company.expirement.Statistic;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.kafka.dto.LineChartNode;
 import com.mostovoy_company.kafka.dto.RequestMessage;
@@ -30,7 +31,7 @@ public class RequestService {
     private ControlService controlService;
 
     private SessionManager sessionManager;
-    private StatManager normalizedStatManager;
+    private NewNormalizedStatManager normalizedStatManager;
     private ResponseService responseService;
     private KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate;
 
@@ -70,24 +71,27 @@ public class RequestService {
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setPercolationProbability(probability);
         fillingType.setSize(size);
-        ForkJoinPool forkJoinPool = new ForkJoinPool(7);
-        List<Experiment> experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(count, fillingType)).get();
-        responseService.sendResponseMessage(collectStatisticAndBuildResponseMessage(size, probability, experiments));
+        ForkJoinPool forkJoinPool = new ForkJoinPool(8);
+        List<Statistic> statistics = forkJoinPool.submit(
+                () -> new ExperimentManager()
+                        .getStatistics(count, fillingType))
+                .get();
+        responseService.sendResponseMessage(collectStatisticAndBuildResponseMessage(size, probability, statistics));
         controlService.sendReadyMessage();
         log.info("=> end consumed request message: " + (System.currentTimeMillis() - startTime));
     }
 
-    private ResponseMessage collectStatisticAndBuildResponseMessage(int size, double probability, List<Experiment> experiments) {
+    private ResponseMessage collectStatisticAndBuildResponseMessage(int size, double probability, List<Statistic> statistics) {
         return ResponseMessage.builder()
                 .sessionId(sessionManager.getCurrentSessionId())
                 .size(size)
-                .midClustersCounts(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(experiments)))
-                .midClustersSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(experiments)))
-                .midRedCellsCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(experiments)))
-                .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)))
-                .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)))
-                .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)))
-                .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(experiments)))
+                .midClustersCounts(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(statistics)))
+                .midClustersSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(statistics)))
+                .midRedCellsCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(statistics)))
+                .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
+                .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
+                .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
+                .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(statistics)))
                 .build();
     }
 

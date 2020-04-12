@@ -5,10 +5,14 @@ import com.mostovoy_company.filling.FillingType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Slf4j
 public class ExperimentManager {
 
 
@@ -28,23 +32,26 @@ public class ExperimentManager {
     }
 
     public List<Experiment> initializeExperiments(int number, FillingType fillingType) {
-        List<Experiment> experimentObservableList = new ArrayList<>();
+        List<Experiment> experiments = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1)));
+            experiments.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
         }
-        experimentObservableList.parallelStream().forEach( experiment -> {
-            experiment.setMatrix(new Matrix(fillingType));
+        experiments.parallelStream().forEach( experiment -> {
             experiment.calculatePath();
             experiment.clear();
         });
-        return experimentObservableList;
+        return experiments;
     }
-
-    public List<Matrix> getMatrices(int number, FillingType fillingType) {
-        List<Matrix> matrices = new ArrayList<>();
-        for (int i = 0; i < number; i++) {
-            matrices.add(new Matrix(fillingType));
-        }
-        return matrices;
+    public List<Statistic> getStatistics(int number, FillingType fillingType){
+        List<Statistic> s =
+         Stream.generate(Experiment::new)
+                .limit(number)
+                .parallel()
+                .map(experiment -> experiment.matrix(new Matrix(fillingType)))
+                .map(Experiment::calculateLightningBolt)
+                .map(Experiment::getStatistic)
+                .collect(Collectors.toList());
+        log.info("=> statistics: " + s);
+         return s;
     }
 }

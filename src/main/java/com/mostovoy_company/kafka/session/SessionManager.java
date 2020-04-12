@@ -13,7 +13,7 @@ public class SessionManager {
     public static final String START_SESSION_ACTION = "start";
     public static final String READY_ACTION = "ready";
     public static final String END_SESSION_ACTION = "end";
-    public static final String NODE_NUMBER = "0";
+    public static final String NODE_NUMBER = "1";
     private static final String PREFIX_NODE_NAME = "node";
     public static final String NODE_NAME = PREFIX_NODE_NAME + NODE_NUMBER;
 

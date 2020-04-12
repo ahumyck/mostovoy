@@ -158,7 +158,7 @@ public class Controller {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             paintByCheckBox(experiment, PYTHAGORAS);
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
-            redCellsLabel.setText("Красных клеток: " + experiment.getRedCellsCounter());
+            redCellsLabel.setText("Красных клеток: " + experiment.getStatistic().getRedCellCount());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
 //        tapeCheckBox.setOnAction(event -> {

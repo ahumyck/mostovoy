@@ -34,9 +34,7 @@ public class ResponseService {
     @KafkaListener(topics = {"server.response"}, containerFactory = "responseMessageKafkaListenerContainerFactory")
     public void consumeResponseMessage(ResponseMessage message) {
         if (message.getSessionId() == sessionManager.getCurrentSessionId()) {
-            Platform.runLater(() -> {
-                chartsDataRepository.addAll(message.getSize(), parseResponseMessage(message));
-            });
+            Platform.runLater(() -> chartsDataRepository.addAll(message.getSize(), parseResponseMessage(message)));
         }
         log.info("=> consumed response  {}", message);
     }
@@ -52,7 +50,7 @@ public class ResponseService {
         return values;
     }
 
-    public void sendResponseMessage(ResponseMessage message){
+    public void sendResponseMessage(ResponseMessage message) {
         kafkaResponseTemplate.send("server.response", message);
     }
 }
