@@ -20,16 +20,23 @@ public class Experiment {
 
     private String name;
     private Matrix matrix;
+    private int size;
     private Pair<List<Cell>, Integer> path = null;
     private int redCellsCounter;
     private List<PercolationRelation> programmings = null;
     private int neighborhood = 3;
     private Pair<Integer, Integer> darkRedAndBlackCellsRatio = null;
     private LightningBolt lightningBolt;
+    private int clusterCounter;
+    private long countOfBlackCells;
+    private List<Double> distances;
 
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
         this.lightningBolt = new LightningBolt(matrix);
+        this.size = matrix.getSize() - 2 * Matrix.OFFSET;
+        this.clusterCounter = matrix.getClusterCounter();
+        this.countOfBlackCells = matrix.getCountOfBlackCells();
     }
 
     Experiment(String name) {
@@ -48,6 +55,18 @@ public class Experiment {
 
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public long getCountOfBlackCells() {
+        return countOfBlackCells;
+    }
+
+    public int getClusterCounter(){
+        return this.clusterCounter;
+    }
+
     public int getRedCellsCounter() {
         return redCellsCounter;
     }
@@ -56,13 +75,20 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    public List<Double> getDistances(){
+    public List<Double> getDistances1(){
         return this.lightningBolt.getDistances();
+
+    }
+
+    public List<Double> getDistances(){
+        return this.distances;
+
     }
 
     void calculatePath() {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.redCellsCounter = lightningBolt.getRedCellCounterForShortestPath();
+        this.distances = lightningBolt.getDistances();
     }
 
     public List<PercolationRelation> getProgrammings(String distanceCalculatorType) {
@@ -112,5 +138,10 @@ public class Experiment {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void clear(){
+        this.matrix = null;
+        this.lightningBolt = null;
     }
 }

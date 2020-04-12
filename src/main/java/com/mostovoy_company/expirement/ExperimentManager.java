@@ -27,14 +27,15 @@ public class ExperimentManager {
         return experimentObservableList;
     }
 
-    public ObservableList<Experiment> initializeExperiments(int number, FillingType fillingType) {
-        ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
+    public List<Experiment> initializeExperiments(int number, FillingType fillingType) {
+        List<Experiment> experimentObservableList = new ArrayList<>();
         for (int i = 0; i < number; i++) {
             experimentObservableList.add(new Experiment("Эксперимент №" + (i + 1)));
         }
         experimentObservableList.parallelStream().forEach( experiment -> {
             experiment.setMatrix(new Matrix(fillingType));
             experiment.calculatePath();
+            experiment.clear();
         });
         return experimentObservableList;
     }

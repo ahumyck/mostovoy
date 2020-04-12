@@ -59,6 +59,10 @@ public class Matrix {
         return clusterCounter;
     }
 
+    public long getCountOfBlackCells(){
+        return stream().filter(Cell::hasClusterMark).count();
+    }
+
     private int minClusterMark(Cell first,Cell second){
         return Math.min(first.getClusterMark(), second.getClusterMark());
     }
