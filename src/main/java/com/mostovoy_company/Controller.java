@@ -6,7 +6,7 @@ import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.filling.customs.*;
-import com.mostovoy_company.kafka.MainService;
+import com.mostovoy_company.kafka.KafkaSupportService;
 import com.mostovoy_company.paint.Painter;
 import com.mostovoy_company.stat.NormalizedStatManager;
 import com.mostovoy_company.stat.StatManager;
@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -35,12 +36,9 @@ public class Controller {
 
     private ChartsDataRepository chartsDataRepository;
 
-    //    private DefaultService defaultService;
     private MainService mainService;
-    private ExperimentManager experimentManager = new ExperimentManager();
+    private ExperimentManager experimentManager;
     private final Painter painter = new Painter();
-    private StatManager statManager = new NormalizedStatManager();
-
 
     @FXML
     public Label currentClustersCount;
@@ -125,15 +123,10 @@ public class Controller {
     @FXML
     public TextField tapeCount;
 
-    public Controller(ChartsDataRepository chartsDataRepository, MainService mainService) {
+    public Controller(ChartsDataRepository chartsDataRepository, @Qualifier("defaultService") MainService mainService) {
         this.chartsDataRepository = chartsDataRepository;
         this.mainService = mainService;
     }
-
-//    public Controller(ChartsDataRepository chartsDataRepository, DefaultService defaultService) {
-//        this.chartsDataRepository = chartsDataRepository;
-//        this.defaultService = defaultService;
-//    }
 
     @FXML
     public void initialize() {
@@ -207,16 +200,13 @@ public class Controller {
             for (int i = 0; i < sizes.size(); i++) {
                 map.put(sizes.get(i), counts.get(i));
             }
-            mainService.initNewSession();
             log.info("=> init: " + map);
             map.forEach((size, count) ->
                     DoubleStream.iterate(0.01, x -> x + 0.01)
                             .limit(100)
                             .filter(x -> x <= 1)
-                            .forEach(probability -> {
-                                mainService.add(count, size, probability);
-                            }));
-            mainService.startNewSession();
+                            .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
+            mainService.consume();
         });
     }
 

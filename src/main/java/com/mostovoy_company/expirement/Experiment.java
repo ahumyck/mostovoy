@@ -144,6 +144,7 @@ public class Experiment {
     }
 
     public Statistic getStatistic() {
+        clear();
         return statistic;
     }
 }

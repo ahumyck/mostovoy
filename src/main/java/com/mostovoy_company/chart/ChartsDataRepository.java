@@ -1,13 +1,8 @@
 package com.mostovoy_company.chart;
 
 import com.mostovoy_company.kafka.dto.LineChartNode;
-import com.mostovoy_company.paint.Painter;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
+import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +36,7 @@ public class ChartsDataRepository {
     }
 
     public void addAll(int size, Map<String, LineChartNode> values) {
-        values.forEach((name, value) -> add(name, size, value));
+        Platform.runLater(() -> values.forEach((name, value) -> add(name, size, value)));
     }
 
     public void add(String name, int size, LineChartNode node) {

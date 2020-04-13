@@ -50,7 +50,7 @@ public class PercolationProgramming {
         this.path.stream().map(cell -> findRelationForCurrentCell(cell, neighborhood)).
                 forEach(element -> element.ifPresent(percolationRelations::addAll));
 //        this.path.stream().filter(Cell::isWhite).map(cell -> findRelationForCurrentCell(cell, neighborhood))
-//                .forEach(element -> element.ifPresent(percolationRelations::addAll));
+//                .forEach(element -> element.ifPresent(percolationRelations::addDotsToCharts));
         return percolationRelations;
     }
 

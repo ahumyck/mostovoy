@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
+@Component
 public class ExperimentManager {
 
 
@@ -36,22 +38,19 @@ public class ExperimentManager {
         for (int i = 0; i < number; i++) {
             experiments.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
         }
-        experiments.parallelStream().forEach( experiment -> {
+        experiments.parallelStream().forEach(experiment -> {
             experiment.calculatePath();
             experiment.clear();
         });
         return experiments;
     }
-    public List<Statistic> getStatistics(int number, FillingType fillingType){
-        List<Statistic> s =
-         Stream.generate(Experiment::new)
-                .limit(number)
-                .parallel()
-                .map(experiment -> experiment.matrix(new Matrix(fillingType)))
-                .map(Experiment::calculateLightningBolt)
-                .map(Experiment::getStatistic)
+
+    public List<Statistic> getStatistics(int count, FillingType fillingType) {
+        return  Stream.generate(Experiment::new)
+                .limit(count)
+                .collect(Collectors.toList())
+                .parallelStream()
+                .map(experiment -> experiment.matrix(new Matrix(fillingType)).calculateLightningBolt().getStatistic())
                 .collect(Collectors.toList());
-        log.info("=> statistics: " + s);
-         return s;
     }
 }

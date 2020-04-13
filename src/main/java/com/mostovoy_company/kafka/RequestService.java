@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
 @Slf4j
-@Component
+//@Component
 public class RequestService {
 
     @Autowired
