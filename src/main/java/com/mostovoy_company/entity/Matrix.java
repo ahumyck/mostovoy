@@ -89,9 +89,10 @@ public class Matrix {
          * Output: set.size() - 1 because 0 will count as cluster as well
          * so we need to get rid off it
          */
+
         Set<Integer> set = new HashSet<>();
-        stream().forEach(cell -> set.add(cell.getClusterMark()));
-        clusterCounter = set.size() - 1;
+        stream().filter(Cell::hasClusterMark).forEach(cell -> set.add(cell.getClusterMark()));
+        clusterCounter = set.size();
     }
 
     private void markClusters(){
