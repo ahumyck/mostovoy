@@ -10,7 +10,6 @@ import com.mostovoy_company.kafka.dto.RequestMessage;
 import com.mostovoy_company.kafka.dto.ResponseMessage;
 import com.mostovoy_company.kafka.session.SessionManager;
 import com.mostovoy_company.stat.NewNormalizedStatManager;
-import com.mostovoy_company.stat.NormalizedStatManager;
 import com.mostovoy_company.stat.StatManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

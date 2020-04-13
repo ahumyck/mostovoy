@@ -28,7 +28,7 @@ public class Experiment {
     private int neighborhood = 3;
     private Pair<Integer, Integer> darkRedAndBlackCellsRatio = null;
     private LightningBolt lightningBolt;
-    private List<Double> distances;
+//    private List<Double> distances;
 
     public Experiment(String name, Matrix matrix) {
         this.name = name;
@@ -73,12 +73,11 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    public List<Double> getDistances(){
-        return this.distances;
+//    public List<Double> getDistances(){
+//        return this.distances;
+//    }
 
-    }
-
-    public Experiment calculateLightningBolt(){
+    Experiment calculateLightningBolt(){
         this.lightningBolt = new LightningBolt(this.matrix);
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.statistic.setRedCellCount(lightningBolt.getRedCellCounterForShortestPath());
@@ -89,7 +88,7 @@ public class Experiment {
     void calculatePath() {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.statistic.setRedCellCount(lightningBolt.getRedCellCounterForShortestPath());
-        this.distances = lightningBolt.getDistances();
+//        this.distances = lightningBolt.getDistances();
 
     }
 
@@ -104,9 +103,9 @@ public class Experiment {
                 .getProgrammingPercolationList(this.neighborhood);
     }
 
-    public List<Cell> generateTape(int bound){
-        return new Tape(matrix, getPath()).generateTape(bound);
-    }
+//    public List<Cell> generateTape(int bound){
+//        return new Tape(matrix, getPath()).generateTape(bound);
+//    }
 
     public Pair<Integer,Integer> getDarkRedAndBlackCellsFromWideTape(){
         calculateDarkRedAndBlackCellsInTape();
@@ -132,7 +131,7 @@ public class Experiment {
         return name;
     }
 
-    public Experiment clear(){
+    Experiment clear(){
         this.matrix = null;
         this.lightningBolt = null;
         return this;

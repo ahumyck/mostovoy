@@ -80,7 +80,6 @@ public class Matrix {
                 cell.setClusterMark(newMarks.get(cell.getClusterMark()));
             }
         }
-//        System.out.println(this.clusterCounter);
     }
 
     private void countClusters(){
@@ -91,20 +90,11 @@ public class Matrix {
          * so we need to get rid off it
          */
         Set<Integer> set = new HashSet<>();
-//        for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
-//            for(int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
-//                set.add(this.matrix[i][j].getClusterMark());
-//            }
-//        }
         stream().forEach(cell -> set.add(cell.getClusterMark()));
         clusterCounter = set.size() - 1;
-//        System.out.println(this.clusterCounter);
     }
 
     private void markClusters(){
-        /**
-         * this method is used to give a percolation blocks their unique! marks
-         * */
         int clusterCounter = 0;
         for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
             for(int j = OFFSET; j < this.matrix.length - OFFSET; j++){
@@ -132,10 +122,6 @@ public class Matrix {
     }
 
     private void joinClusters(){
-        /**
-         * this method is used to join together neighbor from different clusters
-         * using joinCells
-         * */
         for(int i = OFFSET; i < this.matrix.length - OFFSET; i++){
             for(int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
                 joinCells(i,j);
@@ -144,12 +130,8 @@ public class Matrix {
     }
 
     private void joinCells(int i,int j){
-        /**
-         * @param i,j - current cell coordinates
-         * recursive method to join neighbor cells from different clusters
-         */
-        List<Pair<Integer,Integer>> path = new ArrayList<>(); //if we'll be able to find "bad" cells we need path to comeback
-        path.add(new Pair<>(i,j)); //add to path current position
+        List<Pair<Integer,Integer>> path = new ArrayList<>();
+        path.add(new Pair<>(i,j));
 
         while(!path.isEmpty()){
             Pair p = path.get(path.size() - 1);
@@ -161,7 +143,6 @@ public class Matrix {
                 Cell left = this.matrix[i][j - 1];
                 Cell down = this.matrix[i + 1][j];
                 Cell up = this.matrix[i - 1][j];
-                //Look for "bad" cells
                 if (up.hasClusterMark()) {
                     if (up.getClusterMark() > currentCell.getClusterMark()) {
                         up.setClusterMark(currentCell.getClusterMark());
@@ -194,11 +175,8 @@ public class Matrix {
                         continue;
                     }
                 }
-
-                // if we made it here it means we're surrounded by good cells and it's time to go back
                 path.remove(path.size() - 1);
             }
-            //if we made it here it means we're in bad spot and it's time to go back
             else path.remove(path.size() - 1);
         }
     }

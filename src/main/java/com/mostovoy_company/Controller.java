@@ -6,10 +6,7 @@ import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.filling.customs.*;
-import com.mostovoy_company.kafka.KafkaSupportService;
 import com.mostovoy_company.paint.Painter;
-import com.mostovoy_company.stat.NormalizedStatManager;
-import com.mostovoy_company.stat.StatManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -28,6 +25,8 @@ import java.util.stream.DoubleStream;
 
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
+
+//import com.mostovoy_company.stat.NormalizedStatManager;
 
 @Component
 @FxmlView("sample.fxml")
@@ -123,9 +122,11 @@ public class Controller {
     @FXML
     public TextField tapeCount;
 
-    public Controller(ChartsDataRepository chartsDataRepository, @Qualifier("defaultService") MainService mainService) {
+    public Controller(ChartsDataRepository chartsDataRepository, @Qualifier("defaultService") MainService mainService,
+                      ExperimentManager experimentManager) {
         this.chartsDataRepository = chartsDataRepository;
         this.mainService = mainService;
+        this.experimentManager = experimentManager;
     }
 
     @FXML
@@ -223,7 +224,7 @@ public class Controller {
     }
 
     void paintByCheckBox(Experiment experiment, String type) {
-        int tape = parseInt(tapeCount.getText());
+//        int tape = parseInt(tapeCount.getText());
         painter.paintCanvas(gridPane, experiment.getMatrix());
 //        if (tapeCheckBox.isSelected()) {
 //            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());

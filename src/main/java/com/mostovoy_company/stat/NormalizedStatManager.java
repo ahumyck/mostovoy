@@ -54,12 +54,13 @@ public class NormalizedStatManager implements StatManager {
 
     public double wayLengthStat(List<Experiment> experiments) {
         int size = experiments.get(0).getMatrix().getSize() - 2 * Matrix.OFFSET;
-        return experiments.stream()
-                .map(Experiment::getDistances)
-                .flatMap(Collection::stream)
-                .mapToDouble(d -> d)
-                .average()
-                .orElse(0)/size;
+        return 0;
+//        return experiments.stream()
+//                .map(Experiment::getDistances)
+//                .flatMap(Collection::stream)
+//                .mapToDouble(d -> d)
+//                .average()
+//                .orElse(0)/size;
     }
 
     @Override
