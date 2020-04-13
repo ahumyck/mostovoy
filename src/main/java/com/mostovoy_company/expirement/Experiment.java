@@ -73,11 +73,6 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    public List<Double> getDistances1(){
-        return this.lightningBolt.getDistances();
-
-    }
-
     public List<Double> getDistances(){
         return this.distances;
 
@@ -88,7 +83,6 @@ public class Experiment {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.statistic.setRedCellCount(lightningBolt.getRedCellCounterForShortestPath());
         this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
-//        this.distances = lightningBolt.getDistances();
         return this;
     }
 
@@ -138,13 +132,13 @@ public class Experiment {
         return name;
     }
 
-    public void clear(){
+    public Experiment clear(){
         this.matrix = null;
         this.lightningBolt = null;
+        return this;
     }
 
     public Statistic getStatistic() {
-        clear();
         return statistic;
     }
 }

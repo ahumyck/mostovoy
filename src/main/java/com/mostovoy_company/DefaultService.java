@@ -35,34 +35,6 @@ public class DefaultService extends BaseMainService {
                 .build();
     }
 
-//    @Override
-//    public void consume(){
-//        log.info("=> start consume count: " + count + " size: " + size + " probability: " + probability);
-//        long startTime = System.currentTimeMillis();
-//        RandomFillingType fillingType = new RandomFillingType();
-//        fillingType.setPercolationProbability(probability);
-//        fillingType.setSize(size);
-//        ForkJoinPool forkJoinPool = new ForkJoinPool(6);
-//        List<Experiment> experiments = null;
-//        try {
-//            experiments = forkJoinPool.submit(() -> new ExperimentManager().initializeExperiments(count, fillingType)).get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//        Map<String, LineChartNode> values = new HashMap<>();
-//        values.put(ChartNames.CLUSTER_COUNT_CHART, buildLineChartNode(probability, normalizedStatManager.clusterCountStat(experiments)));
-//        values.put(ChartNames.CLUSTER_SIZE_CHART, buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(experiments)));
-//        values.put(ChartNames.RED_CELLS_ADDED_CHART, buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(experiments)));
-//        values.put(ChartNames.WAY_LENGTHS_CHART, buildLineChartNode(probability, normalizedStatManager.wayLengthStat(experiments)));
-//        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PI_CHART, buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(experiments)));
-//        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_NE_PI_CHART, buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(experiments)));
-//        values.put(ChartNames.RATIO_DARK_RED_AND_BLACK_CELLS_CHART, buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(experiments)));
-//        log.info("=> end consume count: " + count + " size: " + size + " probability: " + probability + " time:" + (System.currentTimeMillis() - startTime));
-//        Platform.runLater(()->{
-//            addDotsToCharts(size, values);
-//        });
-//    }
-
     @Override
     public void consume() {
         new Thread(() ->

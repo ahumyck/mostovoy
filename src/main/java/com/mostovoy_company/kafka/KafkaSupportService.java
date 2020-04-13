@@ -26,11 +26,11 @@ public class KafkaSupportService extends BaseMainService {
         this.sessionManager = sessionManager;
     }
 
-    public void startNewSession() {
+    private void startNewSession() {
         controlService.sendStartMessage();
     }
 
-    public void initNewSession() {
+    private void initNewSession() {
         sessionManager.initNewSession();
     }
 
@@ -39,12 +39,19 @@ public class KafkaSupportService extends BaseMainService {
     }
 
     @Override
-    protected RequestMessage buildRequestMessage(int number, int size, double probability) {
-        return null;
+    protected RequestMessage buildRequestMessage(int count, int size, double probability) {
+        return RequestMessage.builder()
+                .sessionId(sessionManager.getCurrentSessionId())
+                .nodeName(sessionManager.getNodeName())
+                .size(size)
+                .count(count)
+                .probability(probability)
+                .build();
     }
 
     @Override
     public void consume() {
-
+        initNewSession();
+        startNewSession();
     }
 }

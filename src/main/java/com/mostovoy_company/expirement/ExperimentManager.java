@@ -50,7 +50,11 @@ public class ExperimentManager {
                 .limit(count)
                 .collect(Collectors.toList())
                 .parallelStream()
-                .map(experiment -> experiment.matrix(new Matrix(fillingType)).calculateLightningBolt().getStatistic())
+                .map(experiment -> experiment.matrix(new Matrix(fillingType))
+                        .calculateLightningBolt()
+                        .clear()
+                        .getStatistic()
+                )
                 .collect(Collectors.toList());
     }
 }
