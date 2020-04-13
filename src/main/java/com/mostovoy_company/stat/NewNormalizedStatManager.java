@@ -58,7 +58,7 @@ public class NewNormalizedStatManager {
                 .map(Statistic::getPercolationProgramming)
                 .map(Paired::getFirst)
                 .forEach(pair ->{
-                    d.updateAndGet(v -> v + pair.getFirst());
+                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
                     n.addAndGet(pair.getSecond());
                 });
         return d.get()/n.get();
@@ -73,7 +73,7 @@ public class NewNormalizedStatManager {
                 .map(Statistic::getPercolationProgramming)
                 .map(Paired::getSecond)
                 .forEach(pair ->{
-                    d.updateAndGet(v -> v + pair.getFirst());
+                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
                     n.addAndGet(pair.getSecond());
                 });
         return d.get()/n.get();
