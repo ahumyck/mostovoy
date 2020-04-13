@@ -56,6 +56,7 @@ abstract public class BoundaryGenerator {
         List<Integer> boundaries = getBoundaries(bound);
         for (Integer boundary: boundaries) {
             generate(boundary,centerCell,x,y);
+            if(!list.isEmpty()) break;
         }
         return list;
     }

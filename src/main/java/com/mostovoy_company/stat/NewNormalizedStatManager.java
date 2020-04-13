@@ -41,7 +41,6 @@ public class NewNormalizedStatManager {
     }
 
     public double wayLengthStat(List<Statistic> statistics) {
-        System.out.println(statistics);
         int size = statistics.get(0).getSize();
         return statistics.stream()
                 .map(Statistic::getPercolationWayDistance)
