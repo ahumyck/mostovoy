@@ -29,7 +29,6 @@ public class ExperimentManager {
                 experimentObservableList.parallelStream().forEach(experiment -> {
                     experiment.calculatePath();
                     experiment.putPercolationProgrammingInStats();
-                    experiment.clear();
                 });
                 return null;
             }
