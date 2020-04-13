@@ -2,7 +2,7 @@ package com.mostovoy_company.entity;
 
 
 import com.mostovoy_company.filling.FillingType;
-import com.mostovoy_company.lightning.Pair;
+import com.mostovoy_company.lightning.Paired;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -130,11 +130,11 @@ public class Matrix {
     }
 
     private void joinCells(int i,int j){
-        List<Pair<Integer,Integer>> path = new ArrayList<>();
-        path.add(new Pair<>(i,j));
+        List<Paired<Integer,Integer>> path = new ArrayList<>();
+        path.add(new Paired<>(i,j));
 
         while(!path.isEmpty()){
-            Pair p = path.get(path.size() - 1);
+            Paired p = path.get(path.size() - 1);
             i = (int) p.getFirst();
             j = (int) p.getSecond();
             Cell currentCell = this.matrix[i][j];
@@ -147,7 +147,7 @@ public class Matrix {
                     if (up.getClusterMark() > currentCell.getClusterMark()) {
                         up.setClusterMark(currentCell.getClusterMark());
                         i = i - 1;
-                        path.add(new Pair<>(i,j));
+                        path.add(new Paired<>(i,j));
                         continue;
                     }
                 }
@@ -155,7 +155,7 @@ public class Matrix {
                     if (left.getClusterMark() > currentCell.getClusterMark()) {
                         left.setClusterMark(currentCell.getClusterMark());
                         j = j - 1;
-                        path.add(new Pair<>(i,j));
+                        path.add(new Paired<>(i,j));
                         continue;
                     }
                 }
@@ -163,7 +163,7 @@ public class Matrix {
                     if (right.getClusterMark() > currentCell.getClusterMark()) {
                         right.setClusterMark(currentCell.getClusterMark());
                         j = j + 1;
-                        path.add(new Pair<>(i,j));
+                        path.add(new Paired<>(i,j));
                         continue;
                     }
                 }
@@ -171,7 +171,7 @@ public class Matrix {
                     if (down.getClusterMark() > currentCell.getClusterMark()) {
                         down.setClusterMark(currentCell.getClusterMark());
                         i = i + 1;
-                        path.add(new Pair<>(i,j));
+                        path.add(new Paired<>(i,j));
                         continue;
                     }
                 }

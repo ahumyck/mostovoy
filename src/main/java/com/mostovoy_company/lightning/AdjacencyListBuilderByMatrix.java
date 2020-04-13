@@ -10,7 +10,7 @@ import java.util.Map;
 
 class AdjacencyListBuilderByMatrix {
 
-    private Map<Integer, List<Pair<Integer,Integer>>> map = new HashMap<>();
+    private Map<Integer, List<Paired<Integer,Integer>>> map = new HashMap<>();
 
     private int setCostUsingRules(Cell startCell, Cell endCell, int shiftedSize){
         int cheapCost = 1;
@@ -35,11 +35,11 @@ class AdjacencyListBuilderByMatrix {
         if(!endCell.isEmpty()){
             int endShiftedPosition = shiftedSize * (i - Matrix.OFFSET) + (j - Matrix.OFFSET);
             int cost = setCostUsingRules(startCell, endCell, shiftedSize);
-            map.get(startShiftedPosition).add(new Pair<>(endShiftedPosition, cost));
+            map.get(startShiftedPosition).add(new Paired<>(endShiftedPosition, cost));
         }
     }
 
-    Map<Integer, List<Pair<Integer,Integer>>> build(Matrix matrix){
+    Map<Integer, List<Paired<Integer,Integer>>> build(Matrix matrix){
         int size = matrix.getSize();
         for (int i = 0; i < size ; i++) {
             for (int j = 0; j < size; j++) {

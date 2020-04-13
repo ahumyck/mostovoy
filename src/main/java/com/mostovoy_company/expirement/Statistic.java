@@ -1,5 +1,6 @@
 package com.mostovoy_company.expirement;
 
+import com.mostovoy_company.lightning.Paired;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,4 +14,5 @@ public class Statistic {
     private int clusterCount;
     private int blackCellCount;
     private int percolationWayDistance;
+    private Paired<Paired<Double,Integer>,Paired<Double,Integer>> percolationProgramming;
 }

@@ -146,7 +146,8 @@ public class Controller {
                 new HorizontalLineFillingType(),
                 new SquareFillingType(),
                 new TriangleFillingType(),
-                new VerticalLineFillingType()));
+                new VerticalLineFillingType(),
+                new ChessFillingType()));
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
@@ -215,11 +216,11 @@ public class Controller {
         if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
             distanceCalculatorType.setText(DISCRETE);
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            paintByCheckBox(experiment, PYTHAGORAS);
+            paintByCheckBox(experiment, DISCRETE);
         } else if (distanceCalculatorType.getText().equals(DISCRETE)) {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             distanceCalculatorType.setText(PYTHAGORAS);
-            paintByCheckBox(experiment, DISCRETE);
+            paintByCheckBox(experiment, PYTHAGORAS);
         }
     }
 

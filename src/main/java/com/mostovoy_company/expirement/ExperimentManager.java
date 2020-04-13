@@ -26,7 +26,11 @@ public class ExperimentManager {
         new Thread(new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                experimentObservableList.parallelStream().forEach(Experiment::calculatePath);
+                experimentObservableList.parallelStream().forEach(experiment -> {
+                    experiment.calculatePath();
+                    experiment.putPercolationProgrammingInStats();
+                    experiment.clear();
+                });
                 return null;
             }
         }).start();
@@ -40,6 +44,7 @@ public class ExperimentManager {
         }
         experiments.parallelStream().forEach(experiment -> {
             experiment.calculatePath();
+            experiment.putPercolationProgrammingInStats();
             experiment.clear();
         });
         return experiments;
@@ -52,6 +57,7 @@ public class ExperimentManager {
                 .parallelStream()
                 .map(experiment -> experiment.matrix(new Matrix(fillingType))
                         .calculateLightningBolt()
+                        .putPercolationProgrammingInStats()
                         .clear()
                         .getStatistic()
                 )

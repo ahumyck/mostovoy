@@ -1,17 +1,12 @@
 package com.mostovoy_company.stat;
 
-import com.mostovoy_company.entity.Cell;
-import com.mostovoy_company.entity.Matrix;
-import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.Statistic;
-import com.mostovoy_company.lightning.Pair;
-import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
-import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
-import org.apache.kafka.common.metrics.Stat;
+import com.mostovoy_company.lightning.Paired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class NewNormalizedStatManager {
@@ -19,7 +14,7 @@ public class NewNormalizedStatManager {
     public double clusterCountStat(List<Statistic> statistics) {
         int size = statistics.get(0).getSize();
         return statistics.stream()
-                .mapToInt(Statistic::getClusterCount)
+                .mapToDouble(Statistic::getClusterCount)
                 .average()
                 .orElse(0) / (size * size);
     }
@@ -46,6 +41,7 @@ public class NewNormalizedStatManager {
     }
 
     public double wayLengthStat(List<Statistic> statistics) {
+        System.out.println(statistics);
         int size = statistics.get(0).getSize();
         return statistics.stream()
                 .map(Statistic::getPercolationWayDistance)
@@ -56,25 +52,31 @@ public class NewNormalizedStatManager {
 
 
     public double redCellStationDistanceForPythagoras(List<Statistic> statistics) {
-//        return redCellStationDistance(experiments, DistanceCalculatorTypeResolver.PYTHAGORAS);
-        return 0.0;
+        AtomicReference<Double> d = new AtomicReference<>(0.0);
+        AtomicInteger n = new AtomicInteger();
+        statistics.stream()
+                .map(Statistic::getPercolationProgramming)
+                .map(Paired::getFirst)
+                .forEach(pair ->{
+                    d.updateAndGet(v -> v + pair.getFirst());
+                    n.addAndGet(pair.getSecond());
+                });
+        return d.get()/n.get();
     }
 
 
 
     public double redCellStationDistanceForDiscrete(List<Statistic> statistics) {
-//        return redCellStationDistance(experiments, DistanceCalculatorTypeResolver.DISCRETE);
-        return 0.0;
-    }
-
-
-    private double redCellStationDistance(List<Statistic> statistics, String type) {
-//        return experiments.stream()
-//                .flatMapToDouble(experiment -> experiment.getProgrammings(type).stream()
-//                        .mapToDouble(PercolationRelation::getDistance))
-//                .average()
-//                .orElse(0);
-        return 0.0;
+        AtomicReference<Double> d = new AtomicReference<>( 0.0);
+        AtomicInteger n = new AtomicInteger();
+        statistics.stream()
+                .map(Statistic::getPercolationProgramming)
+                .map(Paired::getSecond)
+                .forEach(pair ->{
+                    d.updateAndGet(v -> v + pair.getFirst());
+                    n.addAndGet(pair.getSecond());
+                });
+        return d.get()/n.get();
     }
 
     public double darkRedAndBlackCellsRatio(List<Statistic> statistics) {

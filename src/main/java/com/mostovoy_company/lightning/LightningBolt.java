@@ -5,17 +5,15 @@ import com.mostovoy_company.entity.Matrix;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 public class LightningBolt {
     private Matrix matrix;
-    private Map<Integer, List<Pair<Integer, Integer>>> adjacencyList;
+    private Map<Integer, List<Paired<Integer, Integer>>> adjacencyList;
     private int[] redCellCounters;
     private int shiftedSize;
     private int indexOfShortestPath;
-    private List<Pair<List<Cell>, Integer>> paths;
-    private Pair<List<Cell>, Integer> shortestPath = null;
+    private List<Paired<List<Cell>, Integer>> paths;
+    private Paired<List<Cell>, Integer> shortestPath = null;
 
     public LightningBolt(Matrix matrix) {
         this.matrix = matrix;
@@ -31,7 +29,7 @@ public class LightningBolt {
     }
 
 
-    public Optional<Pair<List<Cell>, Integer>> getShortestPath() {
+    public Optional<Paired<List<Cell>, Integer>> getShortestPath() {
         return Optional.of(this.shortestPath);
     }
 
@@ -40,7 +38,7 @@ public class LightningBolt {
     }
 
     public List<List<Cell>> getShortestPaths(){
-        return this.paths.stream().map(Pair::getFirst).collect(Collectors.toList());
+        return this.paths.stream().map(Paired::getFirst).collect(Collectors.toList());
     }
 
     public List<Double> getDistances() {
@@ -49,18 +47,18 @@ public class LightningBolt {
 
     public LightningBolt calculateShortestPaths() {
         for (int currentPos = 0; currentPos < this.shiftedSize; currentPos++) {
-            Pair<List<Integer>, List<Integer>> inf = findShortestPaths(currentPos);
+            Paired<List<Integer>, List<Integer>> inf = findShortestPaths(currentPos);
             List<Integer> distances = inf.getSecond();
             List<Integer> parents = inf.getFirst();
 
             int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
             int endPos = this.shiftedSize * (this.shiftedSize - 1) + shortest;
             List<Cell> path = getPath(currentPos, endPos, parents);
-            paths.add(new Pair<>(path, distances.get(shortest)));
+            paths.add(new Paired<>(path, distances.get(shortest)));
 
         }
 //        System.out.println("paths: " + paths);
-        this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Pair::getSecond)).get();
+        this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Paired::getSecond)).get();
 //        System.out.println("sortestpath: " + shortestPath);
 
         this.indexOfShortestPath = this.paths.indexOf(shortestPath);
@@ -68,7 +66,7 @@ public class LightningBolt {
         return this;
     }
 
-    private Pair<List<Integer>, List<Integer>> findShortestPaths(int start_pos) {
+    private Paired<List<Integer>, List<Integer>> findShortestPaths(int start_pos) {
         int[] distanceToOtherNeighbors = new int[this.adjacencyList.size()];
         for (int i = 0; i < this.adjacencyList.size(); i++) {
             distanceToOtherNeighbors[i] = Integer.MAX_VALUE;
@@ -107,7 +105,7 @@ public class LightningBolt {
                 }
             });
         }
-        return new Pair<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
+        return new Paired<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
 
     private List<Cell> getPath(int start, int end, List<Integer> parents) {
@@ -119,14 +117,14 @@ public class LightningBolt {
         return path;
     }
 
-    private Pair<Integer, Integer> getIndecies(int currentPosition) {
+    private Paired<Integer, Integer> getIndecies(int currentPosition) {
         int j = currentPosition % this.shiftedSize;
         int i = (currentPosition - j) / this.shiftedSize;
-        return new Pair<>(i, j);
+        return new Paired<>(i, j);
     }
 
     private void smartPathBuilder(int currentPosition, List<Cell> path, int startPosition) {
-        Pair<Integer, Integer> indecies = getIndecies(currentPosition);
+        Paired<Integer, Integer> indecies = getIndecies(currentPosition);
         int i = indecies.getFirst();
         int j = indecies.getSecond();
         path.add(0, this.matrix.getCell(i + Matrix.OFFSET, j + Matrix.OFFSET));
