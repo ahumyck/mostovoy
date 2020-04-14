@@ -76,7 +76,7 @@ public class Experiment {
     Experiment calculateLightningBolt(){
         this.lightningBolt = new LightningBolt(this.matrix);
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
-        this.statistic.setRedCellCount(lightningBolt.getRedCellCounterForShortestPath());
+        this.statistic.setRedCellCount(getRedCell());
         this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
         return this;
     }
@@ -99,9 +99,13 @@ public class Experiment {
         return this;
     }
 
+    public int getRedCell(){
+        return  (int)getPath().stream().filter(Cell::isWhite).count();
+    }
+
     void calculatePath() {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
-        this.statistic.setRedCellCount(lightningBolt.getRedCellCounterForShortestPath());
+        this.statistic.setRedCellCount(getRedCell());
 //        this.distances = lightningBolt.getDistances();
 
     }

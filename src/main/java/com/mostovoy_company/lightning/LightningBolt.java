@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 public class LightningBolt {
     private Matrix matrix;
     private Map<Integer, List<Paired<Integer, Integer>>> adjacencyList;
-    private int[] redCellCounters;
     private int shiftedSize;
     private int indexOfShortestPath;
     private List<Paired<List<Cell>, Integer>> paths;
@@ -19,15 +18,9 @@ public class LightningBolt {
         this.matrix = matrix;
         this.adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix);
         this.shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
-        this.redCellCounters = new int[this.shiftedSize];
         this.indexOfShortestPath = -1;
         this.paths = new ArrayList<>(matrix.getSize());
     }
-
-    public int getRedCellCounterForShortestPath() {
-        return this.indexOfShortestPath == -1 ? -1 /*error code*/ : this.redCellCounters[this.indexOfShortestPath];
-    }
-
 
     public Optional<Paired<List<Cell>, Integer>> getShortestPath() {
         return Optional.of(this.shortestPath);
@@ -128,7 +121,5 @@ public class LightningBolt {
         int i = indecies.getFirst();
         int j = indecies.getSecond();
         path.add(0, this.matrix.getCell(i + Matrix.OFFSET, j + Matrix.OFFSET));
-        if (this.matrix.getCell(i + Matrix.OFFSET, j + Matrix.OFFSET).isWhite())
-            this.redCellCounters[startPosition]++;
     }
 }
