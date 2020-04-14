@@ -1,5 +1,8 @@
 package com.mostovoy_company.filling.customs;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class TriangleFillingType extends CustomTestFillingType {
     private final int MATRIX_SIZE = 50;
     private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];

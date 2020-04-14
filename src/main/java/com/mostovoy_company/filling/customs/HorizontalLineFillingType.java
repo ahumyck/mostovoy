@@ -1,5 +1,8 @@
 package com.mostovoy_company.filling.customs;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class HorizontalLineFillingType extends CustomTestFillingType {
 
     private final int MATRIX_SIZE = 50;

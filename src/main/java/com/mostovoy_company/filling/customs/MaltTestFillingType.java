@@ -1,5 +1,8 @@
 package com.mostovoy_company.filling.customs;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class MaltTestFillingType extends CustomTestFillingType {
 
     private static final int[][] MATRIX = {

@@ -9,6 +9,7 @@ import com.mostovoy_company.filling.customs.*;
 import com.mostovoy_company.paint.Painter;
 import com.mostovoy_company.services.MainService;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -114,6 +115,7 @@ public class Controller {
     @FXML
     public AnchorPane wayLengthLineChart;
 
+    private ObservableList<FillingType> fillingTypesList;
 //    @FXML
 //    public CheckBox tapeCheckBox;
 
@@ -122,11 +124,13 @@ public class Controller {
 
     public Controller(ChartsDataRepository chartsDataRepository,
                       @Qualifier("defaultService") MainService mainService,
-                      ExperimentManager experimentManager
+                      ExperimentManager experimentManager,
+                      List<FillingType> fillingTypesList
     ) {
         this.chartsDataRepository = chartsDataRepository;
         this.mainService = mainService;
         this.experimentManager = experimentManager;
+        this.fillingTypesList = FXCollections.observableArrayList(fillingTypesList);
     }
 
     @FXML
@@ -141,16 +145,7 @@ public class Controller {
         );
 //        tapeCheckBox.setSelected(false);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
-        fillingTypes.setItems(FXCollections.observableArrayList(new RandomFillingType(),
-                new MaltTestFillingType(),
-                new HorizontalLineFillingType(),
-                new SquareFillingType(),
-                new TriangleFillingType(),
-                new VerticalLineFillingType(),
-                new ChessFillingType(),
-                new RandomHorizontalLineFillingType(),
-                new RandomVerticalLineFillingType()
-                ));
+        fillingTypes.setItems(fillingTypesList);
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();

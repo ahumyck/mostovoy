@@ -1,7 +1,10 @@
 package com.mostovoy_company.filling.customs;
 
+import org.springframework.stereotype.Component;
+
 import java.text.MessageFormat;
 
+@Component
 public class ChessFillingType extends CustomTestFillingType {
 
     private final int MATRIX_SIZE = 50;

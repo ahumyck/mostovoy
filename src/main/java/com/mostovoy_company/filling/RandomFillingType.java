@@ -1,7 +1,10 @@
 package com.mostovoy_company.filling;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Random;
 
+@Component
 public class RandomFillingType extends FillingType {
     private double percolationProbability;
     private int size;

@@ -1,5 +1,8 @@
 package com.mostovoy_company.filling.customs;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class RandomHorizontalLineFillingType extends CustomTestFillingType {
     public RandomHorizontalLineFillingType() {
         super("Горизонтальные линии v2.0");
