@@ -93,7 +93,9 @@ public class Experiment {
             String calculator = calculators[i];
             List<PercolationRelation> percolationRelations = calculateProgrammingPercolation(calculator);
             int n = percolationRelations.size();
-            double d = percolationRelations.stream().mapToDouble(PercolationRelation::getDistance).average().orElse(getSize() * getSize());
+            double d = percolationRelations.stream()
+                    .mapToDouble(PercolationRelation::getDistance)
+                    .average().orElse(getSize() * getSize());
             averagesWithSize[i].setFirst(d);
             averagesWithSize[i].setSecond(n);
         }
