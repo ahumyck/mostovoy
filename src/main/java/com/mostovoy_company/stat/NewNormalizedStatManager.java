@@ -38,7 +38,7 @@ public class NewNormalizedStatManager {
         statistics.forEach(statistic -> {
             blackCellCounter[0] += statistic.getBlackCellCount();
         });
-        return blackCellCounter[0] / (size * size);
+        return blackCellCounter[0] / (size * size * statistics.size());
     }
 
     public double redCellsCountStat(List<Statistic> statistics) {
