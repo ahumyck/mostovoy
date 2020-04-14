@@ -21,15 +21,24 @@ public class NewNormalizedStatManager {
 
     public double clusterSizeStat(List<Statistic> statistics) {
         int size = statistics.get(0).getSize();
-        final double[] hasClusterMarkCounter = {0};
+        final double[] blackCellCounter = {0};
         final double[] clusterCounter = {0};
         statistics.forEach(statistic -> {
-                    hasClusterMarkCounter[0] += statistic.getBlackCellCount();
+                    blackCellCounter[0] += statistic.getBlackCellCount();
                     clusterCounter[0] += statistic.getClusterCount();
                 });
-        double concentration = hasClusterMarkCounter[0] / (size * size);
+        double concentration = blackCellCounter[0] / (size * size);
         if (clusterCounter[0] > 0) return (concentration) / (clusterCounter[0]);
         else return 0;
+    }
+
+    public double predictConcentration(List<Statistic> statistics){
+        int size = statistics.get(0).getSize();
+        final double[] blackCellCounter = {0};
+        statistics.forEach(statistic -> {
+            blackCellCounter[0] += statistic.getBlackCellCount();
+        });
+        return blackCellCounter[0] / (size * size);
     }
 
     public double redCellsCountStat(List<Statistic> statistics) {
