@@ -63,8 +63,7 @@ public class NewNormalizedStatManager {
         AtomicReference<Double> d = new AtomicReference<>(0.0);
         AtomicInteger n = new AtomicInteger();
         statistics.stream()
-                .map(Statistic::getPercolationProgramming)
-                .map(Paired::getFirst)
+                .map(Statistic::getPythagorasDistance)
                 .forEach(pair ->{
                     d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
                     n.addAndGet(pair.getSecond());
@@ -78,8 +77,7 @@ public class NewNormalizedStatManager {
         AtomicReference<Double> d = new AtomicReference<>( 0.0);
         AtomicInteger n = new AtomicInteger();
         statistics.stream()
-                .map(Statistic::getPercolationProgramming)
-                .map(Paired::getSecond)
+                .map(Statistic::getDiscreteDistance)
                 .forEach(pair ->{
                     d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
                     n.addAndGet(pair.getSecond());

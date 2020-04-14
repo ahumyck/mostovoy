@@ -14,5 +14,6 @@ public class Statistic {
     private int clusterCount;
     private int blackCellCount;
     private int percolationWayDistance;
-    private Paired<Paired<Double,Integer>,Paired<Double,Integer>> percolationProgramming;
+    private Paired<Double,Integer> pythagorasDistance;
+    private Paired<Double, Integer> discreteDistance;
 }

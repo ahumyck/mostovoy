@@ -4,17 +4,12 @@ import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.lightning.LightningBolt;
 import com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver;
-import com.mostovoy_company.programminPercolation.distance.calculator.DistanceCalculator;
-import com.mostovoy_company.programminPercolation.distance.calculator.EdgeDistanceCalculator;
-import com.mostovoy_company.programminPercolation.distance.calculator.PythagoreanTheoremCalculator;
 import com.mostovoy_company.programminPercolation.percolation.PercolationProgramming;
 import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
 import com.mostovoy_company.lightning.Paired;
-import com.mostovoy_company.programminPercolation.tape.Tape;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class Experiment {
@@ -99,7 +94,8 @@ public class Experiment {
             averagesWithSize[i].setFirst(d);
             averagesWithSize[i].setSecond(n);
         }
-        this.statistic.setPercolationProgramming(new Paired<>(averagesWithSize[0],averagesWithSize[1]));
+        this.statistic.setPythagorasDistance(averagesWithSize[0]);
+        this.statistic.setDiscreteDistance(averagesWithSize[1]);
         return this;
     }
 
