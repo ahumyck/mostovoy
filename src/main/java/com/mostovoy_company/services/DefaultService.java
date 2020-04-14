@@ -1,19 +1,15 @@
-package com.mostovoy_company;
+package com.mostovoy_company.services;
 
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.ExperimentManager;
-import com.mostovoy_company.kafka.dto.LineChartNode;
-import com.mostovoy_company.kafka.dto.RequestMessage;
-import com.mostovoy_company.kafka.dto.ResponseMessage;
+import com.mostovoy_company.services.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.BaseMainService;
 import com.mostovoy_company.stat.NewNormalizedStatManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j

@@ -1,6 +1,6 @@
 package com.mostovoy_company.chart;
 
-import com.mostovoy_company.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.paint.Painter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,9 +8,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
-import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

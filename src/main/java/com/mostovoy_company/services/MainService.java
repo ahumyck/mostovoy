@@ -1,4 +1,4 @@
-package com.mostovoy_company;
+package com.mostovoy_company.services;
 
 
 public interface MainService {

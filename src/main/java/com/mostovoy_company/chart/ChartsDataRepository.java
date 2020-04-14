@@ -1,6 +1,6 @@
 package com.mostovoy_company.chart;
 
-import com.mostovoy_company.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;

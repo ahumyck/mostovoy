@@ -1,15 +1,12 @@
-package com.mostovoy_company.kafka;
+package com.mostovoy_company.services.kafka;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mostovoy_company.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
-import org.springframework.kafka.support.JacksonUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component

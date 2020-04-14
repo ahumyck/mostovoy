@@ -1,14 +1,18 @@
-package com.mostovoy_company.kafka.dto;
+package com.mostovoy_company.services.kafka.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ControlMessage {
+@Builder
+public class RequestMessage {
     private long sessionId;
     private String nodeName;
-    private String action;
+    private int count;
+    private int size;
+    private double probability;
 }

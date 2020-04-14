@@ -1,4 +1,4 @@
-package com.mostovoy_company.kafka.dto;
+package com.mostovoy_company.services.kafka.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

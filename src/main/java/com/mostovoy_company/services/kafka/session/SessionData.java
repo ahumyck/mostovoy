@@ -1,6 +1,6 @@
-package com.mostovoy_company.kafka.session;
+package com.mostovoy_company.services.kafka.session;
 
-import com.mostovoy_company.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.kafka.dto.RequestMessage;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

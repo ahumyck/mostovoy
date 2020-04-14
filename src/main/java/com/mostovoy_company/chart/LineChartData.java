@@ -1,6 +1,6 @@
 package com.mostovoy_company.chart;
 
-import com.mostovoy_company.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import javafx.scene.layout.AnchorPane;
 
 public interface LineChartData {

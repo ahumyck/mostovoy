@@ -7,6 +7,7 @@ import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.filling.customs.*;
 import com.mostovoy_company.paint.Painter;
+import com.mostovoy_company.services.MainService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

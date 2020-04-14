@@ -1,14 +1,13 @@
-package com.mostovoy_company.kafka;
+package com.mostovoy_company.services.kafka;
 
 import com.mostovoy_company.chart.ChartsDataRepository;
-import com.mostovoy_company.kafka.dto.ControlMessage;
-import com.mostovoy_company.kafka.dto.RequestMessage;
-import com.mostovoy_company.kafka.session.SessionManager;
+import com.mostovoy_company.services.kafka.dto.ControlMessage;
+import com.mostovoy_company.services.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.kafka.session.SessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 
 //@Component
 @Slf4j

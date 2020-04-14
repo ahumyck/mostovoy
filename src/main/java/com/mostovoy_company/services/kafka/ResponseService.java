@@ -1,15 +1,14 @@
-package com.mostovoy_company.kafka;
+package com.mostovoy_company.services.kafka;
 
 import com.mostovoy_company.chart.ChartNames;
 import com.mostovoy_company.chart.ChartsDataRepository;
-import com.mostovoy_company.kafka.dto.LineChartNode;
-import com.mostovoy_company.kafka.dto.ResponseMessage;
-import com.mostovoy_company.kafka.session.SessionManager;
+import com.mostovoy_company.services.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
+import com.mostovoy_company.services.kafka.session.SessionManager;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;

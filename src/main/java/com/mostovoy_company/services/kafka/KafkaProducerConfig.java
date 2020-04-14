@@ -1,13 +1,12 @@
-package com.mostovoy_company.kafka;
+package com.mostovoy_company.services.kafka;
 
-import com.mostovoy_company.kafka.dto.ControlMessage;
-import com.mostovoy_company.kafka.dto.RequestMessage;
-import com.mostovoy_company.kafka.dto.ResponseMessage;
+import com.mostovoy_company.services.kafka.dto.ControlMessage;
+import com.mostovoy_company.services.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;

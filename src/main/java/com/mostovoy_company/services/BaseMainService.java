@@ -1,13 +1,13 @@
-package com.mostovoy_company;
+package com.mostovoy_company.services;
 
 import com.mostovoy_company.chart.ChartNames;
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.expirement.Statistic;
 import com.mostovoy_company.filling.RandomFillingType;
-import com.mostovoy_company.kafka.dto.LineChartNode;
-import com.mostovoy_company.kafka.dto.RequestMessage;
-import com.mostovoy_company.kafka.dto.ResponseMessage;
+import com.mostovoy_company.services.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.mostovoy_company.stat.NewNormalizedStatManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
 
 @Slf4j
 public abstract class BaseMainService implements MainService {

@@ -2,7 +2,7 @@ package com.mostovoy_company.paint;
 
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
-import com.mostovoy_company.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,15 +1,14 @@
-package com.mostovoy_company.kafka;
+package com.mostovoy_company.services.kafka;
 
-import com.mostovoy_company.kafka.dto.ControlMessage;
-import com.mostovoy_company.kafka.dto.RequestMessage;
-import com.mostovoy_company.kafka.dto.ResponseMessage;
-import com.mostovoy_company.kafka.session.SessionManager;
+import com.mostovoy_company.services.kafka.dto.ControlMessage;
+import com.mostovoy_company.services.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
+import com.mostovoy_company.services.kafka.session.SessionManager;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
