@@ -147,7 +147,10 @@ public class Controller {
                 new SquareFillingType(),
                 new TriangleFillingType(),
                 new VerticalLineFillingType(),
-                new ChessFillingType()));
+                new ChessFillingType(),
+                new RandomHorizontalLineFillingType(),
+                new RandomVerticalLineFillingType()
+                ));
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();

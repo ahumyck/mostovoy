@@ -33,8 +33,10 @@ public class PercolationProgramming {
         return this;
     }
 
-    private Stream<Cell> streamBlackCells(List<Cell> cells){
-        return cells.stream().filter(Cell::isBlack).filter(cell -> !path.contains(cell));
+    private Stream<Cell> streamBlackNotUsedObjects(List<Cell> cells){
+        return cells.stream().filter(Cell::isBlack)
+                .filter(cell -> !path.contains(cell))
+                .filter(cell -> !usedPercolationObjects.contains(cell));
     }
 
     public List<PercolationRelation> getProgrammingPercolationList(int neighborhood){
@@ -71,7 +73,7 @@ public class PercolationProgramming {
         int current = 1;
         List<Cell> collect = new ArrayList<>();
         while(current <= neighborhood){
-            collect = streamBlackCells(generator.generateAreaPerimeter(current, percolationCell))
+            collect = streamBlackNotUsedObjects(generator.generateAreaPerimeter(current, percolationCell))
                     .sorted(Comparator.comparingDouble(a -> calculator.calculateDistance(a, percolationCell)))
                     .collect(Collectors.toList());
             if(!collect.isEmpty()) return collect;

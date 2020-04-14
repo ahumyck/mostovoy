@@ -10,7 +10,6 @@ public class LightningBolt {
     private Matrix matrix;
     private Map<Integer, List<Paired<Integer, Integer>>> adjacencyList;
     private int shiftedSize;
-    private int indexOfShortestPath;
     private List<Paired<List<Cell>, Integer>> paths;
     private Paired<List<Cell>, Integer> shortestPath = null;
 
@@ -18,7 +17,6 @@ public class LightningBolt {
         this.matrix = matrix;
         this.adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix);
         this.shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
-        this.indexOfShortestPath = -1;
         this.paths = new ArrayList<>(matrix.getSize());
     }
 
@@ -54,7 +52,6 @@ public class LightningBolt {
         this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Paired::getSecond)).get();
 //        System.out.println("sortestpath: " + shortestPath);
 
-        this.indexOfShortestPath = this.paths.indexOf(shortestPath);
 //        System.out.println("index: " + indexOfShortestPath);
         return this;
     }
@@ -104,7 +101,7 @@ public class LightningBolt {
     private List<Cell> getPath(int start, int end, List<Integer> parents) {
         List<Cell> path = new ArrayList<>();
         for (int v = end; ; v = parents.get(v)) {
-            smartPathBuilder(v, path, start);
+            smartPathBuilder(v, path);
             if (v == start) break;
         }
         return path;
@@ -116,7 +113,7 @@ public class LightningBolt {
         return new Paired<>(i, j);
     }
 
-    private void smartPathBuilder(int currentPosition, List<Cell> path, int startPosition) {
+    private void smartPathBuilder(int currentPosition, List<Cell> path) {
         Paired<Integer, Integer> indecies = getIndecies(currentPosition);
         int i = indecies.getFirst();
         int j = indecies.getSecond();

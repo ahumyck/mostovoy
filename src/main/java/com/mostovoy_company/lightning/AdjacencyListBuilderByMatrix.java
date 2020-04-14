@@ -22,7 +22,7 @@ class AdjacencyListBuilderByMatrix {
         if(startCell.isBlack() && endCell.isWhite()) // black -> white - expensive
             cost = expensiveCost;
         if(startCell.isWhite() && endCell.isBlack()) // white -> black - half expensive
-            cost = expensiveCost;
+            cost = cheapCost;
         if(startCell.isWhite() && endCell.isWhite()) // white -> white - twice expensive
             cost = expensiveCost;
 
