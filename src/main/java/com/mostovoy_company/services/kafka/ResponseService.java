@@ -44,8 +44,8 @@ public class ResponseService {
         values.put(ChartNames.CLUSTER_SIZE_CHART, message.getMidClustersSize());
         values.put(ChartNames.RED_CELLS_ADDED_CHART, message.getMidRedCellsCount());
         values.put(ChartNames.WAY_LENGTHS_CHART, message.getMidWayLengths());
-        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PI_CHART, message.getRedCellsStationDistancesPythagoras());
-        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_NE_PI_CHART, message.getRedCellsStationDistancesDiscrete());
+        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART, message.getRedCellsStationDistancesPythagoras());
+        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_DISCRETE_CHART, message.getRedCellsStationDistancesDiscrete());
         return values;
     }
 
