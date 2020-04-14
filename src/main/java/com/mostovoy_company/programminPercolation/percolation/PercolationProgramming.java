@@ -34,23 +34,13 @@ public class PercolationProgramming {
     }
 
     private Stream<Cell> streamBlackCells(List<Cell> cells){
-       return cells.stream().filter(Cell::isBlack).filter(cell -> !path.contains(cell));
+        return cells.stream().filter(Cell::isBlack).filter(cell -> !path.contains(cell));
     }
-
-//    public double getRatio(){
-//        List<Cell> tape = this.tapeGenerator.generateWideTape(this.neighborhood, this.path);
-//        Stream<Cell> cellStream = streamBlackCells(tape);
-//        double countBlackCells = cellStream.count();
-//        double countDarkRedCells = cellStream.filter(cell -> usedPercolationObjects.contains(cell)).count();
-//        return countDarkRedCells/countBlackCells;
-//    }
 
     public List<PercolationRelation> getProgrammingPercolationList(int neighborhood){
         List<PercolationRelation> percolationRelations = new ArrayList<>();
         this.path.stream().map(cell -> findRelationForCurrentCell(cell, neighborhood)).
                 forEach(element -> element.ifPresent(percolationRelations::addAll));
-//        this.path.stream().filter(Cell::isWhite).map(cell -> findRelationForCurrentCell(cell, neighborhood))
-//                .forEach(element -> element.ifPresent(percolationRelations::addDotsToCharts));
         return percolationRelations;
     }
 
@@ -78,9 +68,16 @@ public class PercolationProgramming {
     }
 
     private List<Cell> getOptimalCellsCollection(int neighborhood, Cell percolationCell){
-        return streamBlackCells(generator.generateFilledArea(neighborhood, percolationCell))
-                .sorted(Comparator.comparingDouble(a -> calculator.calculateDistance(a, percolationCell)))
-                .collect(Collectors.toList());
+        int current = 1;
+        List<Cell> collect = new ArrayList<>();
+        while(current <= neighborhood){
+            collect = streamBlackCells(generator.generateAreaPerimeter(current, percolationCell))
+                    .sorted(Comparator.comparingDouble(a -> calculator.calculateDistance(a, percolationCell)))
+                    .collect(Collectors.toList());
+            if(!collect.isEmpty()) return collect;
+            current++;
+        }
+        return collect;
     }
 
 }
