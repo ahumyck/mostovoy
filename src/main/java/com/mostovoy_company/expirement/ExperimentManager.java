@@ -1,5 +1,6 @@
 package com.mostovoy_company.expirement;
 
+import com.mostovoy_company.analyzer.AnalyzerModule;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.filling.FillingType;
 import javafx.collections.FXCollections;
@@ -17,6 +18,11 @@ import java.util.stream.Stream;
 @Component
 public class ExperimentManager {
 
+    private AnalyzerModule module;
+
+    public ExperimentManager(AnalyzerModule module) {
+        this.module = module;
+    }
 
     public ObservableList<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
         ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
@@ -27,6 +33,7 @@ public class ExperimentManager {
             @Override
             protected Void call() throws Exception {
                 experimentObservableList.parallelStream().forEach(experiment -> {
+                    System.out.println(module.gatherData(experiment.getMatrix()));
                     experiment.calculatePath();
                     experiment.putPercolationProgrammingInStats();
                 });
@@ -42,6 +49,7 @@ public class ExperimentManager {
             experiments.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
         }
         experiments.parallelStream().forEach(experiment -> {
+            System.out.println(module.gatherData(experiment.getMatrix()));
             experiment.calculatePath();
             experiment.putPercolationProgrammingInStats();
             experiment.clear();

@@ -17,10 +17,7 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -123,8 +120,10 @@ public class Controller {
     @FXML
     public TextField tapeCount;
 
-    public Controller(ChartsDataRepository chartsDataRepository, @Qualifier("defaultService") MainService mainService,
-                      ExperimentManager experimentManager) {
+    public Controller(ChartsDataRepository chartsDataRepository,
+                      @Qualifier("defaultService") MainService mainService,
+                      ExperimentManager experimentManager
+    ) {
         this.chartsDataRepository = chartsDataRepository;
         this.mainService = mainService;
         this.experimentManager = experimentManager;
@@ -198,7 +197,7 @@ public class Controller {
         applyExperiment.setOnAction(event -> {
             Map<Integer, Integer> map = new HashMap<>();
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
-            List<Integer> counts = Arrays.stream(this.matrixCount.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            List<Integer> counts = countParser(this.matrixCount.getText(), sizes.size());
             chartsDataRepository.clear();
             for (int i = 0; i < sizes.size(); i++) {
                 map.put(sizes.get(i), counts.get(i));
@@ -233,6 +232,21 @@ public class Controller {
 //        } else {
         painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
 //        }
+    }
+
+    List<Integer> countParser(String text, int howMany){
+        if(text.contains(",")){
+            String replace = text.replace(" ", "");
+            return Arrays.stream(replace.split(",")).map(Integer::valueOf).collect(Collectors.toList());
+        }
+        else{
+            List<Integer> count = new ArrayList<>();
+            Integer integer = Integer.valueOf(text);
+            for (int i = 0; i < howMany; i++){
+                count.add(integer);
+            }
+            return count;
+        }
     }
 
     int parseInt(String s) {

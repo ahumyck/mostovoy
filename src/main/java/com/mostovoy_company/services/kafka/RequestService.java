@@ -25,17 +25,18 @@ public class RequestService {
 
     @Autowired
     private ControlService controlService;
-
+    private ExperimentManager experimentManager;
     private SessionManager sessionManager;
     private NewNormalizedStatManager normalizedStatManager;
     private ResponseService responseService;
     private KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate;
 
     @Autowired
-    public RequestService(SessionManager sessionManager,
+    public RequestService(ExperimentManager experimentManager, SessionManager sessionManager,
                           NewNormalizedStatManager normalizedStatManager,
                           ResponseService responseService,
                           KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate) {
+        this.experimentManager = experimentManager;
         this.responseService = responseService;
         this.sessionManager = sessionManager;
         this.normalizedStatManager = normalizedStatManager;
@@ -54,9 +55,7 @@ public class RequestService {
         new Thread(() -> {
             try {
                 performCalculationAndSendResponse(size, count, probability);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();
@@ -69,7 +68,7 @@ public class RequestService {
         fillingType.setSize(size);
         ForkJoinPool forkJoinPool = new ForkJoinPool(8);
         List<Statistic> statistics = forkJoinPool.submit(
-                () -> new ExperimentManager()
+                () -> experimentManager
                         .getStatistics(count, fillingType))
                 .get();
         responseService.sendResponseMessage(collectStatisticAndBuildResponseMessage(size, probability, statistics));
