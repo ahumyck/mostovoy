@@ -28,6 +28,7 @@ public class AnalyzerManager {
         for (int i = 0; i < number; i++) {
             matricesObservableList.add(new Matrix(fillingType));
         }
+
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
