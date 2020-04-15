@@ -10,7 +10,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,8 +20,6 @@ public abstract class BaseLineChartData implements LineChartData {
     private LineChart<Number, Number> lineChart;
 
     private boolean isNormalized;
-
-    private double koef = 1.0;
 
     private Map<Integer, ObservableList<XYChart.Data<Number, Number>>> chartData;
 
@@ -40,8 +37,8 @@ public abstract class BaseLineChartData implements LineChartData {
 
                     chartData.forEach((size, data) -> {
                         final double k;
-                        if (isNormalized) k = 1.0 / getNormalizedKoef(size);
-                        else k = getNormalizedKoef(size);
+                        if (isNormalized) k = 1.0 / getNormalizedCoefficient(size);
+                        else k = getNormalizedCoefficient(size);
                         data.forEach(d -> d.setYValue((Double) d.getYValue() * k));
                     });
                     isNormalized = !isNormalized;
@@ -56,7 +53,7 @@ public abstract class BaseLineChartData implements LineChartData {
             painter.addObservableSeries(lineChart, "Mat size " + size, series);
             chartData.put(size, series);
         }
-        if (isNormalized) node.y *= getNormalizedKoef(size);
+        if (isNormalized) node.y *= getNormalizedCoefficient(size);
         chartData.get(size).add(convertToXYChartData(node));
     }
 
@@ -74,6 +71,6 @@ public abstract class BaseLineChartData implements LineChartData {
         isNormalized = false;
     }
 
-    protected abstract double getNormalizedKoef(int size);
+    protected abstract double getNormalizedCoefficient(int size);
 
 }

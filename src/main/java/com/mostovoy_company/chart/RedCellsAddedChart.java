@@ -12,8 +12,7 @@ public class RedCellsAddedChart extends BaseLineChartData {
     }
 
     @Override
-    protected double getNormalizedKoef(int size) {
-        double Dsize = size;
-        return 1.0/ Dsize;
+    protected double getNormalizedCoefficient(int size) {
+        return 1.0/size;
     }
 }

@@ -13,7 +13,7 @@ public class ClusterSizeChart extends BaseLineChartData {
     }
 
     @Override
-    protected double getNormalizedKoef(int size) {
-        return 1;
+    protected double getNormalizedCoefficient(int size) {
+        return 1.0/size;
     }
 }

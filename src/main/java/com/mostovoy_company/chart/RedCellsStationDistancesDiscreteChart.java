@@ -12,7 +12,7 @@ public class RedCellsStationDistancesDiscreteChart extends BaseLineChartData {
     }
 
     @Override
-    protected double getNormalizedKoef(int size) {
+    protected double getNormalizedCoefficient(int size) {
         return 1;
     }
 }
