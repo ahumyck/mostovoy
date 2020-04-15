@@ -18,12 +18,6 @@ import java.util.stream.Stream;
 @Component
 public class ExperimentManager {
 
-    private AnalyzerModule module;
-
-    public ExperimentManager(AnalyzerModule module) {
-        this.module = module;
-    }
-
     public ObservableList<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
         ObservableList<Experiment> experimentObservableList = FXCollections.observableArrayList();
         for (int i = 0; i < number; i++) {
@@ -33,7 +27,6 @@ public class ExperimentManager {
             @Override
             protected Void call() throws Exception {
                 experimentObservableList.parallelStream().forEach(experiment -> {
-                    System.out.println(module.gatherData(experiment.getMatrix()));
                     experiment.calculatePath();
                     experiment.putPercolationProgrammingInStats();
                 });
@@ -49,7 +42,6 @@ public class ExperimentManager {
             experiments.add(new Experiment("Эксперимент №" + (i + 1), new Matrix(fillingType)));
         }
         experiments.parallelStream().forEach(experiment -> {
-            System.out.println(module.gatherData(experiment.getMatrix()));
             experiment.calculatePath();
             experiment.putPercolationProgrammingInStats();
             experiment.clear();

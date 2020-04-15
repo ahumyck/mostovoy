@@ -1,6 +1,5 @@
 package com.mostovoy_company;
 
-import com.mostovoy_company.chart.ChartsController;
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
@@ -15,13 +14,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import lombok.extern.slf4j.Slf4j;
-import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
@@ -46,10 +45,25 @@ public class Controller {
     public Button distanceCalculatorType;
 
     @FXML
+    public TextField matrixCountAnalyzer;
+
+    @FXML
+    public TextField concentrationAnalyzer;
+
+    @FXML
     public Label redCellsLabel;
 
     @FXML
+    public TextField matrixSizeAnalyzer;
+
+    @FXML
     public Label shortestPathLabel;
+
+    @FXML
+    public Button applyAnalyzerExperiment;
+
+    @FXML
+    public TableView analyzerTable;
 
     @FXML
     private ListView<Experiment> experimentListView;
@@ -71,6 +85,7 @@ public class Controller {
 
     @FXML
     public Label gridSizeLabel;
+
     @FXML
     public ComboBox<FillingType> fillingTypes;
 
@@ -156,6 +171,11 @@ public class Controller {
             }
         });
 
+        applyAnalyzerExperiment.setOnAction(event -> {
+            Map<Integer, Integer> map = new LinkedHashMap<>();
+            List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            log.info("=> init: " + map);
+        });
 //
     }
 
