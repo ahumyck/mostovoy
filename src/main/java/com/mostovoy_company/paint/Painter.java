@@ -17,6 +17,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,7 +26,11 @@ import java.util.stream.Collectors;
 @Component
 public class Painter {
 
-    private ColorRepository colorRepository = new ColorRandomRepository();
+    private ColorRepository colorRepository;
+
+    public Painter(@Qualifier("colorGradientRepository") ColorRepository colorRepository) {
+        this.colorRepository = colorRepository;
+    }
 
     public LineChart<Number, Number> paintEmptyLineChart(AnchorPane pane, String title) {
         pane.getChildren().clear();
@@ -46,7 +51,7 @@ public class Painter {
 //        chart.getStylesheets().add(".chart-line-symbol {}");
         ObservableList<XYChart.Data<Double, Double>> data = FXCollections.observableArrayList();
         nodes.forEach(node -> {
-            XYChart.Data<Double, Double> dot = new XYChart.Data<Double, Double>(node.x, node.y);
+            XYChart.Data<Double, Double> dot = new XYChart.Data<>(node.x, node.y);
             Rectangle rect = new Rectangle(0, 0);
             rect.setVisible(false);
             dot.setNode(rect);

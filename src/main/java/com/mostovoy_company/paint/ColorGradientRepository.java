@@ -1,10 +1,12 @@
 package com.mostovoy_company.paint;
 
 import javafx.scene.paint.Color;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 class ColorGradientRepository implements ColorRepository{
 
     private Map<Integer, Color> colors = new HashMap<>();

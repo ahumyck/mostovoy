@@ -36,7 +36,7 @@ public class Controller {
 
     private MainService mainService;
     private ExperimentManager experimentManager;
-    private final Painter painter = new Painter();
+    private Painter painter;
 
     @FXML
     public Label currentClustersCount;
@@ -125,12 +125,14 @@ public class Controller {
     public Controller(ChartsDataRepository chartsDataRepository,
                       @Qualifier("defaultService") MainService mainService,
                       ExperimentManager experimentManager,
-                      List<FillingType> fillingTypesList
+                      List<FillingType> fillingTypesList,
+                      Painter painter
     ) {
         this.chartsDataRepository = chartsDataRepository;
         this.mainService = mainService;
         this.experimentManager = experimentManager;
         this.fillingTypesList = FXCollections.observableArrayList(fillingTypesList);
+        this.painter = painter;
     }
 
     @FXML

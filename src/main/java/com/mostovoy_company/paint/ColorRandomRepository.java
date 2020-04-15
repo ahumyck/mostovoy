@@ -1,9 +1,11 @@
 package com.mostovoy_company.paint;
 
 import javafx.scene.paint.Color;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class ColorRandomRepository implements ColorRepository{
 
     private Map<Integer, Color> colors = new HashMap<>();
