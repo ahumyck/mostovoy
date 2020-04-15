@@ -34,24 +34,13 @@ import static com.mostovoy_company.programminPercolation.distance.DistanceCalcul
 public class Controller {
 
     public Tab fullExperiment;
-    private ChartsDataRepository chartsDataRepository;
 
     private final FxWeaver fxWeaver;
-    private MainService mainService;
     private ExperimentManager experimentManager;
     private Painter painter;
 
     @FXML
     public Label currentClustersCount;
-
-//    @FXML
-//    public AnchorPane objectStationDistance1;
-//
-//    @FXML
-//    public AnchorPane objectStationDistance2;
-//
-//    @FXML
-//    public AnchorPane ratioDarkRedAndBlackCells;
 
     @FXML
     public Button distanceCalculatorType;
@@ -88,21 +77,6 @@ public class Controller {
     @FXML
     public Button applyConfiguration;
 
-//    @FXML
-//    public Button applyExperiment;
-
-//    @FXML
-//    public TextField matrixSize;
-//
-//    @FXML
-//    public TextField matrixCount;
-
-//    @FXML
-//    public AnchorPane clusterCountChartPane;
-//
-//    @FXML
-//    public AnchorPane clusterSizeChartPane;
-
     @FXML
     public Tab gridTab;
 
@@ -112,11 +86,6 @@ public class Controller {
     @FXML
     public AnchorPane lightningBoltPane;
 
-//    @FXML
-//    public AnchorPane redCellsCountLineChart;
-//
-//    @FXML
-//    public AnchorPane wayLengthLineChart;
 
     private ObservableList<FillingType> fillingTypesList;
 //    @FXML
@@ -125,15 +94,11 @@ public class Controller {
     @FXML
     public TextField tapeCount;
 
-    public Controller(ChartsDataRepository chartsDataRepository,
-                      FxWeaver fxWeaver, @Qualifier("defaultService") MainService mainService,
-                      ExperimentManager experimentManager,
+    public Controller(ExperimentManager experimentManager,
                       List<FillingType> fillingTypesList,
-                      Painter painter
-    ) {
-        this.chartsDataRepository = chartsDataRepository;
+                      Painter painter,
+                      FxWeaver fxWeaver) {
         this.fxWeaver = fxWeaver;
-        this.mainService = mainService;
         this.experimentManager = experimentManager;
         this.fillingTypesList = FXCollections.observableArrayList(fillingTypesList);
         this.painter = painter;
@@ -141,14 +106,6 @@ public class Controller {
 
     @FXML
     public void initialize() {
-//        chartsDataRepository.init(objectStationDistance1,
-//                objectStationDistance2,
-//                clusterCountChartPane,
-//                clusterSizeChartPane,
-//                redCellsCountLineChart,
-//                wayLengthLineChart,
-//                ratioDarkRedAndBlackCells
-//        );
 //        tapeCheckBox.setSelected(false);
         fullExperiment.setContent(fxWeaver.loadController(ChartsController.class).getStatisticCharts());
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
@@ -223,7 +180,6 @@ public class Controller {
         painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
 //        }
     }
-
 
 
     int parseInt(String s) {
