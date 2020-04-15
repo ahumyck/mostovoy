@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mostovoy_company.Controller">
     <children>
         <TabPane prefHeight="900.0" prefWidth="908.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab text="Настройки" fx:id="manualMatrixTab">
+                <Tab fx:id="manualMatrixTab" text="Настройки">
                 </Tab>
-                <Tab text="Общий эксперимент" fx:id="fullExperiment">
+                <Tab fx:id="fullExperiment" text="Общий эксперимент">
                 </Tab>
                 <Tab text="Специальный эксперимент">
                     <content>
@@ -32,12 +28,7 @@
                         <Label layoutX="196.0" layoutY="56.0" prefHeight="25.0" prefWidth="160.0" text="Количество матриц:" />
                         <Label layoutX="387.0" layoutY="56.0" prefHeight="25.0" prefWidth="160.0" text="Концентрация:" />
                         <TextField fx:id="concentrationAnalyzer" layoutX="387.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
-                        <TableView fx:id="analyzerTable" layoutX="32.0" layoutY="169.0" prefHeight="512.0" prefWidth="854.0">
-                          <columns>
-                            <TableColumn prefWidth="427.0" text="C1" />
-                            <TableColumn prefWidth="426.0" text="C2" />
-                          </columns>
-                        </TableView>
+                         <TableView fx:id="analyzerDataTable" layoutX="32.0" layoutY="169.0" prefHeight="512.0" prefWidth="850.0" />
                      </children></AnchorPane>
                     </content>
                 </Tab>

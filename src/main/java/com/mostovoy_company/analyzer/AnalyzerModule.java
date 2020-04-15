@@ -13,8 +13,7 @@ public class AnalyzerModule {
     public AnalyzerModule() {
     }
 
-    public AnalyzerData gatherData(Matrix matrix){
-        AnalyzerData data = new AnalyzerData();
+    public AnalyzerData gatherData(Matrix matrix, double probability){
         int actualSize = matrix.getSize();
 
         List<Integer> blackCellsPerColumn = new ArrayList<>();
@@ -49,15 +48,15 @@ public class AnalyzerModule {
                 .average().getAsDouble();
 
 
-        data.setSize(actualSize - 2 * Matrix.OFFSET);
-        data.setBlackCellsPerColumn(blackCellsPerRow);
-        data.setBlackCellsPerRow(blackCellsPerColumn);
-        data.setBlackCellsAveragePerColumn(rowAverage);
-        data.setBlackCellsAveragePerRow(columnAverage);
-        data.setEmptyColumns(emptyRows);
-        data.setEmptyRows(emptyColumns);
-        data.setTotalBlackCells(totalBlackCells);
-        return data;
+        return new AnalyzerData(String.valueOf(actualSize - 2 * Matrix.OFFSET),
+                String.format("%.2f", probability),
+                blackCellsPerRow.toString(),
+                blackCellsPerColumn.toString(),
+                String.format("%.2f", rowAverage),
+                String.format("%.2f", columnAverage),
+                String.valueOf(emptyRows),
+                String.valueOf(emptyColumns),
+                String.valueOf(totalBlackCells));
     }
 
 

@@ -18,26 +18,16 @@ public class AnalyzerManager {
     @Autowired
     private AnalyzerModule analyzerModule;
 
-    public ObservableList<AnalyzerData> initializeAnalyzerExperimentsParallel(int number, int matrixSize, int probability) {
+    public ObservableList<AnalyzerData> initializeAnalyzerExperiments(int number, int matrixSize, double probability) {
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setSize(matrixSize);
         fillingType.setPercolationProbability(probability);
-        ObservableList<Matrix> matricesObservableList = FXCollections.observableArrayList();
         ObservableList<AnalyzerData> analyzerDataObservableList = FXCollections.observableArrayList();
 
-        for (int i = 0; i < number; i++) {
-            matricesObservableList.add(new Matrix(fillingType));
-        }
+        for (int i = 0; i < number; i++)
+            analyzerDataObservableList.add(analyzerModule.gatherData(new Matrix(fillingType),probability));
 
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() {
-                matricesObservableList.parallelStream().forEach(matrix -> {
-                    analyzerDataObservableList.add(analyzerModule.gatherData(matrix));
-                });
-                return null;
-            }
-        }).start();
+
         return analyzerDataObservableList;
     }
 }
