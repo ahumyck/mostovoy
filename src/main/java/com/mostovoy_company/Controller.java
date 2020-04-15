@@ -193,7 +193,7 @@ public class Controller {
         });
 
         applyExperiment.setOnAction(event -> {
-            Map<Integer, Integer> map = new HashMap<>();
+            Map<Integer, Integer> map = new LinkedHashMap<>();
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
             List<Integer> counts = countParser(this.matrixCount.getText(), sizes.size());
             chartsDataRepository.clear();
@@ -202,9 +202,10 @@ public class Controller {
             }
             log.info("=> init: " + map);
             map.forEach((size, count) ->
-                    DoubleStream.iterate(0.01, x -> x + 0.01)
+                    DoubleStream.iterate(0.01, x -> x + 0.025)
                             .limit(100)
-                            .filter(x -> x <= 1)
+                            .filter(x -> x > 0)
+                            .filter(x -> x <= 0.651)
                             .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
             mainService.consume();
         });

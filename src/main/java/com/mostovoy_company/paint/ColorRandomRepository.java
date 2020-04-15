@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 import java.util.*;
 
-public class ColorRandomRepository {
+public class ColorRandomRepository implements ColorRepository{
 
     private Map<Integer, Color> colors = new HashMap<>();
 

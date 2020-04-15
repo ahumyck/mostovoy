@@ -10,4 +10,9 @@ public class RedCellsStationDistancesDiscreteChart extends BaseLineChartData {
     public RedCellsStationDistancesDiscreteChart(Painter painter) {
         super(painter);
     }
+
+    @Override
+    protected double getNormalizedKoef(int size) {
+        return 1;
+    }
 }

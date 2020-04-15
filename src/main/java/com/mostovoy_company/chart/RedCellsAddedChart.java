@@ -10,4 +10,10 @@ public class RedCellsAddedChart extends BaseLineChartData {
     public RedCellsAddedChart(Painter painter) {
         super(painter);
     }
+
+    @Override
+    protected double getNormalizedKoef(int size) {
+        double Dsize = size;
+        return 1.0/ Dsize;
+    }
 }

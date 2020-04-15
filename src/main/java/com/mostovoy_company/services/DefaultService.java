@@ -3,8 +3,7 @@ package com.mostovoy_company.services;
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
-import com.mostovoy_company.services.BaseMainService;
-import com.mostovoy_company.stat.NewNormalizedStatManager;
+import com.mostovoy_company.stat.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ public class DefaultService extends BaseMainService {
 
 
     public DefaultService(ChartsDataRepository chartsDataRepository,
-                          NewNormalizedStatManager normalizedStatManager,
+                          StatisticManager normalizedStatManager,
                           ExperimentManager experimentManager) {
         super(chartsDataRepository, normalizedStatManager, experimentManager);
     }

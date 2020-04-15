@@ -9,14 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
-public class NewNormalizedStatManager {
+public class StatisticManager {
 
     public double clusterCountStat(List<Statistic> statistics) {
         int size = statistics.get(0).getSize();
         return statistics.stream()
                 .mapToDouble(Statistic::getClusterCount)
                 .average()
-                .orElse(0) / (size * size);
+                .orElse(0)/* / (size * size)*/;
     }
 
     public double clusterSizeStat(List<Statistic> statistics) {
@@ -27,7 +27,7 @@ public class NewNormalizedStatManager {
                     blackCellCounter[0] += statistic.getBlackCellCount();
                     clusterCounter[0] += statistic.getClusterCount();
                 });
-        double concentration = blackCellCounter[0] / (size * size);
+        double concentration = blackCellCounter[0] /*/ (size * size)*/;
         if (clusterCounter[0] > 0) return (concentration) / (clusterCounter[0]);
         else return 0;
     }
@@ -38,7 +38,7 @@ public class NewNormalizedStatManager {
         statistics.forEach(statistic -> {
             blackCellCounter[0] += statistic.getBlackCellCount();
         });
-        return blackCellCounter[0] / (size * size * statistics.size());
+        return blackCellCounter[0] / /*(size * size **/ statistics.size();
     }
 
     public double redCellsCountStat(List<Statistic> statistics) {
@@ -46,43 +46,44 @@ public class NewNormalizedStatManager {
         return statistics.stream()
                 .mapToDouble(Statistic::getRedCellCount)
                 .average()
-                .orElse(0) / size;
+                .orElse(0) /*/ size*/;
     }
 
     public double wayLengthStat(List<Statistic> statistics) {
         int size = statistics.get(0).getSize();
         return statistics.stream()
-                .map(Statistic::getPercolationWayDistance)
-                .mapToDouble(d -> d)
+                .mapToDouble(Statistic::getPercolationWayDistance)
                 .average()
-                .orElse(0) / size;
+                .orElse(0) /*/ size*/;
     }
 
 
     public double redCellStationDistanceForPythagoras(List<Statistic> statistics) {
-        AtomicReference<Double> d = new AtomicReference<>(0.0);
-        AtomicInteger n = new AtomicInteger();
-        statistics.stream()
-                .map(Statistic::getPythagorasDistance)
-                .forEach(pair ->{
-                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
-                    n.addAndGet(pair.getSecond());
-                });
-        return d.get()/n.get();
+//        AtomicReference<Double> d = new AtomicReference<>(0.0);
+//        AtomicInteger n = new AtomicInteger();
+//        statistics.stream()
+//                .map(Statistic::getPythagorasDistance)
+//                .forEach(pair ->{
+//                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
+//                    n.addAndGet(pair.getSecond());
+//                });
+//        return d.get()/n.get();
+        return 0.0;
     }
 
 
 
     public double redCellStationDistanceForDiscrete(List<Statistic> statistics) {
-        AtomicReference<Double> d = new AtomicReference<>( 0.0);
-        AtomicInteger n = new AtomicInteger();
-        statistics.stream()
-                .map(Statistic::getDiscreteDistance)
-                .forEach(pair ->{
-                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
-                    n.addAndGet(pair.getSecond());
-                });
-        return d.get()/n.get();
+//        AtomicReference<Double> d = new AtomicReference<>( 0.0);
+//        AtomicInteger n = new AtomicInteger();
+//        statistics.stream()
+//                .map(Statistic::getDiscreteDistance)
+//                .forEach(pair ->{
+//                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
+//                    n.addAndGet(pair.getSecond());
+//                });
+//        return d.get()/n.get();
+        return 0.0;
     }
 
     public double darkRedAndBlackCellsRatio(List<Statistic> statistics) {

@@ -10,4 +10,9 @@ public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData {
     public RedCellsStationDistancesPythagorasChart(Painter painter) {
         super(painter);
     }
+
+    @Override
+    protected double getNormalizedKoef(int size) {
+        return 1;
+    }
 }

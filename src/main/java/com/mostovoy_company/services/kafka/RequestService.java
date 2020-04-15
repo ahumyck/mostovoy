@@ -8,7 +8,7 @@ import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.mostovoy_company.services.kafka.session.SessionManager;
-import com.mostovoy_company.stat.NewNormalizedStatManager;
+import com.mostovoy_company.stat.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -27,13 +27,13 @@ public class RequestService {
     private ControlService controlService;
     private ExperimentManager experimentManager;
     private SessionManager sessionManager;
-    private NewNormalizedStatManager normalizedStatManager;
+    private StatisticManager normalizedStatManager;
     private ResponseService responseService;
     private KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate;
 
     @Autowired
     public RequestService(ExperimentManager experimentManager, SessionManager sessionManager,
-                          NewNormalizedStatManager normalizedStatManager,
+                          StatisticManager normalizedStatManager,
                           ResponseService responseService,
                           KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate) {
         this.experimentManager = experimentManager;

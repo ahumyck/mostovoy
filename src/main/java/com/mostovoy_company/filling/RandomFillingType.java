@@ -9,6 +9,8 @@ public class RandomFillingType extends FillingType {
     private double percolationProbability;
     private int size;
 
+    private static final Random generator = new Random();
+
     public void setSize(int size) {
         this.size = size;
     }
@@ -23,7 +25,6 @@ public class RandomFillingType extends FillingType {
 
     @Override
     public int[][] getMatrix() {
-        Random generator = new Random();
         int[][] matrix = new int[size][size];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {

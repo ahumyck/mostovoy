@@ -39,6 +39,8 @@ public class Experiment {
         this.statistic.setSize(matrix.getSize() - 2 * Matrix.OFFSET);
         this.statistic.setClusterCount(matrix.getClusterCounter());
         this.statistic.setBlackCellCount((int)matrix.getCountOfBlackCells());
+//        this.statistic.setMaxClusterSize(matrix.getMaxClusterSize());
+//        this.statistic.setMinClusterSize(matrix.getMinClusterSize());
         this.neighborhood = 2*(matrix.getSize() - 2 * Matrix.OFFSET);
         return this;
     }
@@ -68,10 +70,6 @@ public class Experiment {
     public int getDistance() {
         return path != null ? path.getFirst().size() : 0;
     }
-
-//    public List<Double> getDistances(){
-//        return this.distances;
-//    }
 
     Experiment calculateLightningBolt(){
         this.lightningBolt = new LightningBolt(this.matrix);

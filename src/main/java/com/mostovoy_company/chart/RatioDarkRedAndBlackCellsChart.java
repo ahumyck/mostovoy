@@ -10,4 +10,9 @@ public class RatioDarkRedAndBlackCellsChart extends BaseLineChartData{
     public RatioDarkRedAndBlackCellsChart(Painter painter) {
         super(painter);
     }
+
+    @Override
+    protected double getNormalizedKoef(int size) {
+        return 1;
+    }
 }

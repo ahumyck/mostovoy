@@ -5,6 +5,7 @@ import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.lightning.Paired;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 public class Matrix {
@@ -180,6 +181,24 @@ public class Matrix {
             }
             else path.remove(path.size() - 1);
         }
+    }
+
+    public int getMaxClusterSize(){
+        Map<Integer, Integer> result = new HashMap<>();
+        stream().filter(Cell::hasClusterMark).forEach(cell -> {
+            result.putIfAbsent(cell.getClusterMark(), 0);
+            result.computeIfPresent(cell.getClusterMark(), (key,value) -> value + 1);
+        });
+        return result.values().stream().mapToInt(Integer::valueOf).max().orElse(0);
+    }
+
+    public int getMinClusterSize(){
+        Map<Integer, Integer> result = new HashMap<>();
+        stream().filter(Cell::hasClusterMark).forEach(cell -> {
+            result.putIfAbsent(cell.getClusterMark(), 0);
+            result.computeIfPresent(cell.getClusterMark(), (key,value) -> value + 1);
+        });
+        return result.values().stream().mapToInt(Integer::valueOf).min().orElse(0);
     }
 
     @Override

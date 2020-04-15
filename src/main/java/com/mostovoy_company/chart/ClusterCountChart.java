@@ -11,4 +11,10 @@ public class ClusterCountChart extends BaseLineChartData {
     public ClusterCountChart(Painter painter) {
         super(painter);
     }
+
+    @Override
+    protected double getNormalizedKoef(int size) {
+        double Dsize = size*size;
+        return 1.0/ Dsize;
+    }
 }

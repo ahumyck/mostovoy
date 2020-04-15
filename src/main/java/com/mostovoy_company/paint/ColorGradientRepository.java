@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import java.util.HashMap;
 import java.util.Map;
 
-class ColorGradientRepository {
+class ColorGradientRepository implements ColorRepository{
 
     private Map<Integer, Color> colors = new HashMap<>();
 
@@ -24,9 +24,9 @@ class ColorGradientRepository {
         }
     }
 
-    Color getColorForCell(int clusterMark) {
+    public Color getColorForCell(int clusterMark) {
         return clusterMark > 0 ? Color.BLACK : Color.WHITE;
     }
 
-    Color getRandomColorForCluster(int clusterMark) { return colors.get(clusterMark); }
+    public Color getRandomColorForCluster(int clusterMark) { return colors.get(clusterMark); }
 }

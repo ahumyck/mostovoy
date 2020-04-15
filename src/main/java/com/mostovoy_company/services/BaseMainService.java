@@ -8,7 +8,7 @@ import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
-import com.mostovoy_company.stat.NewNormalizedStatManager;
+import com.mostovoy_company.stat.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -22,10 +22,10 @@ public abstract class BaseMainService implements MainService {
 
     private ChartsDataRepository chartsDataRepository;
     private Queue<RequestMessage> queue = new ConcurrentLinkedQueue<>();
-    private NewNormalizedStatManager normalizedStatManager;
+    private StatisticManager normalizedStatManager;
     private ExperimentManager experimentManager;
 
-    protected BaseMainService(ChartsDataRepository chartsDataRepository, NewNormalizedStatManager normalizedStatManager, ExperimentManager experimentManager) {
+    protected BaseMainService(ChartsDataRepository chartsDataRepository, StatisticManager normalizedStatManager, ExperimentManager experimentManager) {
         this.chartsDataRepository = chartsDataRepository;
         this.normalizedStatManager = normalizedStatManager;
         this.experimentManager = experimentManager;

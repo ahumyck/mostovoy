@@ -25,7 +25,7 @@ public class LightningBolt {
     }
 
     public int getDistanceForShortestPath() {
-        return this.shortestPath == null ? -1 /*error code */ : this.shortestPath.getFirst().size();
+        return Optional.of(this.shortestPath).get().getFirst().size();
     }
 
     public List<List<Cell>> getShortestPaths(){
