@@ -74,63 +74,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Общий эксперимент">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0">
-                            <children>
-                                <Button fx:id="applyExperiment" layoutX="8.0" layoutY="122.0" mnemonicParsing="false" text="Apply" />
-                                <!--<TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-                                <!--<Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />-->
-                                <!--<Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />-->
-                                <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-                                <!--<TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-                                <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
-                                <Label layoutX="9.0" layoutY="58.0" prefHeight="20.0" prefWidth="170.0" text="Размер матрицы:" />
-                                <TextField fx:id="matrixSize" layoutX="9.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
-                                <TextField fx:id="matrixCount" layoutX="196.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
-                                <Label layoutX="196.0" layoutY="56.0" prefHeight="25.0" prefWidth="170.0" text="Количество матриц:" />
-                                <TabPane layoutY="155.0" prefHeight="716.0" prefWidth="908.0" tabClosingPolicy="UNAVAILABLE">
-                                    <tabs>
-                                        <Tab text="Количество кластеров">
-                                            <content>
-                                                <AnchorPane fx:id="clusterCountChartPane" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Размер кластеров">
-                                            <content>
-                                                <AnchorPane fx:id="clusterSizeChartPane" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Количество красных клеток">
-                                            <content>
-                                                <AnchorPane fx:id="redCellsCountLineChart" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Длина пути">
-                                            <content>
-                                                <AnchorPane fx:id="wayLengthLineChart" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Расстояние установки способ 1">
-                                            <content>
-                                                <AnchorPane fx:id="objectStationDistance1" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Расстояние установки способ 2">
-                                            <content>
-                                                <AnchorPane fx:id="objectStationDistance2" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                            </content>
-                                        </Tab>
-                                        <Tab text="Отношение темнокрасных и черных">
-                                            <content>
-                                                <AnchorPane fx:id="ratioDarkRedAndBlackCells" minHeight="0.0" minWidth="0.0" prefHeight="686.0" prefWidth="908.0" />
-                                            </content>
-                                        </Tab>
-                                    </tabs>
-                                </TabPane>
-                            </children>
-                        </AnchorPane>
-                    </content>
+                <Tab text="Общий эксперимент" fx:id="fullExperiment">
                 </Tab>
                 <Tab text="Untitled Tab">
                     <content>

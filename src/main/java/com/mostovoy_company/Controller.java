@@ -1,5 +1,6 @@
 package com.mostovoy_company;
 
+import com.mostovoy_company.chart.ChartsController;
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
@@ -14,13 +15,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import lombok.extern.slf4j.Slf4j;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
@@ -32,8 +33,10 @@ import static com.mostovoy_company.programminPercolation.distance.DistanceCalcul
 @Slf4j
 public class Controller {
 
+    public Tab fullExperiment;
     private ChartsDataRepository chartsDataRepository;
 
+    private final FxWeaver fxWeaver;
     private MainService mainService;
     private ExperimentManager experimentManager;
     private Painter painter;
@@ -41,14 +44,14 @@ public class Controller {
     @FXML
     public Label currentClustersCount;
 
-    @FXML
-    public AnchorPane objectStationDistance1;
-
-    @FXML
-    public AnchorPane objectStationDistance2;
-
-    @FXML
-    public AnchorPane ratioDarkRedAndBlackCells;
+//    @FXML
+//    public AnchorPane objectStationDistance1;
+//
+//    @FXML
+//    public AnchorPane objectStationDistance2;
+//
+//    @FXML
+//    public AnchorPane ratioDarkRedAndBlackCells;
 
     @FXML
     public Button distanceCalculatorType;
@@ -85,20 +88,20 @@ public class Controller {
     @FXML
     public Button applyConfiguration;
 
-    @FXML
-    public Button applyExperiment;
+//    @FXML
+//    public Button applyExperiment;
 
-    @FXML
-    public TextField matrixSize;
+//    @FXML
+//    public TextField matrixSize;
+//
+//    @FXML
+//    public TextField matrixCount;
 
-    @FXML
-    public TextField matrixCount;
-
-    @FXML
-    public AnchorPane clusterCountChartPane;
-
-    @FXML
-    public AnchorPane clusterSizeChartPane;
+//    @FXML
+//    public AnchorPane clusterCountChartPane;
+//
+//    @FXML
+//    public AnchorPane clusterSizeChartPane;
 
     @FXML
     public Tab gridTab;
@@ -109,11 +112,11 @@ public class Controller {
     @FXML
     public AnchorPane lightningBoltPane;
 
-    @FXML
-    public AnchorPane redCellsCountLineChart;
-
-    @FXML
-    public AnchorPane wayLengthLineChart;
+//    @FXML
+//    public AnchorPane redCellsCountLineChart;
+//
+//    @FXML
+//    public AnchorPane wayLengthLineChart;
 
     private ObservableList<FillingType> fillingTypesList;
 //    @FXML
@@ -123,12 +126,13 @@ public class Controller {
     public TextField tapeCount;
 
     public Controller(ChartsDataRepository chartsDataRepository,
-                      @Qualifier("defaultService") MainService mainService,
+                      FxWeaver fxWeaver, @Qualifier("defaultService") MainService mainService,
                       ExperimentManager experimentManager,
                       List<FillingType> fillingTypesList,
                       Painter painter
     ) {
         this.chartsDataRepository = chartsDataRepository;
+        this.fxWeaver = fxWeaver;
         this.mainService = mainService;
         this.experimentManager = experimentManager;
         this.fillingTypesList = FXCollections.observableArrayList(fillingTypesList);
@@ -137,15 +141,16 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        chartsDataRepository.init(objectStationDistance1,
-                objectStationDistance2,
-                clusterCountChartPane,
-                clusterSizeChartPane,
-                redCellsCountLineChart,
-                wayLengthLineChart,
-                ratioDarkRedAndBlackCells
-        );
+//        chartsDataRepository.init(objectStationDistance1,
+//                objectStationDistance2,
+//                clusterCountChartPane,
+//                clusterSizeChartPane,
+//                redCellsCountLineChart,
+//                wayLengthLineChart,
+//                ratioDarkRedAndBlackCells
+//        );
 //        tapeCheckBox.setSelected(false);
+        fullExperiment.setContent(fxWeaver.loadController(ChartsController.class).getStatisticCharts());
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(fillingTypesList);
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -194,23 +199,7 @@ public class Controller {
             }
         });
 
-        applyExperiment.setOnAction(event -> {
-            Map<Integer, Integer> map = new LinkedHashMap<>();
-            List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
-            List<Integer> counts = countParser(this.matrixCount.getText(), sizes.size());
-            chartsDataRepository.clear();
-            for (int i = 0; i < sizes.size(); i++) {
-                map.put(sizes.get(i), counts.get(i));
-            }
-            log.info("=> init: " + map);
-            map.forEach((size, count) ->
-                    DoubleStream.iterate(0.01, x -> x + 0.025)
-                            .limit(100)
-                            .filter(x -> x > 0)
-                            .filter(x -> x <= 0.651)
-                            .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
-            mainService.consume();
-        });
+//
     }
 
     void paintByDistanceResolverAndCheckBox() {
@@ -235,20 +224,7 @@ public class Controller {
 //        }
     }
 
-    List<Integer> countParser(String text, int howMany){
-        if(text.contains(",")){
-            String replace = text.replace(" ", "");
-            return Arrays.stream(replace.split(",")).map(Integer::valueOf).collect(Collectors.toList());
-        }
-        else{
-            List<Integer> count = new ArrayList<>();
-            Integer integer = Integer.valueOf(text);
-            for (int i = 0; i < howMany; i++){
-                count.add(integer);
-            }
-            return count;
-        }
-    }
+
 
     int parseInt(String s) {
         try {

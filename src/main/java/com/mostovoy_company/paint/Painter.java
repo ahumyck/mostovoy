@@ -32,52 +32,6 @@ public class Painter {
         this.colorRepository = colorRepository;
     }
 
-    public LineChart<Number, Number> paintEmptyLineChart(AnchorPane pane, String title) {
-        pane.getChildren().clear();
-        NumberAxis x = new NumberAxis();
-        NumberAxis y = new NumberAxis();
-        LineChart<Number, Number> numberLineChart = new LineChart<>(x, y);
-        numberLineChart.setPrefHeight(pane.getPrefHeight());
-        numberLineChart.setPrefWidth(pane.getPrefWidth());
-        numberLineChart.setTitle(title);
-        pane.getChildren().clear();
-        pane.getChildren().add(numberLineChart);
-        return numberLineChart;
-    }
-
-    public void addSeriesToLineChart(LineChart<Double, Double> chart, String title, List<LineChartNode> nodes) {
-        XYChart.Series<Double, Double> series = new XYChart.Series<Double, Double>();
-        series.setName(title);
-//        chart.getStylesheets().add(".chart-line-symbol {}");
-        ObservableList<XYChart.Data<Double, Double>> data = FXCollections.observableArrayList();
-        nodes.forEach(node -> {
-            XYChart.Data<Double, Double> dot = new XYChart.Data<>(node.x, node.y);
-            Rectangle rect = new Rectangle(0, 0);
-            rect.setVisible(false);
-            dot.setNode(rect);
-            data.add(dot);
-        });
-        series.setData(data);
-        chart.getData().add(series);
-    }
-
-    public void addObservableSeries(LineChart<Number, Number> chart, String title, ObservableList<XYChart.Data<Number, Number>> data) {
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName(title);
-        series.setData(data);
-        chart.getData().add(series);
-        chart.getChildrenUnmodifiable().stream()
-                .filter(child -> child instanceof Legend)
-                .flatMap(legend -> ((Legend) legend).getItems().stream())
-                .forEach(item -> {
-                            XYChart.Series<Number,Number> s = chart.getData().stream().filter(d -> d.getName().equals(item.getText())).collect(Collectors.toList()).get(0);
-                            item.getSymbol().setCursor(Cursor.HAND);
-                            item.getSymbol().setOnMouseClicked(event1 -> s.getNode().setVisible(!s.getNode().isVisible()));
-                        }
-                );
-
-    }
-
     private void paintClusterMatrix(double size, Matrix matrix, GraphicsContext graphicsContext2D) {
         matrix.stream().forEach(cell -> {
             graphicsContext2D.setFill(colorRepository.getRandomColorForCluster(cell.getClusterMark()));
