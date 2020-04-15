@@ -48,13 +48,28 @@ public class Controller {
     public AnchorPane objectStationDistance2;
 
     @FXML
+    public Button applyAnalyzerExperiment;
+
+    @FXML
+    public TableView analyzerTable;
+
+    @FXML
     public AnchorPane ratioDarkRedAndBlackCells;
 
     @FXML
     public Button distanceCalculatorType;
 
     @FXML
+    public TextField matrixCountAnalyzer;
+
+    @FXML
+    public TextField concentrationAnalyzer;
+
+    @FXML
     public Label redCellsLabel;
+
+    @FXML
+    public TextField matrixSizeAnalyzer;
 
     @FXML
     public Label shortestPathLabel;
@@ -79,6 +94,7 @@ public class Controller {
 
     @FXML
     public Label gridSizeLabel;
+
     @FXML
     public ComboBox<FillingType> fillingTypes;
 
@@ -210,6 +226,12 @@ public class Controller {
                             .filter(x -> x <= 0.651)
                             .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
             mainService.consume();
+        });
+
+        applyAnalyzerExperiment.setOnAction(event -> {
+            Map<Integer, Integer> map = new LinkedHashMap<>();
+            List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            log.info("=> init: " + map);
         });
     }
 

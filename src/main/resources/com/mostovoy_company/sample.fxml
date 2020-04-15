@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -132,9 +133,24 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Untitled Tab">
+                <Tab text="Специальный эксперимент">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="applyAnalyzerExperiment" layoutX="8.0" layoutY="122.0" mnemonicParsing="false" text="Apply" />
+                        <Label layoutX="9.0" layoutY="58.0" prefHeight="20.0" prefWidth="161.0" text="Размер матрицы:" />
+                        <TextField fx:id="matrixSizeAnalyzer" layoutX="9.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
+                        <TextField fx:id="matrixCountAnalyzer" layoutX="196.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
+                        <Label layoutX="196.0" layoutY="56.0" prefHeight="25.0" prefWidth="160.0" text="Количество матриц:" />
+                        <Label layoutX="387.0" layoutY="56.0" prefHeight="25.0" prefWidth="160.0" text="Концентрация:" />
+                        <TextField fx:id="concentrationAnalyzer" layoutX="387.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0" />
+                        <TableView fx:id="analyzerTable" layoutX="32.0" layoutY="169.0" prefHeight="512.0" prefWidth="854.0">
+                          <columns>
+                            <TableColumn prefWidth="427.0" text="C1" />
+                            <TableColumn prefWidth="426.0" text="C2" />
+                          </columns>
+                        </TableView>
+                     </children></AnchorPane>
                     </content>
                 </Tab>
             </tabs>
