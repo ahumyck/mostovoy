@@ -12,7 +12,7 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:id="statisticChartsAnchorPane"
-      fx:controller="com.mostovoy_company.chart.ChartsController" spacing="15">
+      fx:controller="com.mostovoy_company.chart.ChartsController" spacing="15" prefHeight="400" prefWidth="400">
     <padding>
         <Insets top="10" left="10" right="10"/>
     </padding>
@@ -39,8 +39,7 @@
         <TextField fx:id="matrixCount"/>
     </HBox>
     <Button fx:id="applyExperiment" mnemonicParsing="false" text="Apply"/>
-
-    <TabPane fx:id="statisticChartsTabPane" tabClosingPolicy="UNAVAILABLE"/>
+    <TabPane fx:id="statisticChartsTabPane" tabClosingPolicy="UNAVAILABLE"  prefHeight="900"/>
 </VBox>
 
 
