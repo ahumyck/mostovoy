@@ -7,66 +7,88 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.mostovoy_company.ManualMatrixController"
-            prefHeight="871.0" prefWidth="944.0"
-            fx:id="manualMatrixAnchorPane">
 
-    <children>
-        <TextField fx:id="experimentNumber" layoutX="14.0" layoutY="35.0" prefHeight="25.0" prefWidth="159.0"/>
-        <Label layoutX="14.0" layoutY="1.0" prefHeight="31.0" prefWidth="157.0" text="Количество экспериментов:"/>
-        <Label fx:id="gridSizeLabel" layoutX="209.0" layoutY="1.0" prefHeight="27.0" prefWidth="149.0"
-               text="Размер матрицы:"/>
-        <Label layoutX="393.0" layoutY="1.0" prefHeight="26.0" prefWidth="145.0" text="Тип заполнения:"/>
-        <Label fx:id="probabilityLabel" layoutX="570.0" layoutY="2.0" prefHeight="24.0" prefWidth="146.0"
-               text="Концентрация:"/>
-        <TextField fx:id="fillingProbability" layoutX="568.0" layoutY="35.0"/>
-        <ComboBox fx:id="fillingTypes" layoutX="390.0" layoutY="35.0" prefWidth="150.0"/>
-        <Button fx:id="applyConfiguration" layoutX="14.0" layoutY="70.0" mnemonicParsing="false" text="Apply"/>
-        <ComboBox fx:id="gridSize" layoutX="208.0" layoutY="35.0" prefWidth="150.0"/>
-        <ListView fx:id="experimentListView" layoutY="107.0" prefHeight="764.0" prefWidth="208.0"/>
-        <TabPane layoutX="208.0" layoutY="107.0" prefHeight="765.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
-            <tabs>
-                <Tab fx:id="gridTab" text="Матрица">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="553.0" prefWidth="595.0">
-                            <children>
-                                <Label fx:id="currentClustersCount" layoutY="701.0" prefHeight="34.0" prefWidth="186.0">
-                                    <font>
-                                        <Font size="14.0"/>
-                                    </font>
-                                </Label>
-                                <AnchorPane fx:id="gridPane" prefHeight="700.0" prefWidth="700.0"/>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab fx:id="lightningBoltTab" text="Молния">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <Label fx:id="redCellsLabel" layoutY="702.0" prefHeight="34.0" prefWidth="157.0">
-                                    <font>
-                                        <Font size="14.0"/>
-                                    </font>
-                                </Label>
-                                <Label fx:id="shortestPathLabel" layoutX="262.0" layoutY="702.0" prefHeight="34.0"
-                                       prefWidth="157.0">
-                                    <font>
-                                        <Font size="14.0"/>
-                                    </font>
-                                </Label>
-                                <AnchorPane fx:id="lightningBoltPane" prefHeight="700.0" prefWidth="700.0"/>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-            </tabs>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mostovoy_company.ManualMatrixController"
+      fx:id="manualMatrixAnchorPane" spacing="10">
+    <FlowPane hgap="10" vgap="10">
+        <padding>
+            <Insets top="10" left="10" right="10"/>
+        </padding>
+        <HBox spacing="5">
+            <Label text="Количество экспериментов:">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="experimentNumber"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label text="Тип заполнения:">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <ComboBox fx:id="fillingTypes"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label fx:id="gridSizeLabel" text="Размер матрицы:">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <ComboBox fx:id="gridSize"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label fx:id="probabilityLabel" text="Концентрация:">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="fillingProbability"/>
+        </HBox>
+    </FlowPane>
+    <HBox spacing="10">
+        <padding>
+            <Insets top="10" left="10" right="10"/>
+        </padding>
+        <Button fx:id="applyConfiguration" mnemonicParsing="false" text="Apply"/>
+        <Button fx:id="distanceCalculatorType" text="Пифагор"/>
+    </HBox>
+    <HBox>
+        <ListView fx:id="experimentListView" maxHeight="Infinity" minWidth="50"/>
+        <TabPane tabClosingPolicy="UNAVAILABLE" minWidth="300" minHeight="300">
+            <Tab fx:id="gridTab" text="Матрица">
+                <VBox spacing="5">
+                    <ScrollPane fx:id="gridPane" maxHeight="600" maxWidth="600"/>
+                    <Label fx:id="currentClustersCount">
+                        <font>
+                            <Font size="14.0"/>
+                        </font>
+                    </Label>
+                </VBox>
+            </Tab>
+            <Tab fx:id="lightningBoltTab" text="Молния">
+                <VBox spacing="10">
+                    <ScrollPane fx:id="lightningBoltPane" maxHeight="600" maxWidth="600"/>
+                    <HBox spacing="20">
+                        <Label fx:id="redCellsLabel">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="shortestPathLabel">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+            </Tab>
         </TabPane>
-        <Button fx:id="distanceCalculatorType" layoutX="765.0" layoutY="35.0" mnemonicParsing="false" prefHeight="25.0"
-                prefWidth="121.0" text="Пифагор"/>
         <!--                        <CheckBox fx:id="tapeCheckBox" layoutX="765.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Изолента" />-->
         <!--                        <TextField fx:id="tapeCount" layoutX="569.0" layoutY="70.0" promptText="Отступ (целое число>0)" />-->
-    </children>
-</AnchorPane>
+    </HBox>
+</VBox>

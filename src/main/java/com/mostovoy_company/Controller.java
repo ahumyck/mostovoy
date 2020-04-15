@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -54,7 +55,7 @@ public class Controller {
     public void initialize() {
         tableViewInitializer();
 //        tapeCheckBox.setSelected(false);
-        fullExperiment.setContent(fxWeaver.loadController(ChartsController.class).getStatisticCharts());
+        fullExperiment.setContent(fxWeaver.loadController(ChartsController.class).getContent());
         manualMatrixTab.setContent(fxWeaver.loadController(ManualMatrixController.class).getContent());
         applyAnalyzerExperiment.setOnAction(event -> {
             int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
@@ -77,38 +78,38 @@ public class Controller {
         TableColumn<AnalyzerData, String> totalBlackCells = new TableColumn<>("Всг чк");
 
         size.setCellValueFactory(new PropertyValueFactory<>("size"));
-        size.setMinWidth(35);
-        size.setMaxWidth(35);
+//        size.setMinWidth(35);
+//        size.setMaxWidth(35);
 
         probability.setCellValueFactory(new PropertyValueFactory<>("probability"));
-        size.setMinWidth(60);
-        size.setMaxWidth(60);
+//        size.setMinWidth(60);
+//        size.setMaxWidth(60);
 
         blackCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("blackCellsPerColumn"));
-        blackCellsPerColumn.setMinWidth(200);
+//        blackCellsPerColumn.setMinWidth(200);
 
         blackCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("blackCellsPerRow"));
-        blackCellsPerRow.setMinWidth(200);
+//        blackCellsPerRow.setMinWidth(200);
 
         blackCellsAveragePerColumn.setCellValueFactory(new PropertyValueFactory<>("blackCellsAveragePerColumn"));
-        blackCellsAveragePerColumn.setMinWidth(75);
-        blackCellsAveragePerColumn.setMaxWidth(75);
+//        blackCellsAveragePerColumn.setMinWidth(75);
+//        blackCellsAveragePerColumn.setMaxWidth(75);
 
         blackCellsAveragePerRow.setCellValueFactory(new PropertyValueFactory<>("blackCellsAveragePerRow"));
-        blackCellsAveragePerRow.setMinWidth(75);
-        blackCellsAveragePerRow.setMaxWidth(75);
+//        blackCellsAveragePerRow.setMinWidth(75);
+//        blackCellsAveragePerRow.setMaxWidth(75);
 
         emptyRows.setCellValueFactory(new PropertyValueFactory<>("emptyRows"));
-        emptyRows.setMinWidth(50);
-        emptyRows.setMaxWidth(50);
+//        emptyRows.setMinWidth(50);
+//        emptyRows.setMaxWidth(50);
 
         emptyColumns.setCellValueFactory(new PropertyValueFactory<>("emptyColumns"));
-        emptyColumns.setMinWidth(50);
-        emptyColumns.setMaxWidth(50);
+//        emptyColumns.setMinWidth(50);
+//        emptyColumns.setMaxWidth(50);
 
         totalBlackCells.setCellValueFactory(new PropertyValueFactory<>("totalBlackCells"));
-        totalBlackCells.setMinWidth(70);
-        totalBlackCells.setMaxWidth(100);
+//        totalBlackCells.setMinWidth(70);
+//        totalBlackCells.setMaxWidth(100);
 
         analyzerDataTable.setItems(FXCollections.emptyObservableList());
         analyzerDataTable.getColumns().addAll(size, probability,

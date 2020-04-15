@@ -24,6 +24,7 @@ public class Main extends Application {
         Parent root = fxWeaver.loadView(Controller.class);
         primaryStage.setTitle("Percolation");
         primaryStage.setScene(new Scene(root));
+//        primaryStage.sizeToScene();
         primaryStage.show();
     }
 

@@ -7,28 +7,41 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml" minHeight="0.0" minWidth="0.0"
-            fx:id="statisticChartsAnchorPane"
-            fx:controller="com.mostovoy_company.chart.ChartsController">
-    <children>
-        <Button fx:id="applyExperiment" layoutX="8.0" layoutY="122.0" mnemonicParsing="false" text="Apply"/>
-        <!--<TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-        <!--<Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />-->
-        <!--<Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />-->
-        <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-        <!--<TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-        <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
-        <Label layoutX="9.0" layoutY="58.0" prefHeight="20.0" prefWidth="170.0" text="Размер матрицы:"/>
-        <TextField fx:id="matrixSize" layoutX="9.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0"/>
-        <TextField fx:id="matrixCount" layoutX="196.0" layoutY="84.0" prefHeight="25.0" prefWidth="160.0"/>
-        <Label layoutX="196.0" layoutY="56.0" prefHeight="25.0" prefWidth="170.0" text="Количество матриц:"/>
-        <TabPane fx:id="statisticChartsTabPane"
-                 layoutY="155.0" prefHeight="716.0" prefWidth="908.0"
-                 tabClosingPolicy="UNAVAILABLE">
-        </TabPane>
-    </children>
-</AnchorPane>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:id="statisticChartsAnchorPane"
+      fx:controller="com.mostovoy_company.chart.ChartsController" spacing="15">
+    <padding>
+        <Insets top="10" left="10" right="10"/>
+    </padding>
+    <!--<TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+    <!--<Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />-->
+    <!--<Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />-->
+    <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+    <!--<TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+    <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
+    <HBox spacing="5">
+        <Label text="Размер матрицы:">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="matrixSize"/>
+    </HBox>
+    <HBox spacing="5">
+        <Label text="Количество матриц:">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="matrixCount"/>
+    </HBox>
+    <Button fx:id="applyExperiment" mnemonicParsing="false" text="Apply"/>
+
+    <TabPane fx:id="statisticChartsTabPane" tabClosingPolicy="UNAVAILABLE"/>
+</VBox>
 
 
 

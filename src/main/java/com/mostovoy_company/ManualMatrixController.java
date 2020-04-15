@@ -9,8 +9,10 @@ import com.mostovoy_company.paint.Painter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +46,7 @@ public class ManualMatrixController {
     @FXML
     public Label currentClustersCount;
     @FXML
-    public AnchorPane gridPane;
+    public ScrollPane gridPane;
     @FXML
     public Tab lightningBoltTab;
     @FXML
@@ -52,11 +54,12 @@ public class ManualMatrixController {
     @FXML
     public Label shortestPathLabel;
     @FXML
-    public AnchorPane lightningBoltPane;
+    public ScrollPane lightningBoltPane;
     @FXML
     public Button distanceCalculatorType;
     @FXML
-    public AnchorPane manualMatrixAnchorPane;
+    public VBox manualMatrixAnchorPane;
+
 
     private ObservableList<FillingType> fillingTypesList;
     private ExperimentManager experimentManager;
@@ -71,7 +74,7 @@ public class ManualMatrixController {
         this.painter = painter;
     }
 
-    public AnchorPane getContent(){
+    public Node getContent(){
         return this.manualMatrixAnchorPane;
     }
 

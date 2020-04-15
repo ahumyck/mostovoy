@@ -2,21 +2,12 @@ package com.mostovoy_company.paint;
 
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
-import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
-import com.sun.javafx.charts.Legend;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.input.MouseButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -85,23 +76,21 @@ public class Painter {
         });
     }
 
-    public void paintCanvas(AnchorPane grid, Matrix matrix) {
-        double size = grid.getHeight() / (matrix.getSize() - 2 * Matrix.OFFSET);
-        Canvas canvas = new Canvas(grid.getWidth(), grid.getHeight());
+    public void paintCanvas(ScrollPane grid, Matrix matrix) {
+        double size = (grid.getMaxHeight() -15) / (matrix.getSize() - 2 * Matrix.OFFSET);
+        Canvas canvas = new Canvas(grid.getMaxWidth() - 15, grid.getMaxHeight() - 15);
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, grid.getWidth(), grid.getHeight());
 
         paintClusterMatrix(size, matrix, graphicsContext2D);
         drawLines(size, matrix, graphicsContext2D);
-
-        grid.getChildren().clear();
-        grid.getChildren().add(canvas);
+        grid.setContent(canvas);
     }
 
     public void paintLightningBoltAndTape(AnchorPane pane, List<Cell> path, List<Cell> tape, List<PercolationRelation> relations, Matrix matrix) {
-        double size = pane.getHeight() / (matrix.getSize() - 2 * Matrix.OFFSET);
-        Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
+        double size = pane.getMaxHeight() / (matrix.getSize() - 2 * Matrix.OFFSET);
+        Canvas canvas = new Canvas(pane.getMaxWidth(), pane.getMaxHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
@@ -116,9 +105,9 @@ public class Painter {
         pane.getChildren().add(canvas);
     }
 
-    public void paintLightningBoltAndRelations(AnchorPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix) {
-        double size = pane.getHeight() / (matrix.getSize() - 2 * Matrix.OFFSET);
-        Canvas canvas = new Canvas(pane.getWidth(), pane.getHeight());
+    public void paintLightningBoltAndRelations(ScrollPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix) {
+        double size = (pane.getMaxHeight() -15) / (matrix.getSize() - 2 * Matrix.OFFSET);
+        Canvas canvas = new Canvas(pane.getMaxWidth() - 15, pane.getMaxHeight() - 15);
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
@@ -127,8 +116,6 @@ public class Painter {
         paintPath(size, path, graphicsContext2D);
 //        paintRelations(size,relations,graphicsContext2D);
         drawLines(size, matrix, graphicsContext2D);
-
-        pane.getChildren().clear();
-        pane.getChildren().add(canvas);
+        pane.setContent(canvas);
     }
 }

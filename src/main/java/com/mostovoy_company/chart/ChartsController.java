@@ -2,6 +2,7 @@ package com.mostovoy_company.chart;
 
 import com.mostovoy_company.services.MainService;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
@@ -9,7 +10,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -29,7 +32,7 @@ public class ChartsController {
     @FXML
     public TextField matrixCount;
     @FXML
-    public AnchorPane statisticChartsAnchorPane;
+    public VBox statisticChartsAnchorPane;
     @FXML
     public TabPane statisticChartsTabPane;
 
@@ -38,7 +41,7 @@ public class ChartsController {
     private MainService mainService;
 
 
-    public AnchorPane getStatisticCharts() {
+    public Node getContent() {
         return statisticChartsAnchorPane;
     }
 
