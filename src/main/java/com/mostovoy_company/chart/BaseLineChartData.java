@@ -1,17 +1,18 @@
 package com.mostovoy_company.chart;
 
+import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
-import com.mostovoy_company.paint.Painter;
 import com.sun.javafx.charts.Legend;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
+import net.rgielen.fxweaver.core.FxWeaver;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -22,17 +23,23 @@ public abstract class BaseLineChartData implements LineChartData {
 
     private LineChart<Number, Number> lineChart;
 
+    private ChartConfigurationTab chartConfigurationTab;
+
+    private FxWeaver fxWeaver;
+
     private boolean isNormalized;
 
     private Map<Integer, ObservableList<XYChart.Data<Number, Number>>> chartData;
 
-    public BaseLineChartData() {
+    public BaseLineChartData(FxWeaver fxWeaver) {
+        this.fxWeaver = fxWeaver;
         this.chartData = new ConcurrentHashMap<>();
     }
 
     @PostConstruct
     private void init() {
         this.lineChart = createLineChart();
+        this.chartConfigurationTab = fxWeaver.loadController(ChartConfigurationTab.class);
         lineChart.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 if (event.getClickCount() == 2) {
@@ -65,6 +72,10 @@ public abstract class BaseLineChartData implements LineChartData {
         rect.setVisible(false);
         dot.setNode(rect);
         return dot;
+    }
+
+    public Node getConfigurationTab(){
+        return this.chartConfigurationTab.getContent();
     }
 
     public void clear() {

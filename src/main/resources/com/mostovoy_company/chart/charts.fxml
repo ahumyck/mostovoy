@@ -16,11 +16,11 @@
     <padding>
         <Insets top="10" left="10" right="10"/>
     </padding>
-    <!--<TextField fx:id="startProbability" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+    <!--<TextField fx:id="startProbabilityField" layoutX="9.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
     <!--<Label layoutX="8.0" layoutY="3.0" prefHeight="20.0" prefWidth="170.0" text="Минимальная вероятность:" />-->
     <!--<Label layoutX="196.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Максимальная вероятность:" />-->
     <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
-    <!--<TextField fx:id="stepProbability" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
+    <!--<TextField fx:id="stepProbabilityField" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
     <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
     <HBox spacing="5">
         <Label text="Размер матрицы:">
@@ -38,7 +38,9 @@
         </Label>
         <TextField fx:id="matrixCount"/>
     </HBox>
+    <Button fx:id="configurationWindow" text="Configure"/>
     <Button fx:id="applyExperiment" mnemonicParsing="false" text="Apply"/>
+
     <TabPane fx:id="statisticChartsTabPane" tabClosingPolicy="UNAVAILABLE"  prefHeight="900"/>
 </VBox>
 

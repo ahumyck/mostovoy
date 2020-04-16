@@ -3,16 +3,13 @@ package com.mostovoy_company.chart;
 import com.mostovoy_company.services.MainService;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -35,7 +32,10 @@ public class ChartsController {
     public VBox statisticChartsAnchorPane;
     @FXML
     public TabPane statisticChartsTabPane;
+    @FXML
+    public Button configurationWindow;
 
+    private FxWeaver fxWeaver;
     private List<LineChartData> charts;
     private ChartsDataRepository chartsDataRepository;
     private MainService mainService;
@@ -45,7 +45,11 @@ public class ChartsController {
         return statisticChartsAnchorPane;
     }
 
-    public ChartsController(List<LineChartData> charts, ChartsDataRepository chartsDataRepository, @Qualifier("defaultService") MainService mainService) {
+    public ChartsController(FxWeaver fxWeaver,
+                            List<LineChartData> charts,
+                            ChartsDataRepository chartsDataRepository,
+                            @Qualifier("defaultService") MainService mainService) {
+        this.fxWeaver = fxWeaver;
         this.charts = charts;
         this.chartsDataRepository = chartsDataRepository;
         this.mainService = mainService;
@@ -61,7 +65,9 @@ public class ChartsController {
             tab.setContent(chartData.getChart());
             statisticChartsTabPane.getTabs().add(tab);
         });
-
+        configurationWindow.setOnMouseClicked(mouseEvent -> {
+            fxWeaver.loadController()
+        });
         applyExperiment.setOnAction(event -> {
             Map<Integer, Integer> map = new LinkedHashMap<>();
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
