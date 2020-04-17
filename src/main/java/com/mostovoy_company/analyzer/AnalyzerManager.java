@@ -18,14 +18,14 @@ public class AnalyzerManager {
     @Autowired
     private AnalyzerModule analyzerModule;
 
-    public ObservableList<AnalyzerData> initializeAnalyzerExperiments(int number, int matrixSize, double probability) {
+    public ObservableList<TableViewAnalyzerData> initializeAnalyzerExperiments(int number, int matrixSize, double probability) {
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setSize(matrixSize);
         fillingType.setPercolationProbability(probability);
-        ObservableList<AnalyzerData> analyzerDataObservableList = FXCollections.observableArrayList();
+        ObservableList<TableViewAnalyzerData> analyzerDataObservableList = FXCollections.observableArrayList();
 
         for (int i = 0; i < number; i++)
-            analyzerDataObservableList.add(analyzerModule.gatherData(new Matrix(fillingType),probability));
+            analyzerDataObservableList.add(new TableViewAnalyzerData(analyzerModule.gatherData(new Matrix(fillingType),probability)));
 
 
         return analyzerDataObservableList;

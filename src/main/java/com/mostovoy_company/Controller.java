@@ -1,7 +1,7 @@
 package com.mostovoy_company;
 
-import com.mostovoy_company.analyzer.AnalyzerData;
 import com.mostovoy_company.analyzer.AnalyzerManager;
+import com.mostovoy_company.analyzer.TableViewAnalyzerData;
 import com.mostovoy_company.chart.ChartsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,15 +11,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-//import com.mostovoy_company.stat.NormalizedStatManager;
 
 @Component
 @FxmlView("sample.fxml")
@@ -43,7 +36,7 @@ public class Controller {
     @FXML
     public Button applyAnalyzerExperiment;
     @FXML
-    public TableView<AnalyzerData> analyzerDataTable;
+    public TableView<TableViewAnalyzerData> analyzerDataTable;
 
 
     public Controller(FxWeaver fxWeaver, AnalyzerManager analyzerManager) {
@@ -61,21 +54,21 @@ public class Controller {
             int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
             int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
             double probability = Double.parseDouble(this.concentrationAnalyzer.getText());
-            ObservableList<AnalyzerData> analyzerDataObservableList = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
+            ObservableList<TableViewAnalyzerData> analyzerDataObservableList = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
             analyzerDataTable.setItems(analyzerDataObservableList);
         });
     }
 
     void tableViewInitializer(){
-        TableColumn<AnalyzerData, String> size = new TableColumn<>("L");
-        TableColumn<AnalyzerData, String> probability = new TableColumn<>("конц");
-        TableColumn<AnalyzerData, String> blackCellsPerColumn = new TableColumn<>("Черных клеток в столбце");
-        TableColumn<AnalyzerData, String> blackCellsPerRow = new TableColumn<>("Черных клеток в строке");
-        TableColumn<AnalyzerData, String> blackCellsAveragePerColumn = new TableColumn<>("Срдн в стлбц");
-        TableColumn<AnalyzerData, String> blackCellsAveragePerRow = new TableColumn<>("Срдн в стрк");
-        TableColumn<AnalyzerData, String> emptyRows = new TableColumn<>("Пуст стрк");
-        TableColumn<AnalyzerData, String> emptyColumns = new TableColumn<>("Пуст стлбц");
-        TableColumn<AnalyzerData, String> totalBlackCells = new TableColumn<>("Всг чк");
+        TableColumn<TableViewAnalyzerData, String> size = new TableColumn<>("L");
+        TableColumn<TableViewAnalyzerData, String> probability = new TableColumn<>("конц");
+        TableColumn<TableViewAnalyzerData, String> blackCellsPerColumn = new TableColumn<>("Черных клеток в столбце");
+        TableColumn<TableViewAnalyzerData, String> blackCellsPerRow = new TableColumn<>("Черных клеток в строке");
+        TableColumn<TableViewAnalyzerData, String> blackCellsAveragePerColumn = new TableColumn<>("Срдн в стлбц");
+        TableColumn<TableViewAnalyzerData, String> blackCellsAveragePerRow = new TableColumn<>("Срдн в стрк");
+        TableColumn<TableViewAnalyzerData, String> emptyRows = new TableColumn<>("Пуст стрк");
+        TableColumn<TableViewAnalyzerData, String> emptyColumns = new TableColumn<>("Пуст стлбц");
+        TableColumn<TableViewAnalyzerData, String> totalBlackCells = new TableColumn<>("Всг чк");
 
         size.setCellValueFactory(new PropertyValueFactory<>("size"));
 //        size.setMinWidth(35);
