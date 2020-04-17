@@ -19,7 +19,7 @@ public class Painter {
 
     private ColorRepository colorRepository;
 
-    public Painter(@Qualifier("colorGradientRepository") ColorRepository colorRepository) {
+    public Painter(@Qualifier("colorRandomRepository") ColorRepository colorRepository) {
         this.colorRepository = colorRepository;
     }
 

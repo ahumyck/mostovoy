@@ -63,6 +63,8 @@ public class ManualMatrixController {
     public Canvas gridPane;
     @FXML
     public HBox experimentListAndCanvas;
+    @FXML
+    public Label currentBlackCellsCount;
 
 
     private ObservableList<FillingType> fillingTypesList;
@@ -118,6 +120,7 @@ public class ManualMatrixController {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             paintByCheckBox(experiment, PYTHAGORAS);
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
+            currentBlackCellsCount.setText("Количество кластеров: " + experiment.getMatrix().getCountOfBlackCells());
             redCellsLabel.setText("Красных клеток: " + experiment.getStatistic().getRedCellCount());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });

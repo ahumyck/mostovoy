@@ -11,9 +11,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <HBox xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.mostovoy_company.ManualMatrixController"
-           fx:id="manualMatrixAnchorPane">
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mostovoy_company.ManualMatrixController"
+      fx:id="manualMatrixAnchorPane">
 
     <VBox spacing="10">
         <padding>
@@ -66,11 +66,18 @@
             <Tab fx:id="gridTab" text="Матрица">
                 <VBox spacing="5">
                     <Canvas fx:id="gridPane"/>
-                    <Label fx:id="currentClustersCount">
-                        <font>
-                            <Font size="14.0"/>
-                        </font>
-                    </Label>
+                    <HBox spacing="20">
+                        <Label fx:id="currentClustersCount">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="currentBlackCellsCount">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                    </HBox>
                 </VBox>
             </Tab>
             <Tab fx:id="lightningBoltTab" text="Молния">
