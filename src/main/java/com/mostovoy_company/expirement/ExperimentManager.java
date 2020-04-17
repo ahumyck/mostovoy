@@ -58,9 +58,10 @@ public class ExperimentManager {
                 .map(experiment -> {
                     experiment.matrix(new Matrix(fillingType));
                     if (consumeProperties.isLightningBoltEnable()) {
-                        experiment.calculateLightningBolt()
-                                .putPercolationProgrammingInStats()
-                                .putNewStats();
+//                        experiment
+//                                .calculateLightningBolt()
+//                                .putPercolationProgrammingInStats()
+//                                .putNewStats();
                     }
                     return experiment.clear().getStatistic();
                 })
