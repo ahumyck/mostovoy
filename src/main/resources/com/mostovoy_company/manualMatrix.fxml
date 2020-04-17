@@ -81,7 +81,7 @@
                 </VBox>
             </Tab>
             <Tab fx:id="lightningBoltTab" text="Молния">
-                <VBox spacing="10">
+                <VBox spacing="5">
                     <Canvas fx:id="lightningBoltPane"/>
                     <HBox spacing="20">
                         <Label fx:id="redCellsLabel">
