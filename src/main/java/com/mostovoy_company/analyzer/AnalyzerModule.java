@@ -47,16 +47,20 @@ public class AnalyzerModule {
                 .mapToDouble(v -> v)
                 .average().getAsDouble();
 
+        return new AnalyzerData(actualSize - 2 * Matrix.OFFSET, probability,
+                blackCellsPerRow, blackCellsPerColumn,
+                rowAverage,columnAverage,
+                emptyRows, emptyColumns, totalBlackCells);
 
-        return new AnalyzerData(String.valueOf(actualSize - 2 * Matrix.OFFSET),
-                String.format("%.2f", probability),
-                blackCellsPerRow.toString(),
-                blackCellsPerColumn.toString(),
-                String.format("%.2f", rowAverage),
-                String.format("%.2f", columnAverage),
-                String.valueOf(emptyRows),
-                String.valueOf(emptyColumns),
-                String.valueOf(totalBlackCells));
+//        return new AnalyzerData(String.valueOf(actualSize - 2 * Matrix.OFFSET),
+//                String.format("%.2f", probability),
+//                blackCellsPerRow.toString(),
+//                blackCellsPerColumn.toString(),
+//                String.format("%.2f", rowAverage),
+//                String.format("%.2f", columnAverage),
+//                String.valueOf(emptyRows),
+//                String.valueOf(emptyColumns),
+//                String.valueOf(totalBlackCells));
     }
 
 

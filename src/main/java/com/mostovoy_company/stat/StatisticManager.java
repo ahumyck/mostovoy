@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class StatisticManager {
 
     public double clusterCountStat(List<Statistic> statistics) {
-        int size = statistics.get(0).getSize();
         return statistics.stream()
                 .mapToDouble(Statistic::getClusterCount)
                 .average()
@@ -20,7 +19,6 @@ public class StatisticManager {
     }
 
     public double clusterSizeStat(List<Statistic> statistics) {
-        int size = statistics.get(0).getSize();
         final double[] blackCellCounter = {0};
         final double[] clusterCounter = {0};
         statistics.forEach(statistic -> {
@@ -33,7 +31,6 @@ public class StatisticManager {
     }
 
     public double predictConcentration(List<Statistic> statistics){
-        int size = statistics.get(0).getSize();
         final double[] blackCellCounter = {0};
         statistics.forEach(statistic -> {
             blackCellCounter[0] += statistic.getBlackCellCount();
@@ -42,7 +39,6 @@ public class StatisticManager {
     }
 
     public double redCellsCountStat(List<Statistic> statistics) {
-        int size = statistics.get(0).getSize();
         return statistics.stream()
                 .mapToDouble(Statistic::getRedCellCount)
                 .average()
@@ -50,7 +46,6 @@ public class StatisticManager {
     }
 
     public double wayLengthStat(List<Statistic> statistics) {
-        int size = statistics.get(0).getSize();
         return statistics.stream()
                 .mapToDouble(Statistic::getPercolationWayDistance)
                 .average()
