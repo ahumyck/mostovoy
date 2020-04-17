@@ -77,7 +77,6 @@ public class Painter {
     }
 
     public void paintCanvas(Canvas grid, Matrix matrix, double gridSize) {
-        System.out.println("grid " + gridSize);
         double size = gridSize / (matrix.getSize() - 2 * Matrix.OFFSET);
         grid.setWidth(gridSize);
         grid.setHeight(gridSize);
@@ -106,9 +105,10 @@ public class Painter {
         pane.getChildren().add(canvas);
     }
 
-    public void paintLightningBoltAndRelations(Canvas pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix) {
-        double size = (pane.getHeight() -15) / (matrix.getSize() - 2 * Matrix.OFFSET);
-        pane = new Canvas(pane.getWidth() - 15, pane.getHeight() - 15);
+    public void paintLightningBoltAndRelations(Canvas pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix, double gridSize) {
+        double size =  gridSize / (matrix.getSize() - 2 * Matrix.OFFSET);
+        pane.setHeight(gridSize);
+        pane.setWidth(gridSize);
         GraphicsContext graphicsContext2D = pane.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());

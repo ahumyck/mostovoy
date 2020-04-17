@@ -86,12 +86,12 @@
                     <HBox spacing="20">
                         <Label fx:id="redCellsLabel">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="20.0"/>
                             </font>
                         </Label>
                         <Label fx:id="shortestPathLabel">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="20.0"/>
                             </font>
                         </Label>
                     </HBox>
