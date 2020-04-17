@@ -103,19 +103,6 @@ public class ManualMatrixController {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             paintByCheckBox(experiment, PYTHAGORAS);
         });
-//
-//        gridPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-//            System.out.println("listened");
-//
-//            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-//            paintByCheckBox(experiment, PYTHAGORAS);
-//        });
-//        gridPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-//            System.out.println("listened");
-//
-//            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-//            paintByCheckBox(experiment, PYTHAGORAS);
-//        });
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             paintByCheckBox(experiment, PYTHAGORAS);
@@ -124,9 +111,6 @@ public class ManualMatrixController {
             redCellsLabel.setText("Красных клеток: " + experiment.getStatistic().getRedCellCount());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
         });
-//        tapeCheckBox.setOnAction(event -> {
-//            paintByDistanceResolverAndCheckBox();
-//        });
         distanceCalculatorType.setOnAction(actionEvent -> {
             paintByDistanceResolverAndCheckBox();
         });
@@ -170,7 +154,7 @@ public class ManualMatrixController {
 //        if (tapeCheckBox.isSelected()) {
 //            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
 //        } else {
-        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix());
+        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 60);
 //        }
     }
 
