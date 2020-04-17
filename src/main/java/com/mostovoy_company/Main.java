@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ public class Main extends Application {
 
     private ConfigurableApplicationContext applicationContext;
 
+    public static Stage pStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -24,9 +26,11 @@ public class Main extends Application {
         Parent root = fxWeaver.loadView(Controller.class);
         primaryStage.setTitle("Percolation");
         primaryStage.setScene(new Scene(root));
+        pStage = primaryStage;
 //        primaryStage.sizeToScene();
         primaryStage.show();
     }
+
 
 
     @Override

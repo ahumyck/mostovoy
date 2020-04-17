@@ -76,16 +76,17 @@ public class Painter {
         });
     }
 
-    public void paintCanvas(ScrollPane grid, Matrix matrix) {
-        double size = (grid.getMaxHeight() -15) / (matrix.getSize() - 2 * Matrix.OFFSET);
-        Canvas canvas = new Canvas(grid.getMaxWidth() - 15, grid.getMaxHeight() - 15);
-        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+    public void paintCanvas(Canvas grid, Matrix matrix, double gridSize) {
+        System.out.println("grid " + gridSize);
+        double size = gridSize / (matrix.getSize() - 2 * Matrix.OFFSET);
+        grid.setWidth(gridSize);
+        grid.setHeight(gridSize);
+        GraphicsContext graphicsContext2D = grid.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, grid.getWidth(), grid.getHeight());
 
         paintClusterMatrix(size, matrix, graphicsContext2D);
         drawLines(size, matrix, graphicsContext2D);
-        grid.setContent(canvas);
     }
 
     public void paintLightningBoltAndTape(AnchorPane pane, List<Cell> path, List<Cell> tape, List<PercolationRelation> relations, Matrix matrix) {
@@ -105,10 +106,10 @@ public class Painter {
         pane.getChildren().add(canvas);
     }
 
-    public void paintLightningBoltAndRelations(ScrollPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix) {
-        double size = (pane.getMaxHeight() -15) / (matrix.getSize() - 2 * Matrix.OFFSET);
-        Canvas canvas = new Canvas(pane.getMaxWidth() - 15, pane.getMaxHeight() - 15);
-        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+    public void paintLightningBoltAndRelations(Canvas pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix) {
+        double size = (pane.getHeight() -15) / (matrix.getSize() - 2 * Matrix.OFFSET);
+        pane = new Canvas(pane.getWidth() - 15, pane.getHeight() - 15);
+        GraphicsContext graphicsContext2D = pane.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
 
@@ -116,6 +117,5 @@ public class Painter {
         paintPath(size, path, graphicsContext2D);
 //        paintRelations(size,relations,graphicsContext2D);
         drawLines(size, matrix, graphicsContext2D);
-        pane.setContent(canvas);
     }
 }

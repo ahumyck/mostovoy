@@ -9,9 +9,6 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.mostovoy_company.ConfigurationController"
-            prefHeight="400.0" prefWidth="600.0">
-    <TabPane fx:id="chartsConfigurations">
-
-    </TabPane>
-
+            fx:id="chartConfigurationTabPane">
+    <TabPane fx:id="chartsConfigurationsTabPane" maxWidth="490" tabClosingPolicy="UNAVAILABLE"/>
 </AnchorPane>

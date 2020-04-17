@@ -2,13 +2,14 @@ package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.chart.BaseLineChartData;
+import com.mostovoy_company.chart.LightningBoltDependChart;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
 
 import static com.mostovoy_company.chart.ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART;
 
 @Component(RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART)
-public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData {
+public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData implements LightningBoltDependChart {
 
     public RedCellsStationDistancesPythagorasChart(FxWeaver fxWeaver) {
         super(fxWeaver);

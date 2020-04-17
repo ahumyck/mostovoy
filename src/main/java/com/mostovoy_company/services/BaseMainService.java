@@ -54,16 +54,16 @@ public abstract class BaseMainService implements MainService {
         return queue.poll();
     }
 
-    protected ResponseMessage performCalculation(RequestMessage message) {
-        return performCalculation(message.getSize(), message.getCount(), message.getProbability());
+    protected ResponseMessage performCalculation(RequestMessage message, ConsumeProperties consumeProperties) {
+        return performCalculation(message.getSize(), message.getCount(), message.getProbability(), consumeProperties);
     }
 
-    protected ResponseMessage performCalculation(int size, int count, double probability) {
+    protected ResponseMessage performCalculation(int size, int count, double probability, ConsumeProperties consumeProperties) {
         long startTime = System.currentTimeMillis();
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setPercolationProbability(probability);
         fillingType.setSize(size);
-        List<Statistic> statistics = experimentManager.getStatistics(count, fillingType);
+        List<Statistic> statistics = experimentManager.getStatistics(count, fillingType, consumeProperties);
         log.info("=> end consumed request message: " + (System.currentTimeMillis() - startTime));
         return collectStatisticAndBuildResponseMessage(size, probability, statistics);
     }

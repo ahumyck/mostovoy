@@ -31,7 +31,7 @@ public class DefaultService extends BaseMainService {
     }
 
     @Override
-    public void consume() {
+    public void consume(ConsumeProperties consumeProperties) {
         new Thread(() ->
         {
             long startTime = System.currentTimeMillis();
@@ -41,7 +41,7 @@ public class DefaultService extends BaseMainService {
                 messages.add(message);
                 message = getNextRequestMessage();
             }
-            messages.forEach(mes -> addDotsToCharts(performCalculation(mes)));
+            messages.forEach(mes -> addDotsToCharts(performCalculation(mes, consumeProperties)));
             log.info("=> total time: " + (System.currentTimeMillis() - startTime));
         }).start();
     }

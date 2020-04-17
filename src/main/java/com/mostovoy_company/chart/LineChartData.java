@@ -20,4 +20,6 @@ public interface LineChartData {
 
     void clear();
 
+    void saveConfiguration();
+
 }

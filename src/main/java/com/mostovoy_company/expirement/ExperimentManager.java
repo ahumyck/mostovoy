@@ -3,6 +3,7 @@ package com.mostovoy_company.expirement;
 import com.mostovoy_company.analyzer.AnalyzerModule;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.filling.FillingType;
+import com.mostovoy_company.services.ConsumeProperties;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -49,17 +50,18 @@ public class ExperimentManager {
         return experiments;
     }
 
-    public List<Statistic> getStatistics(int count, FillingType fillingType) {
-        return  Stream.generate(Experiment::new)
+    public List<Statistic> getStatistics(int count, FillingType fillingType, ConsumeProperties consumeProperties) {
+        return Stream.generate(Experiment::new)
                 .limit(count)
                 .collect(Collectors.toList())
                 .parallelStream()
-                .map(experiment -> experiment.matrix(new Matrix(fillingType))
-                        .calculateLightningBolt()
-                        .putPercolationProgrammingInStats()
-                        .clear()
-                        .getStatistic()
-                )
+                .map(experiment -> {
+                    experiment.matrix(new Matrix(fillingType));
+                    if (consumeProperties.isLightningBoltEnable()) {
+                        experiment.calculateLightningBolt().putPercolationProgrammingInStats();
+                    }
+                    return experiment.clear().getStatistic();
+                })
                 .collect(Collectors.toList());
     }
 }

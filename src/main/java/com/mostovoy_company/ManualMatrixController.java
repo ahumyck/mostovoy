@@ -10,9 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
@@ -46,19 +46,23 @@ public class ManualMatrixController {
     @FXML
     public Label currentClustersCount;
     @FXML
-    public ScrollPane gridPane;
-    @FXML
     public Tab lightningBoltTab;
     @FXML
     public Label redCellsLabel;
     @FXML
     public Label shortestPathLabel;
     @FXML
-    public ScrollPane lightningBoltPane;
+    public Canvas lightningBoltPane;
     @FXML
     public Button distanceCalculatorType;
     @FXML
-    public VBox manualMatrixAnchorPane;
+    public HBox manualMatrixAnchorPane;
+    @FXML
+    public TabPane mainTabPane;
+    @FXML
+    public Canvas gridPane;
+    @FXML
+    public HBox experimentListAndCanvas;
 
 
     private ObservableList<FillingType> fillingTypesList;
@@ -81,9 +85,35 @@ public class ManualMatrixController {
     @FXML
     public void initialize() {
 //        tapeCheckBox.setSelected(false);
+        HBox.setHgrow(experimentListAndCanvas, Priority.ALWAYS);
+        HBox.setHgrow(mainTabPane, Priority.ALWAYS);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(fillingTypesList);
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        mainTabPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("listened");
+            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+            paintByCheckBox(experiment, PYTHAGORAS);
+        });
+        mainTabPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("listened");
+
+            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+            paintByCheckBox(experiment, PYTHAGORAS);
+        });
+//
+//        gridPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+//            System.out.println("listened");
+//
+//            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+//            paintByCheckBox(experiment, PYTHAGORAS);
+//        });
+//        gridPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+//            System.out.println("listened");
+//
+//            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
+//            paintByCheckBox(experiment, PYTHAGORAS);
+//        });
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             paintByCheckBox(experiment, PYTHAGORAS);
@@ -133,7 +163,7 @@ public class ManualMatrixController {
 
     void paintByCheckBox(Experiment experiment, String type) {
 //        int tape = parseInt(tapeCount.getText());
-        painter.paintCanvas(gridPane, experiment.getMatrix());
+        painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 60);
 //        if (tapeCheckBox.isSelected()) {
 //            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
 //        } else {

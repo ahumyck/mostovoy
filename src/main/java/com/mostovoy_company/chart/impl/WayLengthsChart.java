@@ -2,13 +2,14 @@ package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.chart.BaseLineChartData;
+import com.mostovoy_company.chart.LightningBoltDependChart;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
 
 import static com.mostovoy_company.chart.ChartNames.WAY_LENGTHS_CHART;
 
 @Component(WAY_LENGTHS_CHART)
-public class WayLengthsChart extends BaseLineChartData {
+public class WayLengthsChart extends BaseLineChartData implements LightningBoltDependChart {
 
     public WayLengthsChart(FxWeaver fxWeaver) {
         super(fxWeaver);

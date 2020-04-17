@@ -9,11 +9,13 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.geometry.Insets?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.mostovoy_company.ManualMatrixController"
-      fx:id="manualMatrixAnchorPane" spacing="10">
-    <FlowPane hgap="10" vgap="10">
+<?import javafx.scene.canvas.Canvas?>
+<HBox xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.mostovoy_company.ManualMatrixController"
+           fx:id="manualMatrixAnchorPane">
+
+    <VBox spacing="10">
         <padding>
             <Insets top="10" left="10" right="10"/>
         </padding>
@@ -49,20 +51,21 @@
             </Label>
             <TextField fx:id="fillingProbability"/>
         </HBox>
-    </FlowPane>
-    <HBox spacing="10">
-        <padding>
-            <Insets top="10" left="10" right="10"/>
-        </padding>
-        <Button fx:id="applyConfiguration" mnemonicParsing="false" text="Apply"/>
-        <Button fx:id="distanceCalculatorType" text="Пифагор"/>
-    </HBox>
-    <HBox>
-        <ListView fx:id="experimentListView" maxHeight="Infinity" minWidth="50"/>
-        <TabPane tabClosingPolicy="UNAVAILABLE" minWidth="300" minHeight="300">
+
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" left="10" right="10"/>
+            </padding>
+            <Button fx:id="applyConfiguration" mnemonicParsing="false" text="Apply"/>
+            <Button fx:id="distanceCalculatorType" text="Пифагор"/>
+        </HBox>
+    </VBox>
+    <HBox fx:id="experimentListAndCanvas" spacing="5">
+        <ListView fx:id="experimentListView" maxHeight="Infinity" minWidth="150" maxWidth="150"/>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
             <Tab fx:id="gridTab" text="Матрица">
                 <VBox spacing="5">
-                    <ScrollPane fx:id="gridPane" maxHeight="600" maxWidth="600"/>
+                    <Canvas fx:id="gridPane"/>
                     <Label fx:id="currentClustersCount">
                         <font>
                             <Font size="14.0"/>
@@ -72,7 +75,7 @@
             </Tab>
             <Tab fx:id="lightningBoltTab" text="Молния">
                 <VBox spacing="10">
-                    <ScrollPane fx:id="lightningBoltPane" maxHeight="600" maxWidth="600"/>
+                    <Canvas fx:id="lightningBoltPane"/>
                     <HBox spacing="20">
                         <Label fx:id="redCellsLabel">
                             <font>
@@ -91,4 +94,4 @@
         <!--                        <CheckBox fx:id="tapeCheckBox" layoutX="765.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Изолента" />-->
         <!--                        <TextField fx:id="tapeCount" layoutX="569.0" layoutY="70.0" promptText="Отступ (целое число>0)" />-->
     </HBox>
-</VBox>
+</HBox>

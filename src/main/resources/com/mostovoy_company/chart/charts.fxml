@@ -12,7 +12,7 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:id="statisticChartsAnchorPane"
-      fx:controller="com.mostovoy_company.chart.ChartsController" spacing="15" prefHeight="400" prefWidth="400">
+      fx:controller="com.mostovoy_company.chart.ChartsController" spacing="15">
     <padding>
         <Insets top="10" left="10" right="10"/>
     </padding>
@@ -22,26 +22,41 @@
     <!--<TextField fx:id="endProbability" layoutX="195.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
     <!--<TextField fx:id="stepProbabilityField" layoutX="392.0" layoutY="26.0" prefHeight="25.0" prefWidth="160.0" />-->
     <!--<Label layoutX="392.0" layoutY="4.0" prefHeight="20.0" prefWidth="170.0" text="Шаг вероятности:" />-->
-    <HBox spacing="5">
-        <Label text="Размер матрицы:">
-            <font>
-                <Font size="14.0"/>
-            </font>
-        </Label>
-        <TextField fx:id="matrixSize"/>
+    <HBox spacing="50">
+        <VBox spacing="15">
+            <HBox spacing="5">
+                <Label text="Размер матрицы:">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="matrixSize"/>
+            </HBox>
+            <HBox spacing="5">
+                <Label text="Количество матриц:">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="matrixCount"/>
+            </HBox>
+            <HBox spacing="5">
+                <Label text="Шаг концентрации">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="stepProbability"/>
+            </HBox>
+            <CheckBox fx:id="performLightning" text="Молния" selected="true"/>
+        </VBox>
+        <VBox spacing="15">
+            <Button fx:id="configurationWindow" text="Конфигурация"/>
+        </VBox>
     </HBox>
-    <HBox spacing="5">
-        <Label text="Количество матриц:">
-            <font>
-                <Font size="14.0"/>
-            </font>
-        </Label>
-        <TextField fx:id="matrixCount"/>
-    </HBox>
-    <Button fx:id="configurationWindow" text="Configure"/>
     <Button fx:id="applyExperiment" mnemonicParsing="false" text="Apply"/>
 
-    <TabPane fx:id="statisticChartsTabPane" tabClosingPolicy="UNAVAILABLE"  prefHeight="900"/>
+    <TabPane fx:id="statisticChartsTabPane" tabClosingPolicy="UNAVAILABLE"/>
 </VBox>
 
 

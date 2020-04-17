@@ -1,14 +1,14 @@
 package com.mostovoy_company.chart.impl;
 
-import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.chart.BaseLineChartData;
+import com.mostovoy_company.chart.LightningBoltIndependChart;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
 
 import static com.mostovoy_company.chart.ChartNames.CLUSTER_COUNT_CHART;
 
 @Component(CLUSTER_COUNT_CHART)
-public class ClusterCountChart extends BaseLineChartData {
+public class ClusterCountChart extends BaseLineChartData implements LightningBoltIndependChart {
 
     public ClusterCountChart(FxWeaver fxWeaver) {
         super(fxWeaver);

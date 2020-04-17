@@ -3,6 +3,7 @@ package com.mostovoy_company.services.kafka;
 import com.mostovoy_company.services.BaseMainService;
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.ExperimentManager;
+import com.mostovoy_company.services.ConsumeProperties;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.session.SessionManager;
 import com.mostovoy_company.stat.StatisticManager;
@@ -48,7 +49,7 @@ public class KafkaSupportService extends BaseMainService {
     }
 
     @Override
-    public void consume() {
+    public void consume(ConsumeProperties consumeProperties) {
         initNewSession();
         startNewSession();
     }

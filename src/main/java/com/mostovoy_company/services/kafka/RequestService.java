@@ -4,6 +4,7 @@ package com.mostovoy_company.services.kafka;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.expirement.Statistic;
 import com.mostovoy_company.filling.RandomFillingType;
+import com.mostovoy_company.services.ConsumeProperties;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
@@ -69,7 +70,7 @@ public class RequestService {
         ForkJoinPool forkJoinPool = new ForkJoinPool(8);
         List<Statistic> statistics = forkJoinPool.submit(
                 () -> experimentManager
-                        .getStatistics(count, fillingType))
+                        .getStatistics(count, fillingType, new ConsumeProperties()))
                 .get();
         responseService.sendResponseMessage(collectStatisticAndBuildResponseMessage(size, probability, statistics));
         controlService.sendReadyMessage();
