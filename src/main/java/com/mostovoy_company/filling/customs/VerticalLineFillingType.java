@@ -18,7 +18,7 @@ public class VerticalLineFillingType  extends CustomTestFillingType {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             if(i % step == 0) {
                 for (int j = 0; j < MATRIX_SIZE; j++) {
-                    matrix[i][j] = 1;
+                    matrix[j][i] = 1;
                 }
             }
         }

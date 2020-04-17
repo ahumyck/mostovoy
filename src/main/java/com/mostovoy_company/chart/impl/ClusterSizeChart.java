@@ -16,7 +16,7 @@ public class ClusterSizeChart extends BaseLineChartData implements LightningBolt
 
     @Override
     protected double getNormalizedCoefficient(int size) {
-        return 1.0 / size;
+        return 1.0 / (size*size);
     }
 
     @Override

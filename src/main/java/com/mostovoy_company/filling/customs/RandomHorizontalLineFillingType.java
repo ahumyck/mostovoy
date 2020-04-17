@@ -27,7 +27,7 @@ public class RandomHorizontalLineFillingType extends CustomTestFillingType {
             if(i % step == 0) {
                 for (int j = 0; j < MATRIX_SIZE; j++)
                 {
-                    matrix[j][i] = rule(ruleStart, ruleEnd, j);
+                    matrix[i][j] = rule(ruleStart, ruleEnd, j);
                 }
             }
         }
