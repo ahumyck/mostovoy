@@ -23,6 +23,17 @@ public class Matrix {
         }
     }
 
+    public Matrix(Matrix matrix){
+        int actualSize = matrix.getSize();
+        this.matrix = new Cell[actualSize][actualSize];
+        for (int i = 0; i < actualSize; i++) {
+            for (int j = 0; j < actualSize; j++) {
+                this.matrix[i][j] = new Cell(i,j, matrix.getCell(i,j).getType());
+            }
+        }
+        makeSomeStuff();
+    }
+
     public Matrix(FillingType type) {
         int[][] typeMatrix = type.getMatrix();
         init(typeMatrix.length);
@@ -34,6 +45,10 @@ public class Matrix {
                     this.matrix[i + OFFSET][j + OFFSET].setType(CellType.WHITE);
             }
         }
+        makeSomeStuff();
+    }
+
+    private void makeSomeStuff(){
         markClusters();
         reindexClusterMarks();
         joinClusters();
@@ -56,12 +71,20 @@ public class Matrix {
         return this.matrix[i][j];
     }
 
+    public void setCell(int i, int j, Cell cell){
+        this.matrix[i][j] = cell;
+    }
+
     public int getClusterCounter(){
         return clusterCounter;
     }
 
     public long getCountOfBlackCells(){
-        return stream().filter(Cell::hasClusterMark).count();
+        return stream().filter(Cell::isBlack).count();
+    }
+
+    public long getCountOfWhiteCells(){
+        return stream().filter(Cell::isWhite).count();
     }
 
     private int minClusterMark(Cell first,Cell second){

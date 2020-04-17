@@ -1,12 +1,9 @@
 package com.mostovoy_company.stat;
 
 import com.mostovoy_company.expirement.Statistic;
-import com.mostovoy_company.lightning.Paired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class StatisticManager {
@@ -18,13 +15,27 @@ public class StatisticManager {
                 .orElse(0)/* / (size * size)*/;
     }
 
+//    public double clusterSizeStat(List<Statistic> statistics) {
+//        final double[] blackCellCounter = {0};
+//        final double[] clusterCounter = {0};
+//        statistics.forEach(statistic -> {
+//                    blackCellCounter[0] += statistic.getBlackCellCount();
+//                    clusterCounter[0] += statistic.getClusterCount();
+//                });
+//        double concentration = blackCellCounter[0] /*/ (size * size)*/;
+//        if (clusterCounter[0] > 0) return (concentration) / (clusterCounter[0]);
+//        else return 0;
+//    }
+
     public double clusterSizeStat(List<Statistic> statistics) {
         final double[] blackCellCounter = {0};
         final double[] clusterCounter = {0};
         statistics.forEach(statistic -> {
-                    blackCellCounter[0] += statistic.getBlackCellCount();
-                    clusterCounter[0] += statistic.getClusterCount();
-                });
+            blackCellCounter[0] += statistic.getAfterLightningBlackCells();
+            clusterCounter[0] += statistic.getAfterLightningCluster();
+        });
+//        System.out.println(blackCellCounter[0]);
+//        System.out.println(clusterCounter[0]);
         double concentration = blackCellCounter[0] /*/ (size * size)*/;
         if (clusterCounter[0] > 0) return (concentration) / (clusterCounter[0]);
         else return 0;

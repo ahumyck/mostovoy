@@ -27,6 +27,13 @@ public class Cell {
         this.type = type;
     }
 
+    public Cell(int x, int y, CellType type, int clusterMark){
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.clusterMark = clusterMark;
+    }
+
     public boolean isWhite(){ return type.equals(CellType.WHITE); }
 
     public boolean isBlack(){ return type.equals(CellType.BLACK); }

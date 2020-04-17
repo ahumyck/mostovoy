@@ -79,7 +79,7 @@ public class Experiment {
         return this;
     }
 
-    Experiment putPercolationProgrammingInStats(){
+    public Experiment putPercolationProgrammingInStats(){
         String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
         Paired[] averagesWithSize = new Paired[]{new Paired<Double,Integer>(), new Paired<Double,Integer>()};
         for (int i = 0; i < 2; i++) {
@@ -97,7 +97,21 @@ public class Experiment {
         return this;
     }
 
-    public int getRedCell(){
+    public void putNewStats(){
+        Matrix matrix = new Matrix(this.matrix);
+        List<Cell> path = getPath();
+        path.stream().filter(Cell::isWhite)
+                .forEach(cell ->{
+                    int i = cell.getX() + Matrix.OFFSET;
+                    int j = cell.getY() + Matrix.OFFSET;
+                    matrix.setCell(i,j, new Cell(i,j, cell.getType(), cell.getClusterMark()));
+                });
+        this.statistic.setAfterLightningBlackCells((int)matrix.getCountOfBlackCells());
+        System.out.println(matrix.getClusterCounter());
+        this.statistic.setAfterLightningCluster(matrix.getClusterCounter());
+    }
+
+    private int getRedCell(){
         return  (int)getPath().stream().filter(Cell::isWhite).count();
     }
 
@@ -118,6 +132,7 @@ public class Experiment {
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
                 .getProgrammingPercolationList(this.neighborhood);
     }
+
 
  /*   public List<Cell> generateTape(int bound){
         return new Tape(matrix, getPath()).generateTape(bound);
