@@ -26,31 +26,31 @@ public class Painter {
     private void paintClusterMatrix(double size, Matrix matrix, GraphicsContext graphicsContext2D) {
         matrix.stream().forEach(cell -> {
             graphicsContext2D.setFill(colorRepository.getRandomColorForCluster(cell.getClusterMark()));
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, size);
         });
     }
 
     private void drawLines(double size, Matrix matrix, GraphicsContext graphicsContext2D) {
         matrix.stream().forEach(cell -> {
             graphicsContext2D.setFill(Color.GRAY);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, 0.5, size);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size + size - 0.5, size, 0.5);
-            graphicsContext2D.fillRect(cell.getX() * size + size - 0.5, cell.getY() * size, 0.5, size);
+            graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, 0.5);
+            graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, 0.5, size);
+            graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size + size - 0.5, size, 0.5);
+            graphicsContext2D.fillRect(cell.getY() * size + size - 0.5, cell.getX() * size, 0.5, size);
         });
     }
 
     private void paintMatrix(double size, Matrix matrix, GraphicsContext graphicsContext2D) {
         matrix.stream().forEach(cell -> {
             graphicsContext2D.setFill(colorRepository.getColorForCell(cell.getClusterMark()));
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, size);
         });
     }
 
     private void paintPath(double size, List<Cell> path, GraphicsContext graphicsContext2D) {
         path.forEach(cell -> {
             graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, size);
         });
     }
 
