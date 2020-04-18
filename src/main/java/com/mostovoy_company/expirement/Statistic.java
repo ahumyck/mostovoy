@@ -14,8 +14,6 @@ public class Statistic {
     private int clusterCount;
     private int blackCellCount;
     private int percolationWayDistance;
-    private int afterLightningBlackCells;
-    private int afterLightningCluster;
     private Paired<Double,Integer> pythagorasDistance;
     private Paired<Double, Integer> discreteDistance;
 }

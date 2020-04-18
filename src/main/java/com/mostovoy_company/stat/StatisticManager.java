@@ -15,27 +15,13 @@ public class StatisticManager {
                 .orElse(0)/* / (size * size)*/;
     }
 
-//    public double clusterSizeStat(List<Statistic> statistics) {
-//        final double[] blackCellCounter = {0};
-//        final double[] clusterCounter = {0};
-//        statistics.forEach(statistic -> {
-//                    blackCellCounter[0] += statistic.getBlackCellCount();
-//                    clusterCounter[0] += statistic.getClusterCount();
-//                });
-//        double concentration = blackCellCounter[0] /*/ (size * size)*/;
-//        if (clusterCounter[0] > 0) return (concentration) / (clusterCounter[0]);
-//        else return 0;
-//    }
-
     public double clusterSizeStat(List<Statistic> statistics) {
         final double[] blackCellCounter = {0};
         final double[] clusterCounter = {0};
         statistics.forEach(statistic -> {
-            blackCellCounter[0] += statistic.getAfterLightningBlackCells();
-            clusterCounter[0] += statistic.getAfterLightningCluster();
-        });
-//        System.out.println(blackCellCounter[0]);
-//        System.out.println(clusterCounter[0]);
+                    blackCellCounter[0] += statistic.getBlackCellCount();
+                    clusterCounter[0] += statistic.getClusterCount();
+                });
         double concentration = blackCellCounter[0] /*/ (size * size)*/;
         if (clusterCounter[0] > 0) return (concentration) / (clusterCounter[0]);
         else return 0;

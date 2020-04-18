@@ -1,10 +1,7 @@
 package com.mostovoy_company.filling;
 
-import org.apache.commons.math3.distribution.UniformIntegerDistribution;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.springframework.stereotype.Component;
-
-import java.util.Random;
 
 @Component
 public class RandomFillingType extends FillingType {
