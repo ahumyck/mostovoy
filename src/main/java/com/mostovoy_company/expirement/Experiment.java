@@ -79,7 +79,7 @@ public class Experiment {
         return this;
     }
 
-    Experiment putPercolationProgrammingInStats(){
+    public Experiment putPercolationProgrammingInStats(){
         String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
         Paired[] averagesWithSize = new Paired[]{new Paired<Double,Integer>(), new Paired<Double,Integer>()};
         for (int i = 0; i < 2; i++) {
@@ -97,7 +97,7 @@ public class Experiment {
         return this;
     }
 
-    public int getRedCell(){
+    private int getRedCell(){
         return  (int)getPath().stream().filter(Cell::isWhite).count();
     }
 
@@ -118,6 +118,7 @@ public class Experiment {
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
                 .getProgrammingPercolationList(this.neighborhood);
     }
+
 
  /*   public List<Cell> generateTape(int bound){
         return new Tape(matrix, getPath()).generateTape(bound);

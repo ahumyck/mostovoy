@@ -1,12 +1,9 @@
 package com.mostovoy_company.stat;
 
 import com.mostovoy_company.expirement.Statistic;
-import com.mostovoy_company.lightning.Paired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class StatisticManager {
