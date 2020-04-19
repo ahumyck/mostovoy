@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 public interface LineChartData {
 
@@ -14,7 +15,7 @@ public interface LineChartData {
 
     void add(int size, LineChartNode node);
 
-    LineChart<Number, Number> getChart();
+    Node getChartContent();
 
     Node getConfigurationTab();
 

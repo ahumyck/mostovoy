@@ -4,17 +4,28 @@ import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.sun.javafx.charts.Legend;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import lombok.var;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.gillius.jfxutils.chart.ChartPanManager;
+import org.gillius.jfxutils.chart.ChartZoomManager;
+import org.gillius.jfxutils.chart.JFXChartUtil;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -118,9 +129,38 @@ public abstract class BaseLineChartData implements LineChartData {
         return numberLineChart;
     }
 
-    public LineChart<Number, Number> getChart() {
+    public LineChart<Number, Number> getChartContent() {
         return this.lineChart;
     }
+
+//    public StackPane getChartContent() {
+//        StackPane chartPane  = new StackPane();
+//        chartPane.setAlignment(Pos.CENTER);
+//        Rectangle  selectRect = new Rectangle();
+//        selectRect.setFill(Color.DODGERBLUE);
+//        selectRect.setHeight(0.0);
+//        selectRect.setMouseTransparent(true);
+//        selectRect.setOpacity(0.3);
+//        selectRect.setStroke(Color.BLUE);
+//        selectRect.setStrokeType(StrokeType.INSIDE);
+//        selectRect.setStrokeWidth(3.0);
+//        selectRect.setWidth(0.0);
+//        selectRect.setX(0.0);
+//        selectRect.setY(0.0);
+//        StackPane.setAlignment(selectRect, Pos.TOP_LEFT);
+//        chartPane.getChildren().add(lineChart);
+//        chartPane.getChildren().add(selectRect);
+//        ChartZoomManager zoomManager = new ChartZoomManager( chartPane, selectRect, lineChart);
+//        zoomManager.setMouseFilter(event -> {
+//            if (event.getButton() != MouseButton.SECONDARY) {
+//                event.consume();
+//            }
+//        } );
+//        lineChart.setAnimated(false);
+//        new ChartPanManager(lineChart).start();
+//        zoomManager.start();
+//        return chartPane;
+//    }
 
     public void addObservableSeries(LineChart<Number, Number> chart, String title, ObservableList<XYChart.Data<Number, Number>> data) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
@@ -154,4 +194,5 @@ public abstract class BaseLineChartData implements LineChartData {
             });
         });
     }
+
 }
