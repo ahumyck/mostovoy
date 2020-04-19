@@ -19,4 +19,5 @@ public class ResponseMessage {
     private LineChartNode redCellsStationDistancesPythagoras;
     private LineChartNode redCellsStationDistancesDiscrete;
     private LineChartNode darkRedAndBlackCellsRatio;
+    private LineChartNode percolationThreshold;
 }
