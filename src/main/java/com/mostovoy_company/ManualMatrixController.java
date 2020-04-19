@@ -82,7 +82,7 @@ public class ManualMatrixController {
         this.painter = painter;
     }
 
-    public Node getContent(){
+    public Node getContent() {
         return this.manualMatrixAnchorPane;
     }
 
@@ -95,15 +95,14 @@ public class ManualMatrixController {
         fillingTypes.setItems(fillingTypesList);
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         mainTabPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("listened");
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            paintByCheckBox(experiment, PYTHAGORAS);
+            if (experiment != null)
+                paintByCheckBox(experiment, PYTHAGORAS);
         });
         mainTabPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("listened");
-
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            paintByCheckBox(experiment, PYTHAGORAS);
+            if (experiment != null)
+                paintByCheckBox(experiment, PYTHAGORAS);
         });
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();

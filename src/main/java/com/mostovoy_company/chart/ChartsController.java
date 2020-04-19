@@ -84,7 +84,7 @@ public class ChartsController {
             log.info("=> init: " + map);
             map.forEach((size, count) ->
                     DoubleStream.iterate(0.0, x -> x + step)
-                            .limit(100)
+                            .limit(120)
                             .filter(x -> x >= 0)
                             .filter(x -> x <= 1.01)
                             .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
@@ -108,7 +108,7 @@ public class ChartsController {
     private Tab createTabForChartData(LineChartData chartData){
         Tab tab = new Tab();
         tab.setText(chartData.getTabName());
-        tab.setContent(chartData.getChart());
+        tab.setContent(chartData.getChartContent());
         return tab;
     }
 
