@@ -1,4 +1,4 @@
-package com.mostovoy_company.analyzer.data_block;
+package com.mostovoy_company.table_view.analyzer.data_block;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

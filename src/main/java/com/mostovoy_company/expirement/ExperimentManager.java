@@ -1,6 +1,5 @@
 package com.mostovoy_company.expirement;
 
-import com.mostovoy_company.analyzer.AnalyzerModule;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.services.ConsumeProperties;

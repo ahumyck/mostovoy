@@ -1,14 +1,13 @@
-package com.mostovoy_company.analyzer;
+package com.mostovoy_company.table_view.analyzer;
 
-import com.mostovoy_company.analyzer.data_block.AnalyzerData;
-import com.mostovoy_company.analyzer.data_block.BlackBlockData;
-import com.mostovoy_company.analyzer.data_block.WhiteBlockData;
+import com.mostovoy_company.table_view.analyzer.data_block.AnalyzerData;
+import com.mostovoy_company.table_view.analyzer.data_block.BlackBlockData;
+import com.mostovoy_company.table_view.analyzer.data_block.WhiteBlockData;
 import com.mostovoy_company.entity.Matrix;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
 
 
 @Component
@@ -56,22 +55,22 @@ public class AnalyzerModule {
     }
 
 
-    private WhiteBlockData gatherDataToWhiteBlock(List<Integer> whiteCellsPerColumn,  List<Integer> whiteCellsPerRow){
+    private WhiteBlockData gatherDataToWhiteBlock(List<Integer> whiteCellsPerColumn, List<Integer> whiteCellsPerRow){
         int maxOfColumns = whiteCellsPerColumn.stream().mapToInt(i -> i)
                 .max().getAsInt();
         int maxOfRows = whiteCellsPerRow.stream().mapToInt(i->i)
                 .max().getAsInt();
 
         int minOfColumns = whiteCellsPerColumn.stream().mapToInt(i -> i)
-                .max().getAsInt();
+                .min().getAsInt();
         int minOfRows = whiteCellsPerRow.stream().mapToInt(i->i)
-                .max().getAsInt();
+                .min().getAsInt();
 
 
         double averageOfColumns = whiteCellsPerColumn.stream().mapToDouble(i -> i)
-                .max().getAsDouble();
+                .average().getAsDouble();
         double averageOfRows = whiteCellsPerRow.stream().mapToDouble(i->i)
-                .max().getAsDouble();
+                .average().getAsDouble();
 
         return new WhiteBlockData(averageOfColumns, averageOfRows, maxOfColumns, minOfColumns, maxOfRows, minOfRows);
 

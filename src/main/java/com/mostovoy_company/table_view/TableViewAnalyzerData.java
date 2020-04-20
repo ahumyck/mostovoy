@@ -1,13 +1,11 @@
-package com.mostovoy_company.analyzer;
+package com.mostovoy_company.table_view;
 
-import com.mostovoy_company.analyzer.data_block.AnalyzerData;
-import com.mostovoy_company.analyzer.data_block.BlackBlockData;
-import com.mostovoy_company.analyzer.data_block.WhiteBlockData;
+import com.mostovoy_company.table_view.analyzer.data_block.AnalyzerData;
+import com.mostovoy_company.table_view.analyzer.data_block.BlackBlockData;
+import com.mostovoy_company.table_view.analyzer.data_block.WhiteBlockData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
