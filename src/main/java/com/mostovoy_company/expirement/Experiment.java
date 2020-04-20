@@ -1,5 +1,6 @@
 package com.mostovoy_company.expirement;
 
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.lightning.LightningBolt;
@@ -10,6 +11,8 @@ import com.mostovoy_company.lightning.Paired;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor
 public class Experiment {
@@ -74,11 +77,23 @@ public class Experiment {
     public Experiment calculateLightningBolt(){
         this.lightningBolt = new LightningBolt(this.matrix);
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
+        System.out.println(path);
         this.statistic.setRedCellCount(getRedCell());
         this.statistic.setPercolationizated(getRedCell() == 0);
         this.statistic.setPercolationWayWidth(percolationWayWidth());
         this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
         return this;
+    }
+
+    private void calculateMidInterClusterInterval(){
+        AtomicInteger interClusterHoleCount = new AtomicInteger(0);
+        AtomicInteger interClusterIntervalSize = new AtomicInteger(0);
+        AtomicBoolean flag = new AtomicBoolean(false);
+        path.getFirst().forEach(cell -> {
+            if(cell.isWhite() && flag.get()){
+                interClusterIntervalSize.incrementAndGet();
+            }
+        });
     }
 
     private int percolationWayWidth(){
@@ -109,6 +124,7 @@ public class Experiment {
 
     void calculatePath() {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
+        System.out.println(path);
         this.statistic.setRedCellCount(getRedCell());
 //        this.distances = lightningBolt.getDistances();
 

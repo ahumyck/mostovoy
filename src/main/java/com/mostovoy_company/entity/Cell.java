@@ -68,6 +68,6 @@ public class Cell {
 
     @Override
     public String toString() {
-        return "Cell [" + getX() + "][" + getY() + "]";
+        return "Cell [" + getX() + "][" + getY() + "] " + type;
     }
 }
