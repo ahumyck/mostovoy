@@ -10,6 +10,7 @@ import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.mostovoy_company.stat.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,22 +66,24 @@ public abstract class BaseMainService implements MainService {
         fillingType.setSize(size);
         List<Statistic> statistics = experimentManager.getStatistics(count, fillingType, consumeProperties);
         log.info("=> end consumed request message: " + (System.currentTimeMillis() - startTime));
-        return collectStatisticAndBuildResponseMessage(size, probability, statistics);
+        return collectStatisticAndBuildResponseMessage(size, probability, statistics, consumeProperties);
     }
 
-    private ResponseMessage collectStatisticAndBuildResponseMessage(int size, double probability, List<Statistic> statistics) {
-        return ResponseMessage.builder()
+    private ResponseMessage collectStatisticAndBuildResponseMessage(int size, double probability, List<Statistic> statistics, ConsumeProperties consumeProperties) {
+        var responseMessageBuilder = ResponseMessage.builder()
                 .size(size)
                 .midClustersCounts(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(statistics)))
-                .midClustersSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(statistics)))
-                .midRedCellsCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(statistics)))
-                .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
-                .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
-                .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
-                .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(statistics)))
-                .percolationThreshold(buildLineChartNode(probability, normalizedStatManager.percolationThreshold(statistics)))
-                .percolationWayWidth(buildLineChartNode(probability, normalizedStatManager.percolationWayWidth(statistics)))
-                .build();
+                .midClustersSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(statistics)));
+        if (consumeProperties.isLightningBoltEnable()) {
+            responseMessageBuilder.midRedCellsCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(statistics)))
+                    .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
+                    .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
+                    .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
+                    .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(statistics)))
+                    .percolationThreshold(buildLineChartNode(probability, normalizedStatManager.percolationThreshold(statistics)))
+                    .percolationWayWidth(buildLineChartNode(probability, normalizedStatManager.percolationWayWidth(statistics)));
+        }
+        return responseMessageBuilder.build();
     }
 
     private LineChartNode buildLineChartNode(double x, double y) {
@@ -89,14 +92,19 @@ public abstract class BaseMainService implements MainService {
 
     private Map<String, LineChartNode> parseResponseMessage(ResponseMessage message) {
         Map<String, LineChartNode> values = new HashMap<>();
-        values.put(ChartNames.CLUSTER_COUNT_CHART, message.getMidClustersCounts());
-        values.put(ChartNames.CLUSTER_SIZE_CHART, message.getMidClustersSize());
-        values.put(ChartNames.RED_CELLS_ADDED_CHART, message.getMidRedCellsCount());
-        values.put(ChartNames.WAY_LENGTHS_CHART, message.getMidWayLengths());
-        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART, message.getRedCellsStationDistancesPythagoras());
-        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_DISCRETE_CHART, message.getRedCellsStationDistancesDiscrete());
-        values.put(ChartNames.PERCOLATION_CHART, message.getPercolationThreshold());
-        values.put(ChartNames.PERCOLATION_WAY_WIDTH_CHART, message.getPercolationWayWidth());
+        putToValues(values, ChartNames.CLUSTER_COUNT_CHART, message.getMidClustersCounts());
+        putToValues(values, ChartNames.CLUSTER_SIZE_CHART, message.getMidClustersSize());
+        putToValues(values, ChartNames.RED_CELLS_ADDED_CHART, message.getMidRedCellsCount());
+        putToValues(values, ChartNames.WAY_LENGTHS_CHART, message.getMidWayLengths());
+        putToValues(values, ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART, message.getRedCellsStationDistancesPythagoras());
+        putToValues(values, ChartNames.RED_CELLS_STATION_DISTANCES_DISCRETE_CHART, message.getRedCellsStationDistancesDiscrete());
+        putToValues(values, ChartNames.PERCOLATION_CHART, message.getPercolationThreshold());
+        putToValues(values, ChartNames.PERCOLATION_WAY_WIDTH_CHART, message.getPercolationWayWidth());
         return values;
     }
+
+    private void putToValues(Map<String, LineChartNode> values, String chartName, LineChartNode value) {
+        if (value != null) values.put(chartName, value);
+    }
+
 }

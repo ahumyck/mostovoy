@@ -4,6 +4,8 @@ import com.mostovoy_company.expirement.Statistic;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class StatisticManager {
@@ -62,31 +64,31 @@ public class StatisticManager {
 
 
     public double redCellStationDistanceForPythagoras(List<Statistic> statistics) {
-//        AtomicReference<Double> d = new AtomicReference<>(0.0);
-//        AtomicInteger n = new AtomicInteger();
-//        statistics.stream()
-//                .map(Statistic::getPythagorasDistance)
-//                .forEach(pair ->{
-//                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
-//                    n.addAndGet(pair.getSecond());
-//                });
-//        return d.get()/n.get();
-        return 0.0;
+        AtomicReference<Double> d = new AtomicReference<>(0.0);
+        AtomicInteger n = new AtomicInteger();
+        statistics.stream()
+                .map(Statistic::getPythagorasDistance)
+                .forEach(pair ->{
+                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
+                    n.addAndGet(pair.getSecond());
+                });
+        return d.get()/n.get();
+//        return 0.0;
     }
 
 
 
     public double redCellStationDistanceForDiscrete(List<Statistic> statistics) {
-//        AtomicReference<Double> d = new AtomicReference<>( 0.0);
-//        AtomicInteger n = new AtomicInteger();
-//        statistics.stream()
-//                .map(Statistic::getDiscreteDistance)
-//                .forEach(pair ->{
-//                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
-//                    n.addAndGet(pair.getSecond());
-//                });
-//        return d.get()/n.get();
-        return 0.0;
+        AtomicReference<Double> d = new AtomicReference<>( 0.0);
+        AtomicInteger n = new AtomicInteger();
+        statistics.stream()
+                .map(Statistic::getDiscreteDistance)
+                .forEach(pair ->{
+                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
+                    n.addAndGet(pair.getSecond());
+                });
+        return d.get()/n.get();
+//        return 0.0;
     }
 
     public double darkRedAndBlackCellsRatio(List<Statistic> statistics) {

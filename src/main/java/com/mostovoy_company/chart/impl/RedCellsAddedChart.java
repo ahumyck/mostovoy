@@ -4,11 +4,13 @@ import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltDependChart;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import static com.mostovoy_company.chart.ChartNames.RED_CELLS_ADDED_CHART;
 
 @Component(RED_CELLS_ADDED_CHART)
+@Order(5)
 public class RedCellsAddedChart extends BaseLineChartData implements LightningBoltDependChart {
 
     public RedCellsAddedChart(FxWeaver fxWeaver) {
