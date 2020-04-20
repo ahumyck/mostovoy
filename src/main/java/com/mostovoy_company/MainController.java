@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("sample.fxml")
 @Slf4j
-public class Controller {
+public class MainController {
 
     @FXML
     public Tab fullExperiment;
@@ -27,7 +27,7 @@ public class Controller {
     public Tab analyzerTable;
 
 
-    public Controller(FxWeaver fxWeaver) {
+    public MainController(FxWeaver fxWeaver) {
         this.fxWeaver = fxWeaver;
     }
 
