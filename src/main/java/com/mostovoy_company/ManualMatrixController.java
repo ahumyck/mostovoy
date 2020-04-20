@@ -1,5 +1,6 @@
 package com.mostovoy_company;
 
+import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.filling.FillingType;
@@ -16,6 +17,7 @@ import javafx.scene.layout.*;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.mostovoy_company.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
@@ -65,8 +67,6 @@ public class ManualMatrixController {
     public HBox experimentListAndCanvas;
     @FXML
     public Label currentBlackCellsCount;
-    @FXML
-    public Label currentWhiteCellsCount;
 
 
     private ObservableList<FillingType> fillingTypesList;
@@ -82,18 +82,20 @@ public class ManualMatrixController {
         this.painter = painter;
     }
 
-    public Node getContent() {
+    public Node getContent(){
         return this.manualMatrixAnchorPane;
     }
 
+    private String filepath = System.getProperty("user.dir") + "/src/main/resources/matrix/";
+
     @FXML
     public void initialize() {
-//        tapeCheckBox.setSelected(false);
         HBox.setHgrow(experimentListAndCanvas, Priority.ALWAYS);
         HBox.setHgrow(mainTabPane, Priority.ALWAYS);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(fillingTypesList);
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
         mainTabPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             if (experiment != null)
@@ -104,14 +106,21 @@ public class ManualMatrixController {
             if (experiment != null)
                 paintByCheckBox(experiment, PYTHAGORAS);
         });
+
+
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             paintByCheckBox(experiment, PYTHAGORAS);
             currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
             currentBlackCellsCount.setText("Количество черных клеток: " + experiment.getMatrix().getCountOfBlackCells());
-//            currentWhiteCellsCount.setText("Количество белых клеток: " + experiment.getMatrix().getCountOfWhiteCells());
             redCellsLabel.setText("Красных клеток: " + experiment.getStatistic().getRedCellCount());
             shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
+//            try {
+//                experiment.getMatrix().toJSON(filepath + experiment.toString());
+//                System.out.println("saving file: " + filepath + experiment.toString());
+//            } catch (IOException e) {
+//                System.out.println("Unable to save matrix: " + filepath + experiment.toString());
+//            }
         });
         distanceCalculatorType.setOnAction(actionEvent -> {
             paintByDistanceResolverAndCheckBox();
@@ -135,6 +144,7 @@ public class ManualMatrixController {
             }
         });
         applyConfiguration.setOnAction(actionEvent -> {
+//            loadFiles();
             String txt = experimentNumber.getText();
             int number = Integer.parseInt(txt);
             FillingType fillingType = fillingTypes.getValue();
@@ -151,13 +161,8 @@ public class ManualMatrixController {
     }
 
     void paintByCheckBox(Experiment experiment, String type) {
-//        int tape = parseInt(tapeCount.getText());
         painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 60);
-//        if (tapeCheckBox.isSelected()) {
-//            painter.paintLightningBoltAndTape(lightningBoltPane, experiment.getPath(), experiment.generateTape(tape),experiment.getProgrammings(type), experiment.getMatrix());
-//        } else {
         painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 60);
-//        }
     }
 
     void paintByDistanceResolverAndCheckBox() {
@@ -170,5 +175,21 @@ public class ManualMatrixController {
             distanceCalculatorType.setText(PYTHAGORAS);
             paintByCheckBox(experiment, PYTHAGORAS);
         }
+    }
+
+    void loadFiles()  {
+        ObservableList<Experiment> matrixObservableList = FXCollections.observableArrayList();
+        for(int i = 1 ; i < Integer.MAX_VALUE; i++){
+            String currentFilename = filepath + "Эксперимент №" + i;
+            try {
+                Matrix matrix = Matrix.fromJSON(currentFilename);
+                Experiment experiment = new Experiment("Эксперимент №" + i, matrix);
+                matrixObservableList.add(experiment);
+            }
+            catch (IOException e){
+                break;
+            }
+        }
+        experimentListView.setItems(matrixObservableList);
     }
 }

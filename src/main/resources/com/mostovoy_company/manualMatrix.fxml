@@ -77,11 +77,6 @@
                                 <Font size="15.0"/>
                             </font>
                         </Label>
-<!--                        <Label fx:id="currentWhiteCellsCount">-->
-<!--                            <font>-->
-<!--                                <Font size="20.0"/>-->
-<!--                            </font>-->
-<!--                        </Label>-->
                     </HBox>
                 </VBox>
             </Tab>
