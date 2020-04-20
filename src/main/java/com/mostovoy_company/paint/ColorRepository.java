@@ -7,5 +7,4 @@ public interface ColorRepository {
     Color getRandomColorForCluster(int clusterMark);
 
     Color getColorForCell(int clusterMark);
-
 }

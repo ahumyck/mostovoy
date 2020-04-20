@@ -1,5 +1,6 @@
 package com.mostovoy_company.chart;
 
+import com.mostovoy_company.controllers.ChartConfigurationTabController;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.sun.javafx.charts.Legend;
 import javafx.collections.FXCollections;
@@ -25,7 +26,7 @@ public abstract class BaseLineChartData implements LineChartData {
 
     private LineChart<Number, Number> lineChart;
 
-    private ChartConfigurationTab chartConfigurationTab;
+    private ChartConfigurationTabController chartConfigurationTabController;
 
     private FxWeaver fxWeaver;
 
@@ -44,7 +45,7 @@ public abstract class BaseLineChartData implements LineChartData {
     @PostConstruct
     private void init() {
         this.lineChart = createLineChart();
-        this.chartConfigurationTab = fxWeaver.loadController(ChartConfigurationTab.class);
+        this.chartConfigurationTabController = fxWeaver.loadController(ChartConfigurationTabController.class);
         lineChart.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 if (event.getClickCount() == 2) {
@@ -84,7 +85,7 @@ public abstract class BaseLineChartData implements LineChartData {
     }
 
     private boolean checkStartAndFinalProbability(LineChartNode node) {
-        return node.x >= chartConfigurationTab.getStartProbability() && node.x <= chartConfigurationTab.getFinalProbability();
+        return node.x >= chartConfigurationTabController.getStartProbability() && node.x <= chartConfigurationTabController.getFinalProbability();
     }
 
     private XYChart.Data<Number, Number> convertToXYChartData(LineChartNode node) {
@@ -96,7 +97,7 @@ public abstract class BaseLineChartData implements LineChartData {
     }
 
     public Node getConfigurationTab() {
-        return this.chartConfigurationTab.getContent();
+        return this.chartConfigurationTabController.getContent();
     }
 
     public void clear() {
@@ -167,8 +168,8 @@ public abstract class BaseLineChartData implements LineChartData {
     }
 
     public void saveConfiguration() {
-        this.chartConfigurationTab.saveConfiguration();
-        if (this.chartConfigurationTab.isChanged())
+        this.chartConfigurationTabController.saveConfiguration();
+        if (this.chartConfigurationTabController.isChanged())
             reInitRepresentationChartData();
     }
 

@@ -1,11 +1,11 @@
 package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.chart.BaseLineChartData;
-import com.mostovoy_company.chart.LightningBoltDependChart;
+import com.mostovoy_company.chart.LightningBoltDependentChart;
 import net.rgielen.fxweaver.core.FxWeaver;
 
 //@Component(RATIO_DARK_RED_AND_BLACK_CELLS_CHART)
-public class RatioDarkRedAndBlackCellsChart extends BaseLineChartData implements LightningBoltDependChart {
+public class RatioDarkRedAndBlackCellsChart extends BaseLineChartData implements LightningBoltDependentChart {
 
     public RatioDarkRedAndBlackCellsChart(FxWeaver fxWeaver) {
         super(fxWeaver);

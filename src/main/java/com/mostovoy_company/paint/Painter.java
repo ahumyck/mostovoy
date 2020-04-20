@@ -1,18 +1,15 @@
 package com.mostovoy_company.paint;
 
-import com.mostovoy_company.entity.Cell;
-import com.mostovoy_company.entity.Matrix;
-import com.mostovoy_company.programminPercolation.percolation.PercolationRelation;
+import com.mostovoy_company.expirement.entity.Cell;
+import com.mostovoy_company.expirement.entity.Matrix;
+import com.mostovoy_company.expirement.programminPercolation.percolation.PercolationRelation;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class Painter {
@@ -54,23 +51,8 @@ public class Painter {
         });
     }
 
-    private void paintTape(double size, List<Cell> tape, GraphicsContext graphicsContext2D) {
-        tape.forEach(cell -> {
-            graphicsContext2D.setFill(Color.BLUE);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
-        });
-    }
-
     private void paintRelations(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D) {
         relations.stream().map(PercolationRelation::getDarkRedCell).forEach(cell -> {
-            graphicsContext2D.setFill(Color.DARKRED);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
-        });
-    }
-
-    private void paintRelationOnTape(double size, List<PercolationRelation> relations, List<Cell> tape, GraphicsContext graphicsContext2D) {
-        List<Cell> darkRedCells = relations.stream().map(PercolationRelation::getDarkRedCell).collect(Collectors.toList());
-        tape.stream().filter(darkRedCells::contains).forEach(cell -> {
             graphicsContext2D.setFill(Color.DARKRED);
             graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
         });
@@ -88,25 +70,9 @@ public class Painter {
         drawLines(size, matrix, graphicsContext2D);
     }
 
-    public void paintLightningBoltAndTape(AnchorPane pane, List<Cell> path, List<Cell> tape, List<PercolationRelation> relations, Matrix matrix) {
-        double size = pane.getMaxHeight() / (matrix.getSize() - 2 * Matrix.OFFSET);
-        Canvas canvas = new Canvas(pane.getMaxWidth(), pane.getMaxHeight());
-        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
-        graphicsContext2D.setFill(Color.WHITE);
-        graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
-
-        paintMatrix(size, matrix, graphicsContext2D);
-        paintPath(size, path, graphicsContext2D);
-        paintTape(size, tape, graphicsContext2D);
-        paintRelationOnTape(size, relations, tape, graphicsContext2D);
-        drawLines(size, matrix, graphicsContext2D);
-
-        pane.getChildren().clear();
-        pane.getChildren().add(canvas);
-    }
 
     public void paintLightningBoltAndRelations(Canvas pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix, double gridSize) {
-        double size =  gridSize / (matrix.getSize() - 2 * Matrix.OFFSET);
+        double size = gridSize / (matrix.getSize() - 2 * Matrix.OFFSET);
         pane.setHeight(gridSize);
         pane.setWidth(gridSize);
         GraphicsContext graphicsContext2D = pane.getGraphicsContext2D();
@@ -115,7 +81,7 @@ public class Painter {
 
         paintMatrix(size, matrix, graphicsContext2D);
         paintPath(size, path, graphicsContext2D);
-//        paintRelations(size,relations,graphicsContext2D);
+        paintRelations(size, relations, graphicsContext2D);
         drawLines(size, matrix, graphicsContext2D);
     }
 }

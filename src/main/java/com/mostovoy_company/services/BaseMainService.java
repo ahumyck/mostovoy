@@ -3,12 +3,12 @@ package com.mostovoy_company.services;
 import com.mostovoy_company.chart.ChartNames;
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.expirement.ExperimentManager;
-import com.mostovoy_company.expirement.Statistic;
-import com.mostovoy_company.filling.RandomFillingType;
+import com.mostovoy_company.expirement.entity.Statistic;
+import com.mostovoy_company.expirement.filling.RandomFillingType;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
-import com.mostovoy_company.stat.StatisticManager;
+import com.mostovoy_company.expirement.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 
@@ -109,5 +109,4 @@ public abstract class BaseMainService implements MainService {
     private void putToValues(Map<String, LineChartNode> values, String chartName, LineChartNode value) {
         if (value != null) values.put(chartName, value);
     }
-
 }

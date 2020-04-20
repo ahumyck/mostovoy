@@ -2,14 +2,14 @@ package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.ChartNames;
-import com.mostovoy_company.chart.LightningBoltDependChart;
+import com.mostovoy_company.chart.LightningBoltDependentChart;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component(ChartNames.MID_INTERCLUSTER_INTERVAL_SIZE)
 @Order(8)
-public class MidInterClustersIntervalChart extends BaseLineChartData implements LightningBoltDependChart {
+public class MidInterClustersIntervalChart extends BaseLineChartData implements LightningBoltDependentChart {
 
     public MidInterClustersIntervalChart(FxWeaver fxWeaver) {
         super(fxWeaver);

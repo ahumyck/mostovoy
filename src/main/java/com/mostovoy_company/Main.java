@@ -1,15 +1,12 @@
 package com.mostovoy_company;
 
+import com.mostovoy_company.controllers.MainController;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -20,18 +17,14 @@ public class Main extends Application {
     public static Stage pStage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-
+    public void start(Stage primaryStage) {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(Controller.class);
-        primaryStage.setTitle("Percolation");
+        Parent root = fxWeaver.loadView(MainController.class);
+        primaryStage.setTitle("Исследование перколяции");
         primaryStage.setScene(new Scene(root));
         pStage = primaryStage;
-//        primaryStage.sizeToScene();
         primaryStage.show();
     }
-
-
 
     @Override
     public void init() {
@@ -46,5 +39,4 @@ public class Main extends Application {
         this.applicationContext.close();
         Platform.exit();
     }
-
 }

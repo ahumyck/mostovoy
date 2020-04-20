@@ -2,14 +2,14 @@ package com.mostovoy_company.services.kafka;
 
 
 import com.mostovoy_company.expirement.ExperimentManager;
-import com.mostovoy_company.expirement.Statistic;
-import com.mostovoy_company.filling.RandomFillingType;
+import com.mostovoy_company.expirement.entity.Statistic;
+import com.mostovoy_company.expirement.filling.RandomFillingType;
 import com.mostovoy_company.services.ConsumeProperties;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.mostovoy_company.services.kafka.session.SessionManager;
-import com.mostovoy_company.stat.StatisticManager;
+import com.mostovoy_company.expirement.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
