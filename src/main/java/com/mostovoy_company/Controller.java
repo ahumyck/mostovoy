@@ -8,6 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -59,8 +62,9 @@ public class Controller {
     }
 
     void tableViewInitializer(){
+        HBox.setHgrow(analyzerDataTable, Priority.ALWAYS);
         TableColumn<TableViewAnalyzerData, String> size = new TableColumn<>("L");
-        TableColumn<TableViewAnalyzerData, String> probability = new TableColumn<>("конц");
+        TableColumn<TableViewAnalyzerData, String> probability = new TableColumn<>("Концентрация");
         TableColumn<TableViewAnalyzerData, String> averageWhiteCellsPerColumn = new TableColumn<>("Среднее белых в столбце");
         TableColumn<TableViewAnalyzerData, String> minWhiteCellsPerColumn= new TableColumn<>("Минимальное белых в столбце");
         TableColumn<TableViewAnalyzerData, String> maxWhiteCellsPerColumn = new TableColumn<>("Максимальное белых в столбце");
