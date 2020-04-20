@@ -71,13 +71,18 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    Experiment calculateLightningBolt(){
+    public Experiment calculateLightningBolt(){
         this.lightningBolt = new LightningBolt(this.matrix);
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.statistic.setRedCellCount(getRedCell());
         this.statistic.setPercolationizated(getRedCell() == 0);
+        this.statistic.setPercolationWayWidth(percolationWayWidth());
         this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
         return this;
+    }
+
+    private int percolationWayWidth(){
+        return this.path.getFirst().stream().mapToInt(Cell::getY).max().getAsInt() - this.path.getFirst().stream().mapToInt(Cell::getY).min().getAsInt();
     }
 
     public Experiment putPercolationProgrammingInStats(){

@@ -56,6 +56,10 @@ public class StatisticManager {
                 .orElse(0);
     }
 
+    public double percolationWayWidth(List<Statistic> statistics){
+        return statistics.stream().mapToDouble(Statistic::getPercolationWayWidth).average().orElse(0);
+    }
+
 
     public double redCellStationDistanceForPythagoras(List<Statistic> statistics) {
 //        AtomicReference<Double> d = new AtomicReference<>(0.0);

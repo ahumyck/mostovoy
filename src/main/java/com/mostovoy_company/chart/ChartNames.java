@@ -15,6 +15,7 @@ public class ChartNames {
     public static final String WAY_LENGTHS_CHART = "wayLengthsChart";
     public static final String RATIO_DARK_RED_AND_BLACK_CELLS_CHART = "ratioDarkRedAndBlackCellsChart";
     public static final String PERCOLATION_CHART = "percolationChart";
+    public static final String PERCOLATION_WAY_WIDTH_CHART = "percolationWayWidthChart";
 
     static {
         chartNames.add(CLUSTER_COUNT_CHART);

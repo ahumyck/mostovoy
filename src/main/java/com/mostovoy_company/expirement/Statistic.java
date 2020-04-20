@@ -17,4 +17,5 @@ public class Statistic {
     private Paired<Double,Integer> pythagorasDistance;
     private Paired<Double, Integer> discreteDistance;
     private boolean percolationizated;
+    private int percolationWayWidth;
 }

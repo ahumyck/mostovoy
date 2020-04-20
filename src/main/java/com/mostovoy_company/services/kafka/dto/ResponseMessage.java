@@ -20,4 +20,5 @@ public class ResponseMessage {
     private LineChartNode redCellsStationDistancesDiscrete;
     private LineChartNode darkRedAndBlackCellsRatio;
     private LineChartNode percolationThreshold;
+    private LineChartNode percolationWayWidth;
 }

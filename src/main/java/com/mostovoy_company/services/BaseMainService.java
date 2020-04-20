@@ -79,6 +79,7 @@ public abstract class BaseMainService implements MainService {
                 .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
                 .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(statistics)))
                 .percolationThreshold(buildLineChartNode(probability, normalizedStatManager.percolationThreshold(statistics)))
+                .percolationWayWidth(buildLineChartNode(probability, normalizedStatManager.percolationWayWidth(statistics)))
                 .build();
     }
 
@@ -95,6 +96,7 @@ public abstract class BaseMainService implements MainService {
         values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART, message.getRedCellsStationDistancesPythagoras());
         values.put(ChartNames.RED_CELLS_STATION_DISTANCES_DISCRETE_CHART, message.getRedCellsStationDistancesDiscrete());
         values.put(ChartNames.PERCOLATION_CHART, message.getPercolationThreshold());
+        values.put(ChartNames.PERCOLATION_WAY_WIDTH_CHART, message.getPercolationWayWidth());
         return values;
     }
 }
