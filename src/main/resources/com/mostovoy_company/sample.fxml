@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.mostovoy_company.Controller" prefWidth="400" prefHeight="400">
+           fx:controller="com.mostovoy_company.Controller">
     <TabPane tabClosingPolicy="UNAVAILABLE">
         <Tab fx:id="manualMatrixTab" text="Настройки">
         </Tab>

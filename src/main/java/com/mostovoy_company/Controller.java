@@ -36,6 +36,5 @@ public class Controller {
         analyzerTable.setContent(fxWeaver.loadController(AnalyzerController.class).getContent());
         fullExperiment.setContent(fxWeaver.loadController(ChartsController.class).getContent());
         manualMatrixTab.setContent(fxWeaver.loadController(ManualMatrixController.class).getContent());
-
     }
 }

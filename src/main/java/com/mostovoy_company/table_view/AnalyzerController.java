@@ -46,6 +46,8 @@ public class AnalyzerController {
 
     @FXML
     public void initialize() {
+//        HBox.setHgrow(analyzerDataTable, Priority.ALWAYS);
+//        analyzerDataTable.setColumnResizePolicy((param) -> true);
         HBox.setHgrow(analyzerDataTable, Priority.ALWAYS);
         TableColumn<TableViewAnalyzerData, String> sizeColumn = new TableColumn<>("L");
         TableColumn<TableViewAnalyzerData, String> probabilityColumn = new TableColumn<>("Концентрация");
@@ -78,6 +80,7 @@ public class AnalyzerController {
         averageBlackCells.setCellValueFactory(new PropertyValueFactory<>("averageBlackCells"));
 
         analyzerDataTable.setItems(FXCollections.observableArrayList());
+        analyzerDataTable.getColumns().clear();
         analyzerDataTable.getColumns().addAll(sizeColumn, probabilityColumn,
                 averageWhiteCellsPerColumn, minWhiteCellsPerColumn, maxWhiteCellsPerColumn,
                 averageWhiteCellsPerRow, minWhiteCellsPerRow, maxWhiteCellsPerRow,
