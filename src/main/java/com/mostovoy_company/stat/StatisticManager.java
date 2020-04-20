@@ -88,15 +88,5 @@ public class StatisticManager {
                     n.addAndGet(pair.getSecond());
                 });
         return d.get()/n.get();
-//        return 0.0;
-    }
-
-    public double darkRedAndBlackCellsRatio(List<Statistic> statistics) {
-//        double top = experiments.stream()
-//                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getFirst).sum();
-//        double bot = experiments.stream()
-//                .map(Experiment::getDarkRedAndBlackCellsFromWideTape).mapToInt(Pair::getSecond).sum();
-//        return top / bot;
-        return 0.0;
     }
 }
