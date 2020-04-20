@@ -133,6 +133,9 @@ public class Experiment {
     void calculatePath() {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.statistic.setRedCellCount(getRedCell());
+        this.statistic.setPercolationizated(getRedCell() == 0);
+        this.statistic.setPercolationWayWidth(percolationWayWidth());
+        this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
         calculateInterClusterInterval();
 //        this.distances = lightningBolt.getDistances();
 

@@ -3,6 +3,7 @@ package com.mostovoy_company;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.expirement.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
+import com.mostovoy_company.expirement.Statistic;
 import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.filling.RandomFillingType;
 import com.mostovoy_company.filling.customs.CustomTestFillingType;
@@ -10,10 +11,13 @@ import com.mostovoy_company.paint.Painter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import lombok.var;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
@@ -45,14 +49,14 @@ public class ManualMatrixController {
     public ListView<Experiment> experimentListView;
     @FXML
     public Tab gridTab;
-    @FXML
-    public Label currentClustersCount;
+    //    @FXML
+//    public Label currentClustersCount;
     @FXML
     public Tab lightningBoltTab;
-    @FXML
-    public Label redCellsLabel;
-    @FXML
-    public Label shortestPathLabel;
+    //    @FXML
+//    public Label redCellsLabel;
+//    @FXML
+//    public Label shortestPathLabel;
     @FXML
     public Canvas lightningBoltPane;
     @FXML
@@ -65,8 +69,10 @@ public class ManualMatrixController {
     public Canvas gridPane;
     @FXML
     public HBox experimentListAndCanvas;
+    //    @FXML
+//    public Label currentBlackCellsCount;
     @FXML
-    public Label currentBlackCellsCount;
+    public VBox matrixInfo;
 
 
     private ObservableList<FillingType> fillingTypesList;
@@ -82,7 +88,7 @@ public class ManualMatrixController {
         this.painter = painter;
     }
 
-    public Node getContent(){
+    public Node getContent() {
         return this.manualMatrixAnchorPane;
     }
 
@@ -111,10 +117,7 @@ public class ManualMatrixController {
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             paintByCheckBox(experiment, PYTHAGORAS);
-            currentClustersCount.setText("Количество кластеров: " + experiment.getMatrix().getClusterCounter());
-            currentBlackCellsCount.setText("Количество черных клеток: " + experiment.getMatrix().getCountOfBlackCells());
-            redCellsLabel.setText("Красных клеток: " + experiment.getStatistic().getRedCellCount());
-            shortestPathLabel.setText("Расстояние: " + experiment.getDistance());
+            showMatrixInfo(experiment);
 //            try {
 //                experiment.getMatrix().toJSON(filepath + experiment.toString());
 //                System.out.println("saving file: " + filepath + experiment.toString());
@@ -161,7 +164,7 @@ public class ManualMatrixController {
     }
 
     void paintByCheckBox(Experiment experiment, String type) {
-        painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 60);
+        painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 20);
         painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPath(), experiment.getProgrammings(type), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 60);
     }
 
@@ -177,16 +180,35 @@ public class ManualMatrixController {
         }
     }
 
-    void loadFiles()  {
+    private void showMatrixInfo(Experiment experiment) {
+        matrixInfo.getChildren().clear();
+        Statistic statistic = experiment.getStatistic();
+        addLabelToMatrixInfo("Количество кластеров: " + statistic.getClusterCount());
+        addLabelToMatrixInfo("Количество черных клеток: " + statistic.getBlackCellCount());
+        addLabelToMatrixInfo("Количество красных клеток: " + statistic.getRedCellCount());
+        addLabelToMatrixInfo("Длина перколяционного пути: " + statistic.getPercolationWayDistance());
+        addLabelToMatrixInfo("Ширина перколяционного пути: " + statistic.getPercolationWayWidth());
+        addLabelToMatrixInfo("Средний размер межластерного интервала: " + statistic.getMidInterClustersInterval());
+        addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
+    }
+
+    private void addLabelToMatrixInfo(String text){
+        var label = new Label();
+        label.setFont(new Font(14.0));
+        label.setPadding(new Insets(0.0, 0.0, 0.0, 10.0));
+        label.setText(text);
+        matrixInfo.getChildren().add(label);
+    }
+
+    void loadFiles() {
         ObservableList<Experiment> matrixObservableList = FXCollections.observableArrayList();
-        for(int i = 1 ; i < Integer.MAX_VALUE; i++){
+        for (int i = 1; i < Integer.MAX_VALUE; i++) {
             String currentFilename = filepath + "Эксперимент №" + i;
             try {
                 Matrix matrix = Matrix.fromJSON(currentFilename);
                 Experiment experiment = new Experiment("Эксперимент №" + i, matrix);
                 matrixObservableList.add(experiment);
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 break;
             }
         }

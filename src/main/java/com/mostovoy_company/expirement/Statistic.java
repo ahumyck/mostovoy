@@ -19,6 +19,5 @@ public class Statistic {
     private boolean percolationizated;
     private int percolationWayWidth;
     private double midInterClustersInterval;
-    private int maxInterClusterInterval;
     private int interClustersHoleCount;
 }
