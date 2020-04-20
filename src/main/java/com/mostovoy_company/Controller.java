@@ -47,7 +47,6 @@ public class Controller {
     @FXML
     public void initialize() {
         tableViewInitializer();
-//        tapeCheckBox.setSelected(false);
         fullExperiment.setContent(fxWeaver.loadController(ChartsController.class).getContent());
         manualMatrixTab.setContent(fxWeaver.loadController(ManualMatrixController.class).getContent());
         applyAnalyzerExperiment.setOnAction(event -> {
@@ -62,64 +61,38 @@ public class Controller {
     void tableViewInitializer(){
         TableColumn<TableViewAnalyzerData, String> size = new TableColumn<>("L");
         TableColumn<TableViewAnalyzerData, String> probability = new TableColumn<>("конц");
-        TableColumn<TableViewAnalyzerData, String> blackCellsPerColumn = new TableColumn<>("Черных клеток в столбце");
-        TableColumn<TableViewAnalyzerData, String> blackCellsPerRow = new TableColumn<>("Черных клеток в строке");
-        TableColumn<TableViewAnalyzerData, String> blackCellsAveragePerColumn = new TableColumn<>("Срдн в стлбц");
-        TableColumn<TableViewAnalyzerData, String> blackCellsAveragePerRow = new TableColumn<>("Срдн в стрк");
-        TableColumn<TableViewAnalyzerData, String> emptyRows = new TableColumn<>("Пуст стрк");
-        TableColumn<TableViewAnalyzerData, String> emptyColumns = new TableColumn<>("Пуст стлбц");
-        TableColumn<TableViewAnalyzerData, String> totalBlackCells = new TableColumn<>("Всг чк");
+        TableColumn<TableViewAnalyzerData, String> averageWhiteCellsPerColumn = new TableColumn<>("Среднее белых в столбце");
+        TableColumn<TableViewAnalyzerData, String> minWhiteCellsPerColumn= new TableColumn<>("Минимальное белых в столбце");
+        TableColumn<TableViewAnalyzerData, String> maxWhiteCellsPerColumn = new TableColumn<>("Максимальное белых в столбце");
+
+        TableColumn<TableViewAnalyzerData, String> averageWhiteCellsPerRow = new TableColumn<>("Среднее белых в строке");
+        TableColumn<TableViewAnalyzerData, String> minWhiteCellsPerRow = new TableColumn<>("Минимальное белых в строке");
+        TableColumn<TableViewAnalyzerData, String> maxWhiteCellsPerRow = new TableColumn<>("Максимальное белых в строке");
+
+        TableColumn<TableViewAnalyzerData, String> sumBlackCells = new TableColumn<>("Сумма черных по строкам");
+        TableColumn<TableViewAnalyzerData, String> emptyRows = new TableColumn<>("Пустые строки");
+        TableColumn<TableViewAnalyzerData, String> averageBlackCells = new TableColumn<>("Среднее черных в строке");
+
 
         size.setCellValueFactory(new PropertyValueFactory<>("size"));
-//        size.setMinWidth(35);
-//        size.setMaxWidth(35);
-
         probability.setCellValueFactory(new PropertyValueFactory<>("probability"));
-//        size.setMinWidth(60);
-//        size.setMaxWidth(60);
 
-        blackCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("blackCellsPerColumn"));
-//        blackCellsPerColumn.setMinWidth(200);
+        averageWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("averageWhiteCellsPerColumns"));
+        minWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("minWhiteCellsPerColumn"));
+        maxWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("maxWhiteCellsPerColumn"));
 
-        blackCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("blackCellsPerRow"));
-//        blackCellsPerRow.setMinWidth(200);
+        averageWhiteCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("averageWhiteCellsPerRow"));
+        minWhiteCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("minWhiteCellsPerRow"));
+        maxWhiteCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("maxWhiteCellsPerRow"));
 
-        blackCellsAveragePerColumn.setCellValueFactory(new PropertyValueFactory<>("blackCellsAveragePerColumn"));
-//        blackCellsAveragePerColumn.setMinWidth(75);
-//        blackCellsAveragePerColumn.setMaxWidth(75);
-
-        blackCellsAveragePerRow.setCellValueFactory(new PropertyValueFactory<>("blackCellsAveragePerRow"));
-//        blackCellsAveragePerRow.setMinWidth(75);
-//        blackCellsAveragePerRow.setMaxWidth(75);
-
+        sumBlackCells.setCellValueFactory(new PropertyValueFactory<>("sumBlackCell"));
         emptyRows.setCellValueFactory(new PropertyValueFactory<>("emptyRows"));
-//        emptyRows.setMinWidth(50);
-//        emptyRows.setMaxWidth(50);
+        averageBlackCells.setCellValueFactory(new PropertyValueFactory<>("averageBlackCells"));
 
-        emptyColumns.setCellValueFactory(new PropertyValueFactory<>("emptyColumns"));
-//        emptyColumns.setMinWidth(50);
-//        emptyColumns.setMaxWidth(50);
-
-        totalBlackCells.setCellValueFactory(new PropertyValueFactory<>("totalBlackCells"));
-//        totalBlackCells.setMinWidth(70);
-//        totalBlackCells.setMaxWidth(100);
-
-        analyzerDataTable.setItems(FXCollections.emptyObservableList());
+        analyzerDataTable.setItems(analyzerManager.initializeAnalyzerExperiments(10, 30, 0.1));
         analyzerDataTable.getColumns().addAll(size, probability,
-                blackCellsPerColumn, blackCellsPerRow,
-                blackCellsAveragePerRow, blackCellsAveragePerColumn,
-                emptyRows, emptyColumns, totalBlackCells);
-
-
-    }
-
-
-
-    int parseInt(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return 1;
-        }
+                averageWhiteCellsPerColumn, minWhiteCellsPerColumn, maxWhiteCellsPerColumn,
+                averageWhiteCellsPerRow, minWhiteCellsPerRow, maxWhiteCellsPerRow,
+                sumBlackCells, emptyRows, averageBlackCells);
     }
 }
