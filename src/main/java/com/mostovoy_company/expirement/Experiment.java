@@ -75,6 +75,7 @@ public class Experiment {
         this.lightningBolt = new LightningBolt(this.matrix);
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.statistic.setRedCellCount(getRedCell());
+        this.statistic.setPercolationizated(getRedCell() == 0);
         this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
         return this;
     }

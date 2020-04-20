@@ -14,6 +14,7 @@ public class ChartNames {
     public static final String RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART = "redCellsStationDistancesPythagorasChart";
     public static final String WAY_LENGTHS_CHART = "wayLengthsChart";
     public static final String RATIO_DARK_RED_AND_BLACK_CELLS_CHART = "ratioDarkRedAndBlackCellsChart";
+    public static final String PERCOLATION_CHART = "percolationChart";
 
     static {
         chartNames.add(CLUSTER_COUNT_CHART);

@@ -49,6 +49,13 @@ public class StatisticManager {
                 .orElse(0) /*/ size*/;
     }
 
+    public double percolationThreshold(List<Statistic> statistics){
+        return statistics.stream()
+                .mapToInt(statistic -> statistic.isPercolationizated() ? 1 : 0)
+                .average()
+                .orElse(0);
+    }
+
 
     public double redCellStationDistanceForPythagoras(List<Statistic> statistics) {
 //        AtomicReference<Double> d = new AtomicReference<>(0.0);
