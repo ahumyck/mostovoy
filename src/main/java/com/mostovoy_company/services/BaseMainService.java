@@ -79,9 +79,10 @@ public abstract class BaseMainService implements MainService {
                     .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
                     .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
                     .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
-                    .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(statistics)))
                     .percolationThreshold(buildLineChartNode(probability, normalizedStatManager.percolationThreshold(statistics)))
-                    .percolationWayWidth(buildLineChartNode(probability, normalizedStatManager.percolationWayWidth(statistics)));
+                    .percolationWayWidth(buildLineChartNode(probability, normalizedStatManager.percolationWayWidth(statistics)))
+                    .midInterClustersInterval(buildLineChartNode(probability, normalizedStatManager.midInterClustersIntervalSize(statistics)))
+                    .interClustersHoleCount(buildLineChartNode(probability, normalizedStatManager.interClustersHoleCount(statistics)));
         }
         return responseMessageBuilder.build();
     }
@@ -100,6 +101,8 @@ public abstract class BaseMainService implements MainService {
         putToValues(values, ChartNames.RED_CELLS_STATION_DISTANCES_DISCRETE_CHART, message.getRedCellsStationDistancesDiscrete());
         putToValues(values, ChartNames.PERCOLATION_CHART, message.getPercolationThreshold());
         putToValues(values, ChartNames.PERCOLATION_WAY_WIDTH_CHART, message.getPercolationWayWidth());
+        putToValues(values, ChartNames.MID_INTERCLUSTER_INTERVAL_SIZE, message.getMidInterClustersInterval());
+        putToValues(values, ChartNames.INTER_CLUSTER_INTERVAL_HOLE_COUNT, message.getInterClustersHoleCount());
         return values;
     }
 

@@ -1,6 +1,5 @@
 package com.mostovoy_company.expirement;
 
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.mostovoy_company.entity.Cell;
 import com.mostovoy_company.entity.Matrix;
 import com.mostovoy_company.lightning.LightningBolt;
@@ -10,8 +9,8 @@ import com.mostovoy_company.programminPercolation.percolation.PercolationRelatio
 import com.mostovoy_company.lightning.Paired;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor
@@ -21,7 +20,7 @@ public class Experiment {
     private String name;
     private Matrix matrix;
     private Paired<List<Cell>, Integer> path = null;
-//    private List<PercolationRelation> programmings = null;
+    //    private List<PercolationRelation> programmings = null;
     private int neighborhood;
     private Paired<Integer, Integer> darkRedAndBlackCellsRatio = null;
     private LightningBolt lightningBolt;
@@ -33,18 +32,18 @@ public class Experiment {
         this.lightningBolt = new LightningBolt(matrix);
         this.statistic.setSize(matrix.getSize() - 2 * Matrix.OFFSET);
         this.statistic.setClusterCount(matrix.getClusterCounter());
-        this.statistic.setBlackCellCount((int)matrix.getCountOfBlackCells());
-        this.neighborhood = 2*(matrix.getSize() - 2 * Matrix.OFFSET);
+        this.statistic.setBlackCellCount((int) matrix.getCountOfBlackCells());
+        this.neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
     }
 
-    public Experiment matrix(Matrix matrix){
+    public Experiment matrix(Matrix matrix) {
         this.matrix = matrix;
         this.statistic.setSize(matrix.getSize() - 2 * Matrix.OFFSET);
         this.statistic.setClusterCount(matrix.getClusterCounter());
-        this.statistic.setBlackCellCount((int)matrix.getCountOfBlackCells());
+        this.statistic.setBlackCellCount((int) matrix.getCountOfBlackCells());
 //        this.statistic.setMaxClusterSize(matrix.getMaxClusterSize());
 //        this.statistic.setMinClusterSize(matrix.getMinClusterSize());
-        this.neighborhood = 2*(matrix.getSize() - 2 * Matrix.OFFSET);
+        this.neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
         return this;
     }
 
@@ -62,7 +61,7 @@ public class Experiment {
         return this.statistic.getBlackCellCount();
     }
 
-    public int getClusterCounter(){
+    public int getClusterCounter() {
         return this.statistic.getClusterCount();
     }
 
@@ -74,35 +73,44 @@ public class Experiment {
         return path != null ? path.getFirst().size() : 0;
     }
 
-    public Experiment calculateLightningBolt(){
+    public Experiment calculateLightningBolt() {
         this.lightningBolt = new LightningBolt(this.matrix);
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
-        System.out.println(path);
         this.statistic.setRedCellCount(getRedCell());
         this.statistic.setPercolationizated(getRedCell() == 0);
         this.statistic.setPercolationWayWidth(percolationWayWidth());
         this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
+        calculateInterClusterInterval();
         return this;
     }
 
-    private void calculateMidInterClusterInterval(){
+    private void calculateInterClusterInterval() {
         AtomicInteger interClusterHoleCount = new AtomicInteger(0);
-        AtomicInteger interClusterIntervalSize = new AtomicInteger(0);
-        AtomicBoolean flag = new AtomicBoolean(false);
+        List<AtomicInteger> interClustersSizes = new ArrayList<>();
+        interClustersSizes.add(new AtomicInteger());
         path.getFirst().forEach(cell -> {
-            if(cell.isWhite() && flag.get()){
-                interClusterIntervalSize.incrementAndGet();
+            if (cell.isWhite()) {
+                interClustersSizes.get(interClusterHoleCount.get()).incrementAndGet();
+            } else if (cell.isBlack() && interClustersSizes.get(interClusterHoleCount.get()).get() != 0) {
+                interClustersSizes.add(new AtomicInteger(0));
+                interClusterHoleCount.incrementAndGet();
             }
         });
+        if (path.getFirst().get(path.getFirst().size() - 1).isBlack()) {
+            interClustersSizes.remove(interClustersSizes.get(interClustersSizes.size() - 1));
+        }
+//        System.out.println("sizes: " + interClustersSizes);
+        this.statistic.setMidInterClustersInterval(interClustersSizes.stream().mapToDouble(AtomicInteger::get).average().orElse(0));
+        this.statistic.setInterClustersHoleCount(interClustersSizes.size());
     }
 
-    private int percolationWayWidth(){
+    private int percolationWayWidth() {
         return this.path.getFirst().stream().mapToInt(Cell::getY).max().getAsInt() - this.path.getFirst().stream().mapToInt(Cell::getY).min().getAsInt();
     }
 
-    public Experiment putPercolationProgrammingInStats(){
+    public Experiment putPercolationProgrammingInStats() {
         String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
-        Paired[] averagesWithSize = new Paired[]{new Paired<Double,Integer>(), new Paired<Double,Integer>()};
+        Paired[] averagesWithSize = new Paired[]{new Paired<Double, Integer>(), new Paired<Double, Integer>()};
         for (int i = 0; i < 2; i++) {
             String calculator = calculators[i];
             List<PercolationRelation> percolationRelations = calculateProgrammingPercolation(calculator);
@@ -118,14 +126,14 @@ public class Experiment {
         return this;
     }
 
-    private int getRedCell(){
-        return  (int)getPath().stream().filter(Cell::isWhite).count();
+    private int getRedCell() {
+        return (int) getPath().stream().filter(Cell::isWhite).count();
     }
 
     void calculatePath() {
         this.path = lightningBolt.calculateShortestPaths().getShortestPath().get();
-        System.out.println(path);
         this.statistic.setRedCellCount(getRedCell());
+        calculateInterClusterInterval();
 //        this.distances = lightningBolt.getDistances();
 
     }
@@ -160,7 +168,7 @@ public class Experiment {
         return name;
     }
 
-    public Experiment clear(){
+    public Experiment clear() {
         this.matrix = null;
         this.lightningBolt = null;
         return this;

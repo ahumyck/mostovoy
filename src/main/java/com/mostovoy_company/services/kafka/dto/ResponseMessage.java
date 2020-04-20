@@ -21,4 +21,6 @@ public class ResponseMessage {
     private LineChartNode darkRedAndBlackCellsRatio;
     private LineChartNode percolationThreshold;
     private LineChartNode percolationWayWidth;
+    private LineChartNode midInterClustersInterval;
+    private LineChartNode interClustersHoleCount;
 }

@@ -89,4 +89,12 @@ public class StatisticManager {
                 });
         return d.get()/n.get();
     }
+
+    public double interClustersHoleCount(List<Statistic> statistics){
+        return statistics.stream().mapToDouble(Statistic::getInterClustersHoleCount).average().orElse(0);
+    }
+
+    public double midInterClustersIntervalSize(List<Statistic> statistics){
+        return statistics.stream().mapToDouble(Statistic::getMidInterClustersInterval).average().orElse(0);
+    }
 }

@@ -87,7 +87,6 @@ public class RequestService {
                 .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
                 .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
                 .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
-                .darkRedAndBlackCellsRatio(buildLineChartNode(probability, normalizedStatManager.darkRedAndBlackCellsRatio(statistics)))
                 .build();
     }
 
