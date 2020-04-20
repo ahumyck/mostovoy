@@ -73,7 +73,6 @@ public class StatisticManager {
                     n.addAndGet(pair.getSecond());
                 });
         return d.get()/n.get();
-//        return 0.0;
     }
 
 

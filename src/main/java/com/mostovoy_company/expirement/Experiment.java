@@ -20,11 +20,8 @@ public class Experiment {
     private String name;
     private Matrix matrix;
     private Paired<List<Cell>, Integer> path = null;
-    //    private List<PercolationRelation> programmings = null;
     private int neighborhood;
-    private Paired<Integer, Integer> darkRedAndBlackCellsRatio = null;
     private LightningBolt lightningBolt;
-//    private List<Double> distances;
 
     public Experiment(String name, Matrix matrix) {
         this.name = name;
@@ -41,8 +38,6 @@ public class Experiment {
         this.statistic.setSize(matrix.getSize() - 2 * Matrix.OFFSET);
         this.statistic.setClusterCount(matrix.getClusterCounter());
         this.statistic.setBlackCellCount((int) matrix.getCountOfBlackCells());
-//        this.statistic.setMaxClusterSize(matrix.getMaxClusterSize());
-//        this.statistic.setMinClusterSize(matrix.getMinClusterSize());
         this.neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
         return this;
     }
@@ -55,22 +50,6 @@ public class Experiment {
 
     public int getSize() {
         return this.statistic.getSize();
-    }
-
-    public long getCountOfBlackCells() {
-        return this.statistic.getBlackCellCount();
-    }
-
-    public int getClusterCounter() {
-        return this.statistic.getClusterCount();
-    }
-
-    public int getRedCellsCounter() {
-        return this.statistic.getRedCellCount();
-    }
-
-    public int getDistance() {
-        return path != null ? path.getFirst().size() : 0;
     }
 
     public Experiment calculateLightningBolt() {
@@ -99,7 +78,6 @@ public class Experiment {
         if (path.getFirst().get(path.getFirst().size() - 1).isBlack()) {
             interClustersSizes.remove(interClustersSizes.get(interClustersSizes.size() - 1));
         }
-//        System.out.println("sizes: " + interClustersSizes);
         this.statistic.setMidInterClustersInterval(interClustersSizes.stream().mapToDouble(AtomicInteger::get).average().orElse(0));
         this.statistic.setInterClustersHoleCount(interClustersSizes.size());
     }
@@ -137,12 +115,9 @@ public class Experiment {
         this.statistic.setPercolationWayWidth(percolationWayWidth());
         this.statistic.setPercolationWayDistance(lightningBolt.getDistanceForShortestPath());
         calculateInterClusterInterval();
-//        this.distances = lightningBolt.getDistances();
-
     }
 
     public List<PercolationRelation> getProgrammings(String distanceCalculatorType) {
-//        this.programmings = calculateProgrammingPercolation(distanceCalculatorType);
         return calculateProgrammingPercolation(distanceCalculatorType);
     }
 
@@ -151,16 +126,6 @@ public class Experiment {
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
                 .getProgrammingPercolationList(this.neighborhood);
     }
-
-//    private void calculateDarkRedAndBlackCellsInTape(){
-//        List<Cell> tape = new Tape(matrix, getPath()).generateWideTape(this.neighborhood);
-//        int blackCounter = (int)tape.stream().filter(Cell::isBlack).count();
-//        List<Cell> darkRedCells = this.programmings.stream()
-//                .map(PercolationRelation::getDarkRedCell)
-//                .collect(Collectors.toList());
-//        int darkRedCounter = (int)tape.stream().filter(Cell::isBlack).filter(darkRedCells::contains).count();
-//        darkRedAndBlackCellsRatio = new Paired<>(darkRedCounter, blackCounter);
-//    }
 
     public Matrix getMatrix() {
         return matrix;

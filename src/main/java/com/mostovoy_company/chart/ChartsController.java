@@ -73,7 +73,7 @@ public class ChartsController {
             Map<Integer, Integer> map = new LinkedHashMap<>();
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
             List<Integer> counts = countParser(this.matrixCount.getText(), sizes.size());
-            var consumeProperties = new ConsumeProperties();
+            ConsumeProperties consumeProperties = new ConsumeProperties();
             consumeProperties.setLightningBoltEnable(performLightning.isSelected());
             buildChartsTabPane();
             chartsDataRepository.clear();
@@ -85,7 +85,7 @@ public class ChartsController {
                     DoubleStream.iterate(0.0, x -> x + step)
                             .limit(120)
                             .filter(x -> x >= 0)
-                            .filter(x -> x <= 1.01)
+                            .filter(x -> x <= 0.7)
                             .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
             mainService.consume(consumeProperties);
         });

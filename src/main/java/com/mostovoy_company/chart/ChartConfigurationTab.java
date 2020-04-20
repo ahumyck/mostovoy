@@ -53,8 +53,8 @@ public class ChartConfigurationTab {
 
     public void saveConfiguration(){
         try {
-            var newStartProbability = Double.parseDouble(startProbabilityField.getText());
-            var newFinalProbability = Double.parseDouble(finalProbabilityField.getText());
+            double newStartProbability = Double.parseDouble(startProbabilityField.getText());
+            double newFinalProbability = Double.parseDouble(finalProbabilityField.getText());
             if(newStartProbability != startProbability || newFinalProbability != finalProbability){
                 changed = true;
                 startProbability = newStartProbability;

@@ -1,7 +1,6 @@
 package com.mostovoy_company.chart;
 
 import com.mostovoy_company.Main;
-import com.mostovoy_company.chart.LineChartData;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -10,7 +9,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.var;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,12 +31,12 @@ public class ChartConfigurationController {
 
     public void show(List<LineChartData> charts){
         charts.forEach(chart ->{
-            var tab = new Tab();
+            Tab tab = new Tab();
             tab.setContent(chart.getConfigurationTab());
             tab.setText(chart.getTabName());
             chartsConfigurationsTabPane.getTabs().add(tab);
         });
-        var stage = new Stage();
+        Stage stage = new Stage();
         stage.setTitle("Конфигурация графиков");
         stage.setScene(new Scene(chartConfigurationTabPane));
         stage.setAlwaysOnTop(true);
