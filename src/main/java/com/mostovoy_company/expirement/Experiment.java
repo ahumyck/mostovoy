@@ -125,17 +125,6 @@ public class Experiment {
                 .getProgrammingPercolationList(this.neighborhood);
     }
 
-
- /*   public List<Cell> generateTape(int bound){
-        return new Tape(matrix, getPath()).generateTape(bound);
-    }*/
-
-    /*public Experiment getDarkRedAndBlackCellsFromWideTape(){
-        calculateDarkRedAndBlackCellsInTape();
-        return darkRedAndBlackCellsRatio;
-        return this;
-    }*/
-
 //    private void calculateDarkRedAndBlackCellsInTape(){
 //        List<Cell> tape = new Tape(matrix, getPath()).generateWideTape(this.neighborhood);
 //        int blackCounter = (int)tape.stream().filter(Cell::isBlack).count();

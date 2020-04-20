@@ -1,9 +1,16 @@
 package com.mostovoy_company.entity;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.filling.FillingType;
 import com.mostovoy_company.lightning.Paired;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -21,6 +28,15 @@ public class Matrix {
                 matrix[i][j] = new Cell(i,j);
             }
         }
+    }
+
+    public static Matrix fromJSON(String jsonName) throws IOException {
+        FileReader fileReader = new FileReader(jsonName);
+        JsonReader jsonReader = new JsonReader(fileReader);
+        Matrix matrix = new Gson().fromJson(jsonReader, Matrix.class);
+        fileReader.close();
+        jsonReader.close();
+        return matrix;
     }
 
     public Matrix(Matrix matrix){
@@ -239,5 +255,11 @@ public class Matrix {
             builder.append('\n');
         }
         return builder.toString();
+    }
+
+    public void toJSON(String filename) throws IOException {
+        FileWriter fileWriter = new FileWriter(filename);
+        new Gson().toJson(this, fileWriter);
+        fileWriter.close();
     }
 }
