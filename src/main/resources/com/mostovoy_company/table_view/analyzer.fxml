@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<HBox spacing="15" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mostovoy_company.table_view.AnalyzerController"
+      prefHeight="400.0" prefWidth="600.0"
+      fx:id="analyzer">
+    <padding>
+        <Insets top="10" left="10" right="10"/>
+    </padding>
+    <VBox spacing="10">
+        <Label text="Размер матрицы:"/>
+        <TextField fx:id="matrixSizeAnalyzer"/>
+        <Label text="Количество матриц:"/>
+        <TextField fx:id="matrixCountAnalyzer"/>
+        <Label text="Концентрация:"/>
+        <TextField fx:id="concentrationAnalyzer"/>
+        <Button fx:id="applyAnalyzerExperiment" mnemonicParsing="false" text="Apply"/>
+    </VBox>
+    <TableView fx:id="analyzerDataTable"/>
+</HBox>

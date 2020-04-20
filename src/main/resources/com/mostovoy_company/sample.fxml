@@ -16,22 +16,7 @@
         </Tab>
         <Tab fx:id="fullExperiment" text="Общий эксперимент">
         </Tab>
-        <Tab text="Специальный эксперимент">
-            <HBox spacing="10">
-                <padding>
-                    <Insets top="10" left="10" right="10"/>
-                </padding>
-                <VBox spacing="10">
-                    <Label text="Размер матрицы:"/>
-                    <TextField fx:id="matrixSizeAnalyzer"/>
-                    <Label text="Количество матриц:"/>
-                    <TextField fx:id="matrixCountAnalyzer"/>
-                    <Label text="Концентрация:"/>
-                    <TextField fx:id="concentrationAnalyzer"/>
-                    <Button fx:id="applyAnalyzerExperiment" mnemonicParsing="false" text="Apply"/>
-                </VBox>
-                <TableView fx:id="analyzerDataTable"/>
-            </HBox>
+        <Tab text="Специальный эксперимент" fx:id="analyzerTable">
         </Tab>
     </TabPane>
 </StackPane>

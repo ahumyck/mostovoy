@@ -1,4 +1,4 @@
-package com.mostovoy_company;
+package com.mostovoy_company.chart;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;

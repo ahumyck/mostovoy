@@ -1,31 +1,18 @@
 package com.mostovoy_company.chart;
 
-import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.sun.javafx.charts.Legend;
-import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 import lombok.var;
 import net.rgielen.fxweaver.core.FxWeaver;
-import org.gillius.jfxutils.chart.ChartPanManager;
-import org.gillius.jfxutils.chart.ChartZoomManager;
-import org.gillius.jfxutils.chart.JFXChartUtil;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;

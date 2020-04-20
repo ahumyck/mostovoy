@@ -1,6 +1,5 @@
 package com.mostovoy_company.chart;
 
-import com.mostovoy_company.ConfigurationController;
 import com.mostovoy_company.services.ConsumeProperties;
 import com.mostovoy_company.services.MainService;
 import javafx.fxml.FXML;
@@ -67,7 +66,7 @@ public class ChartsController {
     public void initialize() {
         VBox.setVgrow(statisticChartsTabPane, Priority.ALWAYS);
         configurationWindow.setVisible(false);
-        configurationWindow.setOnMouseClicked(mouseEvent -> fxWeaver.loadController(ConfigurationController.class).show(getCurrentAvailableCharts()));
+        configurationWindow.setOnMouseClicked(mouseEvent -> fxWeaver.loadController(ChartConfigurationController.class).show(getCurrentAvailableCharts()));
         applyExperiment.setOnAction(event -> {
             configurationWindow.setVisible(true);
             final double step = Double.parseDouble(stepProbability.getText());

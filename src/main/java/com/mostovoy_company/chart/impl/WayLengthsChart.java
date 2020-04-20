@@ -1,6 +1,5 @@
 package com.mostovoy_company.chart.impl;
 
-import com.mostovoy_company.ChartConfigurationTab;
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltDependChart;
 import net.rgielen.fxweaver.core.FxWeaver;

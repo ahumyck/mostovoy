@@ -8,7 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.mostovoy_company.ConfigurationController"
+            fx:controller="com.mostovoy_company.chart.ChartConfigurationController"
             fx:id="chartConfigurationTabPane">
     <TabPane fx:id="chartsConfigurationsTabPane" maxWidth="490" tabClosingPolicy="UNAVAILABLE"/>
 </AnchorPane>

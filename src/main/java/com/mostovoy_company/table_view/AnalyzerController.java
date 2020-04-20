@@ -1,20 +1,56 @@
 package com.mostovoy_company.table_view;
 
+import com.mostovoy_company.table_view.analyzer.AnalyzerManager;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.stereotype.Component;
 
 
-public class TableViewController {
-    public static void initialize(TableView<TableViewAnalyzerData> analyzerDataTable){
+@Component
+@FxmlView("analyzer.fxml")
+public class AnalyzerController {
+
+    @FXML
+    public TextField matrixCountAnalyzer;
+    @FXML
+    public TextField concentrationAnalyzer;
+    @FXML
+    public TextField matrixSizeAnalyzer;
+    @FXML
+    public Button applyAnalyzerExperiment;
+    @FXML
+    public TableView<TableViewAnalyzerData> analyzerDataTable;
+    @FXML
+    public HBox analyzer;
+
+    private AnalyzerManager analyzerManager;
+
+    public AnalyzerController(AnalyzerManager analyzerManager) {
+        this.analyzerManager = analyzerManager;
+    }
+
+    public Node getContent() {
+        return this.analyzer;
+    }
+
+
+    @FXML
+    public void initialize() {
         HBox.setHgrow(analyzerDataTable, Priority.ALWAYS);
-        TableColumn<TableViewAnalyzerData, String> size = new TableColumn<>("L");
-        TableColumn<TableViewAnalyzerData, String> probability = new TableColumn<>("Концентрация");
+        TableColumn<TableViewAnalyzerData, String> sizeColumn = new TableColumn<>("L");
+        TableColumn<TableViewAnalyzerData, String> probabilityColumn = new TableColumn<>("Концентрация");
         TableColumn<TableViewAnalyzerData, String> averageWhiteCellsPerColumn = new TableColumn<>("Среднее белых в столбце");
-        TableColumn<TableViewAnalyzerData, String> minWhiteCellsPerColumn= new TableColumn<>("Минимальное белых в столбце");
+        TableColumn<TableViewAnalyzerData, String> minWhiteCellsPerColumn = new TableColumn<>("Минимальное белых в столбце");
         TableColumn<TableViewAnalyzerData, String> maxWhiteCellsPerColumn = new TableColumn<>("Максимальное белых в столбце");
 
         TableColumn<TableViewAnalyzerData, String> averageWhiteCellsPerRow = new TableColumn<>("Среднее белых в строке");
@@ -26,8 +62,8 @@ public class TableViewController {
         TableColumn<TableViewAnalyzerData, String> averageBlackCells = new TableColumn<>("Среднее черных в строке");
 
 
-        size.setCellValueFactory(new PropertyValueFactory<>("size"));
-        probability.setCellValueFactory(new PropertyValueFactory<>("probability"));
+        sizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
+        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>("probability"));
 
         averageWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("averageWhiteCellsPerColumns"));
         minWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("minWhiteCellsPerColumn"));
@@ -42,9 +78,16 @@ public class TableViewController {
         averageBlackCells.setCellValueFactory(new PropertyValueFactory<>("averageBlackCells"));
 
         analyzerDataTable.setItems(FXCollections.observableArrayList());
-        analyzerDataTable.getColumns().addAll(size, probability,
+        analyzerDataTable.getColumns().addAll(sizeColumn, probabilityColumn,
                 averageWhiteCellsPerColumn, minWhiteCellsPerColumn, maxWhiteCellsPerColumn,
                 averageWhiteCellsPerRow, minWhiteCellsPerRow, maxWhiteCellsPerRow,
                 sumBlackCells, emptyRows, averageBlackCells);
+        applyAnalyzerExperiment.setOnAction(event -> {
+            int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
+            int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
+            double probability = Double.parseDouble(this.concentrationAnalyzer.getText());
+            ObservableList<TableViewAnalyzerData> analyzerDataObservableList = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
+            analyzerDataTable.setItems(analyzerDataObservableList);
+        });
     }
 }

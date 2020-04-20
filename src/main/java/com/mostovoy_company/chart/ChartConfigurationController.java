@@ -1,5 +1,6 @@
-package com.mostovoy_company;
+package com.mostovoy_company.chart;
 
+import com.mostovoy_company.Main;
 import com.mostovoy_company.chart.LineChartData;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,7 +20,7 @@ import java.util.List;
 @Component
 @FxmlView("ConfigurationWindow.fxml")
 @Scope("prototype")
-public class ConfigurationController {
+public class ChartConfigurationController {
 
     @FXML
     public TabPane chartsConfigurationsTabPane;

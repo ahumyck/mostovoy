@@ -9,7 +9,7 @@
 <?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.mostovoy_company.ChartConfigurationTab"
+            fx:controller="com.mostovoy_company.chart.ChartConfigurationTab"
             fx:id="chartConfigurationTab">
     <VBox spacing="10.0">
         <padding>
