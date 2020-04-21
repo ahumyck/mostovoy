@@ -50,8 +50,11 @@
             </HBox>
             <CheckBox fx:id="performLightning" text="Молния" selected="true"/>
         </VBox>
-        <VBox spacing="15">
+        <VBox spacing="25">
+            <Button fx:id="uploadButton" text="Загрузить графики"/>
             <Button fx:id="configurationWindow" text="Конфигурация"/>
+            <Button fx:id="snapshotButton" text="Снимок графика"/>
+            <Button fx:id="saveButton" text="Сохранить графики"/>
         </VBox>
     </HBox>
     <Button fx:id="applyExperiment" mnemonicParsing="false" text="Apply"/>

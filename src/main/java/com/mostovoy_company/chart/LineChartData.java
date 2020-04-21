@@ -9,7 +9,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 public interface LineChartData {
 
@@ -30,4 +32,6 @@ public interface LineChartData {
     void collectStatistic(ResponseMessage message, List<Statistic> statistics);
 
     void parseResponseMessage(ResponseMessage message);
+
+    Map<Integer, List<LineChartNode>> getUnmodifiableChartData();
 }

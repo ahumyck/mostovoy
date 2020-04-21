@@ -6,9 +6,13 @@ import com.mostovoy_company.chart.LightningBoltIndependentChart;
 import com.mostovoy_company.chart.LineChartData;
 import com.mostovoy_company.services.ConsumeProperties;
 import com.mostovoy_company.services.MainService;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +21,9 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -41,6 +48,12 @@ public class ChartsController {
     public TextField stepProbability;
     @FXML
     public CheckBox performLightning;
+    @FXML
+    public Button snapshotButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    public Button uploadButton;
 
     private FxWeaver fxWeaver;
     private List<LightningBoltIndependentChart> lightningBoltIndependentCharts;
@@ -57,7 +70,7 @@ public class ChartsController {
                             List<LightningBoltIndependentChart> lightningBoltIndependentCharts,
                             List<LightningBoltDependentChart> lightningBoltDependentCharts,
                             ChartsDataRepository chartsDataRepository,
-                            @Qualifier("kafkaSupportService") MainService mainService) {
+                            @Qualifier("defaultService") MainService mainService) {
         this.fxWeaver = fxWeaver;
         this.lightningBoltIndependentCharts = lightningBoltIndependentCharts;
         this.chartsDataRepository = chartsDataRepository;
@@ -87,11 +100,37 @@ public class ChartsController {
             mainService.initNewSession();
             map.forEach((size, count) ->
                     DoubleStream.iterate(0.00, x -> x + step)
-                            .limit(120)
-                            .filter(x -> x >= 0)
-                            .filter(x -> x <= 1.01)
-                            .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
+                                .limit(120)
+                                .filter(x -> x >= 0)
+                                .filter(x -> x <= 1.01)
+                                .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
             mainService.consume(consumeProperties);
+        });
+        snapshotButton.setOnAction(actionEvent -> {
+            Node node = statisticChartsTabPane.getSelectionModel().getSelectedItem().getContent();
+            LineChart chart = (LineChart) node;
+            WritableImage writableImage = new WritableImage((int) statisticChartsTabPane.getWidth(), (int) statisticChartsTabPane.getHeight());
+            node.snapshot(new SnapshotParameters(), writableImage);
+            try {
+                File file;
+                int i = 1;
+                do {
+                    file = new File(chart.getTitle() + "(" + i++ + ")" + ".png");
+                } while (file.exists());
+
+                ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
+                System.out.println("snapshot saved: " + file.getAbsolutePath());
+            } catch (IOException ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        });
+        buildChartsTabPane();
+        performLightning.setOnAction(actionEvent -> buildChartsTabPane());
+        saveButton.setOnAction(actionEvent -> {
+            chartsDataRepository.saveChartsToJSON();
+        });
+        uploadButton.setOnAction(actionEvent -> {
+            chartsDataRepository.restoreChartsFormJSON();
         });
     }
 

@@ -1,29 +1,38 @@
 package com.mostovoy_company.chart;
 
+import com.google.gson.annotations.Expose;
 import com.mostovoy_company.controllers.ChartConfigurationTabController;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.sun.javafx.charts.Legend;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
+import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import net.rgielen.fxweaver.core.FxWeaver;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@Slf4j
 public abstract class BaseLineChartData implements LineChartData {
 
     private LineChart<Number, Number> lineChart;
@@ -61,6 +70,11 @@ public abstract class BaseLineChartData implements LineChartData {
                 }
             }
         });
+    }
+
+    @Override
+    public Map<Integer, List<LineChartNode>> getUnmodifiableChartData() {
+        return Collections.unmodifiableMap(this.fullChartData);
     }
 
     synchronized public void add(int size, LineChartNode node) {
@@ -192,5 +206,4 @@ public abstract class BaseLineChartData implements LineChartData {
             });
         });
     }
-
 }
