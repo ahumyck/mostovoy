@@ -1,11 +1,15 @@
 package com.mostovoy_company.chart;
 
+import com.mostovoy_company.expirement.entity.Statistic;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+
+import java.util.List;
 
 public interface LineChartData {
 
@@ -22,4 +26,8 @@ public interface LineChartData {
     void clear();
 
     void saveConfiguration();
+
+    void collectStatistic(ResponseMessage message, List<Statistic> statistics);
+
+    void parseResponseMessage(ResponseMessage message);
 }

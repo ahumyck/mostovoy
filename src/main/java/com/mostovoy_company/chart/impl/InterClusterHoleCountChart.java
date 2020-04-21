@@ -1,13 +1,16 @@
 package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.chart.BaseLineChartData;
-import com.mostovoy_company.chart.ChartNames;
 import com.mostovoy_company.chart.LightningBoltDependentChart;
+import com.mostovoy_company.expirement.entity.Statistic;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Component(ChartNames.INTER_CLUSTER_INTERVAL_HOLE_COUNT)
+import java.util.List;
+
+@Component
 @Order(7)
 public class InterClusterHoleCountChart extends BaseLineChartData implements LightningBoltDependentChart {
 
@@ -28,5 +31,18 @@ public class InterClusterHoleCountChart extends BaseLineChartData implements Lig
     @Override
     public String getTabName() {
         return "Межкластерные дырки";
+    }
+
+    @Override
+    public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
+        message.setInterClustersHoleCount(statistics.stream()
+                                                    .mapToDouble(Statistic::getInterClustersHoleCount)
+                                                    .average()
+                                                    .orElse(0));
+    }
+
+    @Override
+    public void parseResponseMessage(ResponseMessage message) {
+        parseResponseMessageAndAdd(message, message.getInterClustersHoleCount());
     }
 }

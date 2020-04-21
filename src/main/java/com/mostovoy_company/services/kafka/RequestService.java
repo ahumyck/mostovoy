@@ -9,7 +9,6 @@ import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.mostovoy_company.services.kafka.session.SessionManager;
-import com.mostovoy_company.expirement.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -28,19 +27,16 @@ public class RequestService {
     private ControlService controlService;
     private ExperimentManager experimentManager;
     private SessionManager sessionManager;
-    private StatisticManager normalizedStatManager;
     private ResponseService responseService;
     private KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate;
 
     @Autowired
     public RequestService(ExperimentManager experimentManager, SessionManager sessionManager,
-                          StatisticManager normalizedStatManager,
                           ResponseService responseService,
                           KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate) {
         this.experimentManager = experimentManager;
         this.responseService = responseService;
         this.sessionManager = sessionManager;
-        this.normalizedStatManager = normalizedStatManager;
         this.kafkaRequestTemplate = kafkaRequestTemplate;
     }
 
@@ -79,14 +75,14 @@ public class RequestService {
 
     private ResponseMessage collectStatisticAndBuildResponseMessage(int size, double probability, List<Statistic> statistics) {
         return ResponseMessage.builder()
-                .sessionId(sessionManager.getCurrentSessionId())
-                .size(size)
-                .midClustersCounts(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(statistics)))
-                .midClustersSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(statistics)))
-                .midRedCellsCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(statistics)))
-                .midWayLengths(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
-                .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
-                .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
+//                .sessionId(sessionManager.getCurrentSessionId())
+//                .size(size)
+//                .clusterCount(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(statistics)))
+//                .clusterSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(statistics)))
+//                .addedRedCellCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(statistics)))
+//                .percolationWayLength(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
+//                .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
+//                .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
                 .build();
     }
 

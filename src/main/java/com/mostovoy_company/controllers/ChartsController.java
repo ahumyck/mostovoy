@@ -88,7 +88,7 @@ public class ChartsController {
                     DoubleStream.iterate(0.0, x -> x + step)
                             .limit(120)
                             .filter(x -> x >= 0)
-                            .filter(x -> x <= 0.7)
+                            .filter(x -> x <= 1.01)
                             .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
             mainService.consume(consumeProperties);
         });

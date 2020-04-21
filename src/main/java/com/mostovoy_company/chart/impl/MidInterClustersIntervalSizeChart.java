@@ -11,38 +11,39 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Order(6)
-public class PercolationWayWidthChart extends BaseLineChartData implements LightningBoltDependentChart {
+@Order(8)
+public class MidInterClustersIntervalSizeChart extends BaseLineChartData implements LightningBoltDependentChart {
 
-    public PercolationWayWidthChart(FxWeaver fxWeaver) {
+    public MidInterClustersIntervalSizeChart(FxWeaver fxWeaver) {
         super(fxWeaver);
     }
 
     @Override
     protected double getNormalizedCoefficient(int size) {
-        return 1.0 / size;
+        return 1.0;
     }
 
     @Override
     public String getChartName() {
-        return "Ширина перколяционного пути";
+        return "Среднее растояние между кластерами";
     }
 
     @Override
     public String getTabName() {
-        return "Ширина пути";
+        return "Межкластерное расстояние";
     }
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        message.setPercolationWayWidth(statistics.stream()
-                                                 .mapToDouble(Statistic::getPercolationWayWidth)
-                                                 .average()
-                                                 .orElse(0));
+        message.setInterClusterIntervalSize(statistics.stream()
+                                                      .mapToDouble(Statistic::getMidInterClustersInterval)
+                                                      .average()
+                                                      .orElse(0));
+
     }
 
     @Override
     public void parseResponseMessage(ResponseMessage message) {
-        parseResponseMessageAndAdd(message, message.getPercolationWayWidth());
+        parseResponseMessageAndAdd(message, message.getInterClusterIntervalSize());
     }
 }

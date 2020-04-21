@@ -1,5 +1,6 @@
-package com.mostovoy_company.expirement.table_view;
+package com.mostovoy_company.controllers;
 
+import com.mostovoy_company.expirement.table_view.TableViewAnalyzerData;
 import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

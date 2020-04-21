@@ -1,9 +1,8 @@
 package com.mostovoy_company.services;
 
-import com.mostovoy_company.chart.ChartsDataRepository;
+import com.mostovoy_company.chart.LineChartData;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
-import com.mostovoy_company.expirement.StatisticManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,19 +14,17 @@ import java.util.List;
 public class DefaultService extends BaseMainService {
 
 
-    public DefaultService(ChartsDataRepository chartsDataRepository,
-                          StatisticManager normalizedStatManager,
-                          ExperimentManager experimentManager) {
-        super(chartsDataRepository, normalizedStatManager, experimentManager);
+    public DefaultService(List<LineChartData> charts, ExperimentManager experimentManager) {
+        super(charts, experimentManager);
     }
 
     @Override
     protected RequestMessage buildRequestMessage(int count, int size, double probability) {
         return RequestMessage.builder()
-                .count(count)
-                .size(size)
-                .probability(probability)
-                .build();
+                             .count(count)
+                             .size(size)
+                             .probability(probability)
+                             .build();
     }
 
     @Override

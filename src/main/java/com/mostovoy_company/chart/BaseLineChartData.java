@@ -2,7 +2,9 @@ package com.mostovoy_company.chart;
 
 import com.mostovoy_company.controllers.ChartConfigurationTabController;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.sun.javafx.charts.Legend;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Cursor;
@@ -107,6 +109,14 @@ public abstract class BaseLineChartData implements LineChartData {
         isNormalized = false;
     }
 
+    protected void parseResponseMessageAndAdd(ResponseMessage message, double value) {
+        add(message.getSize(), buildLineChartNode(message.getProbability(), value));
+    }
+
+    protected LineChartNode buildLineChartNode(double x, double y) {
+        return new LineChartNode(x, y);
+    }
+
     protected abstract double getNormalizedCoefficient(int size);
 
     private LineChart<Number, Number> createLineChart() {
@@ -156,14 +166,14 @@ public abstract class BaseLineChartData implements LineChartData {
         series.setData(data);
         chart.getData().add(series);
         chart.getChildrenUnmodifiable().stream()
-                .filter(child -> child instanceof Legend)
-                .flatMap(legend -> ((Legend) legend).getItems().stream())
-                .forEach(item -> {
-                            XYChart.Series<Number, Number> s = chart.getData().stream().filter(d -> d.getName().equals(item.getText())).collect(Collectors.toList()).get(0);
-                            item.getSymbol().setCursor(Cursor.HAND);
-                            item.getSymbol().setOnMouseClicked(event1 -> s.getNode().setVisible(!s.getNode().isVisible()));
-                        }
-                );
+             .filter(child -> child instanceof Legend)
+             .flatMap(legend -> ((Legend) legend).getItems().stream())
+             .forEach(item -> {
+                         XYChart.Series<Number, Number> s = chart.getData().stream().filter(d -> d.getName().equals(item.getText())).collect(Collectors.toList()).get(0);
+                         item.getSymbol().setCursor(Cursor.HAND);
+                         item.getSymbol().setOnMouseClicked(event1 -> s.getNode().setVisible(!s.getNode().isVisible()));
+                     }
+             );
 
     }
 

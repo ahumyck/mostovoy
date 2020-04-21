@@ -2,13 +2,15 @@ package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltIndependentChart;
+import com.mostovoy_company.expirement.entity.Statistic;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import static com.mostovoy_company.chart.ChartNames.CLUSTER_COUNT_CHART;
+import java.util.List;
 
-@Component(CLUSTER_COUNT_CHART)
+@Component
 @Order(2)
 public class ClusterCountChart extends BaseLineChartData implements LightningBoltIndependentChart {
 
@@ -29,5 +31,17 @@ public class ClusterCountChart extends BaseLineChartData implements LightningBol
     @Override
     public String getTabName() {
         return "Количество кластеров";
+    }
+
+    public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
+        message.setClusterCount(statistics.stream()
+                                          .mapToDouble(Statistic::getClusterCount)
+                                          .average()
+                                          .orElse(0));
+    }
+
+    @Override
+    public void parseResponseMessage(ResponseMessage message) {
+        parseResponseMessageAndAdd(message, message.getClusterCount());
     }
 }

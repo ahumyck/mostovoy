@@ -6,7 +6,7 @@
 <?import javafx.geometry.Insets?>
 <HBox spacing="15" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.mostovoy_company.expirement.table_view.AnalyzerController"
+      fx:controller="com.mostovoy_company.controllers.AnalyzerController"
       fx:id="analyzer">
     <padding>
         <Insets top="10" left="10" right="10"/>

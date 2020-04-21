@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Order(6)
-public class PercolationWayWidthChart extends BaseLineChartData implements LightningBoltDependentChart {
+@Order(4)
+public class PercolationWayLengthChart extends BaseLineChartData implements LightningBoltDependentChart {
 
-    public PercolationWayWidthChart(FxWeaver fxWeaver) {
+    public PercolationWayLengthChart(FxWeaver fxWeaver) {
         super(fxWeaver);
     }
 
@@ -25,24 +25,24 @@ public class PercolationWayWidthChart extends BaseLineChartData implements Light
 
     @Override
     public String getChartName() {
-        return "Ширина перколяционного пути";
+        return "Средняя длина пути";
     }
 
     @Override
     public String getTabName() {
-        return "Ширина пути";
+        return "Длина пути";
     }
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        message.setPercolationWayWidth(statistics.stream()
-                                                 .mapToDouble(Statistic::getPercolationWayWidth)
-                                                 .average()
-                                                 .orElse(0));
+        message.setPercolationWayLength(statistics.stream()
+                                                  .mapToDouble(Statistic::getPercolationWayLength)
+                                                  .average()
+                                                  .orElse(0));
     }
 
     @Override
     public void parseResponseMessage(ResponseMessage message) {
-        parseResponseMessageAndAdd(message, message.getPercolationWayWidth());
+        parseResponseMessageAndAdd(message, message.getPercolationWayLength());
     }
 }

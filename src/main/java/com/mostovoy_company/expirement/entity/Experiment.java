@@ -20,15 +20,11 @@ public class Experiment {
     private String name;
     private Matrix matrix;
     private List<Cell> percolationWay;
-    private int neighborhood;
     private LightningBolt lightningBolt;
 
     public Experiment matrix(Matrix matrix) {
         this.matrix = matrix;
         this.statistic.setSize(matrix.getSize() - 2 * Matrix.OFFSET);
-        this.statistic.setClusterCount(matrix.getClusterCounter());
-        this.statistic.setBlackCellCount((int) matrix.getCountOfBlackCells());
-        this.neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
         return this;
     }
 
@@ -36,6 +32,14 @@ public class Experiment {
         this.name = name;
         return this;
     }
+
+    public Experiment clusterization(){
+        this.matrix.clusterization();
+        this.statistic.setBlackCellCount((int)matrix.getCountOfBlackCells());
+        this.statistic.setClusterCount(matrix.getClusterCount());
+        return this;
+    }
+
 
     public Experiment calculateLightningBolt() {
         this.lightningBolt = new LightningBolt(this.matrix);
@@ -90,7 +94,7 @@ public class Experiment {
         return max - min + 1;
     }
 
-    public Experiment putPercolationProgrammingInStats() {
+    public Experiment calculateProgramingPercolation() {
         String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
         Paired[] averagesWithSize = new Paired[]{new Paired<Double, Integer>(), new Paired<Double, Integer>()};
         for (int i = 0; i < 2; i++) {
@@ -117,9 +121,10 @@ public class Experiment {
     }
 
     private List<PercolationRelation> calculateProgrammingPercolation(String distanceCalculatorType) {
+        int neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
         return new PercolationProgramming(matrix, percolationWay)
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
-                .getProgrammingPercolationList(this.neighborhood);
+                .getProgrammingPercolationList(neighborhood);
     }
 
     @Override

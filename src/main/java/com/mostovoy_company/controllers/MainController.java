@@ -1,6 +1,5 @@
 package com.mostovoy_company.controllers;
 
-import com.mostovoy_company.expirement.table_view.AnalyzerController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import lombok.extern.slf4j.Slf4j;

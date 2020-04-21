@@ -198,7 +198,7 @@ public class ManualMatrixController {
             String currentFilename = filepath + "Эксперимент №" + i;
             try {
                 Matrix matrix = Matrix.fromJSON(currentFilename);
-                Experiment experiment = new Experiment().name("Эксперимент №" + i).matrix(matrix);
+                Experiment experiment = new Experiment().name("Эксперимент №" + i).matrix(matrix).clusterization();
                 matrixObservableList.add(experiment);
             } catch (IOException e) {
                 break;

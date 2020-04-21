@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 public class ResponseMessage {
     private long sessionId;
     private int size;
-    private LineChartNode midClustersCounts;
-    private LineChartNode midClustersSize;
-    private LineChartNode midRedCellsCount;
-    private LineChartNode midWayLengths;
-    private LineChartNode redCellsStationDistancesPythagoras;
-    private LineChartNode redCellsStationDistancesDiscrete;
-    private LineChartNode darkRedAndBlackCellsRatio;
-    private LineChartNode percolationThreshold;
-    private LineChartNode percolationWayWidth;
-    private LineChartNode midInterClustersInterval;
-    private LineChartNode interClustersHoleCount;
+    private double probability;
+    private double clusterCount;
+    private double clusterSize;
+    private double addedRedCellCount;
+    private double percolationWayLength;
+    private double redCellsStationDistancesPythagoras;
+    private double redCellsStationDistancesDiscrete;
+    private double percolationThreshold;
+    private double percolationWayWidth;
+    private double interClusterIntervalSize;
+    private double interClustersHoleCount;
 }

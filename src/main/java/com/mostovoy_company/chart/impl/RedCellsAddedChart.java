@@ -2,13 +2,15 @@ package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltDependentChart;
+import com.mostovoy_company.expirement.entity.Statistic;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import static com.mostovoy_company.chart.ChartNames.RED_CELLS_ADDED_CHART;
+import java.util.List;
 
-@Component(RED_CELLS_ADDED_CHART)
+@Component
 @Order(5)
 public class RedCellsAddedChart extends BaseLineChartData implements LightningBoltDependentChart {
 
@@ -29,5 +31,18 @@ public class RedCellsAddedChart extends BaseLineChartData implements LightningBo
     @Override
     public String getTabName() {
         return "Количество красных клеток";
+    }
+
+    @Override
+    public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
+        message.setAddedRedCellCount(statistics.stream()
+                                               .mapToDouble(Statistic::getRedCellCount)
+                                               .average()
+                                               .orElse(0));
+    }
+
+    @Override
+    public void parseResponseMessage(ResponseMessage message) {
+        parseResponseMessageAndAdd(message, message.getAddedRedCellCount());
     }
 }

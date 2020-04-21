@@ -36,17 +36,6 @@ public class Matrix {
         return matrix;
     }
 
-    public Matrix(Matrix matrix){
-        int actualSize = matrix.getSize();
-        this.matrix = new Cell[actualSize][actualSize];
-        for (int i = 0; i < actualSize; i++) {
-            for (int j = 0; j < actualSize; j++) {
-                this.matrix[i][j] = new Cell(i,j, matrix.getCell(i,j).getType());
-            }
-        }
-        makeSomeStuff();
-    }
-
     public Matrix(FillingType type) {
         int[][] typeMatrix = type.getMatrix();
         init(typeMatrix.length);
@@ -58,14 +47,16 @@ public class Matrix {
                     this.matrix[i + OFFSET][j + OFFSET].setType(CellType.WHITE);
             }
         }
-        makeSomeStuff();
     }
 
-    private void makeSomeStuff(){
+
+
+    public Matrix clusterization(){
         markClusters();
         reindexClusterMarks();
         joinClusters();
         countClusters();
+        return this;
     }
 
     public Stream<Cell> stream() {
@@ -88,7 +79,7 @@ public class Matrix {
         this.matrix[i][j] = cell;
     }
 
-    public int getClusterCounter(){
+    public int getClusterCount(){
         return clusterCounter;
     }
 

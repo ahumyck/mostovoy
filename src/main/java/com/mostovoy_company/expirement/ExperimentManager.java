@@ -5,8 +5,6 @@ import com.mostovoy_company.expirement.entity.Matrix;
 import com.mostovoy_company.expirement.entity.Statistic;
 import com.mostovoy_company.expirement.filling.FillingType;
 import com.mostovoy_company.services.ConsumeProperties;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +20,13 @@ public class ExperimentManager {
     public List<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
         List<Experiment> experimentObservableList = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            experimentObservableList.add(new Experiment().name("Эксперимент №" + (i + 1)).matrix(new Matrix(fillingType)));
+            experimentObservableList.add(new Experiment().name("Эксперимент №" + (i + 1))
+                                                         .matrix(new Matrix(fillingType))
+                                                         .clusterization());
         }
         new Thread(() -> experimentObservableList.parallelStream()
                                                  .forEach(experiment -> experiment.calculateLightningBolt()
-                                                                                  .putPercolationProgrammingInStats()
+                                                                                  .calculateProgramingPercolation()
                                                  )).start();
         return experimentObservableList;
     }
@@ -37,10 +37,11 @@ public class ExperimentManager {
                      .collect(Collectors.toList())
                      .parallelStream()
                      .map(experiment -> {
-                         experiment.matrix(new Matrix(fillingType));
+                         experiment.matrix(new Matrix(fillingType))
+                                   .clusterization();
                          if (consumeProperties.isLightningBoltEnable()) {
                              experiment.calculateLightningBolt()
-                                       .putPercolationProgrammingInStats();
+                                       .calculateProgramingPercolation();
                          }
                          return experiment.clear().getExperimentStatistic();
                      })

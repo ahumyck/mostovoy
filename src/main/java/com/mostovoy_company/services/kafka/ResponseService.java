@@ -1,6 +1,5 @@
 package com.mostovoy_company.services.kafka;
 
-import com.mostovoy_company.chart.ChartNames;
 import com.mostovoy_company.chart.ChartsDataRepository;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
@@ -40,12 +39,12 @@ public class ResponseService {
 
     private Map<String, LineChartNode> parseResponseMessage(ResponseMessage message) {
         Map<String, LineChartNode> values = new HashMap<>();
-        values.put(ChartNames.CLUSTER_COUNT_CHART, message.getMidClustersCounts());
-        values.put(ChartNames.CLUSTER_SIZE_CHART, message.getMidClustersSize());
-        values.put(ChartNames.RED_CELLS_ADDED_CHART, message.getMidRedCellsCount());
-        values.put(ChartNames.WAY_LENGTHS_CHART, message.getMidWayLengths());
-        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART, message.getRedCellsStationDistancesPythagoras());
-        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_DISCRETE_CHART, message.getRedCellsStationDistancesDiscrete());
+//        values.put(ChartNames.CLUSTER_COUNT_CHART, message.getClusterCount());
+//        values.put(ChartNames.CLUSTER_SIZE_CHART, message.getClusterSize());
+//        values.put(ChartNames.RED_CELLS_ADDED_CHART, message.getAddedRedCellCount());
+//        values.put(ChartNames.WAY_LENGTHS_CHART, message.getPercolationWayLength());
+//        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART, message.getRedCellsStationDistancesPythagoras());
+//        values.put(ChartNames.RED_CELLS_STATION_DISTANCES_DISCRETE_CHART, message.getRedCellsStationDistancesDiscrete());
         return values;
     }
 

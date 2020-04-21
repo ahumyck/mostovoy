@@ -2,12 +2,16 @@ package com.mostovoy_company.chart.impl;
 
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltDependentChart;
+import com.mostovoy_company.expirement.entity.Statistic;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
 
-import static com.mostovoy_company.chart.ChartNames.RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
-@Component(RED_CELLS_STATION_DISTANCES_PYTHAGORAS_CHART)
+@Component
 public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData implements LightningBoltDependentChart {
 
     public RedCellsStationDistancesPythagorasChart(FxWeaver fxWeaver) {
@@ -27,5 +31,23 @@ public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData i
     @Override
     public String getTabName() {
         return "Расстояние установки способ 2";
+    }
+
+    @Override
+    public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
+        AtomicReference<Double> d = new AtomicReference<>(0.0);
+        AtomicInteger n = new AtomicInteger();
+        statistics.stream()
+                  .map(Statistic::getPythagorasDistance)
+                  .forEach(pair -> {
+                      d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
+                      n.addAndGet(pair.getSecond());
+                  });
+        message.setRedCellsStationDistancesPythagoras(d.get() / n.get());
+    }
+
+    @Override
+    public void parseResponseMessage(ResponseMessage message) {
+        parseResponseMessageAndAdd(message, message.getRedCellsStationDistancesPythagoras());
     }
 }
