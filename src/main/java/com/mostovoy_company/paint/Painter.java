@@ -54,7 +54,7 @@ public class Painter {
     private void paintRelations(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D) {
         relations.stream().map(PercolationRelation::getDarkRedCell).forEach(cell -> {
             graphicsContext2D.setFill(Color.DARKRED);
-            graphicsContext2D.fillRect(cell.getX() * size, cell.getY() * size, size, size);
+            graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, size);
         });
     }
 

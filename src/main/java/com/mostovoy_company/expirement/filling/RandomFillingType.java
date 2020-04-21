@@ -34,4 +34,9 @@ public class RandomFillingType extends FillingType {
         }
         return matrix;
     }
+
+    @Override
+    public String getName() {
+        return toString() + " " + size + "x" + size + ", k=" + String.format("%.2f", percolationProbability);
+    }
 }

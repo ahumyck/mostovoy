@@ -9,6 +9,8 @@ abstract public class FillingType {
 
     abstract public int[][] getMatrix();
 
+    abstract public String getName();
+
     @Override
     public String toString() {
         return name;

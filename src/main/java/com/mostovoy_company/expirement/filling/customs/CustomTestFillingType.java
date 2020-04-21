@@ -9,4 +9,9 @@ public abstract class CustomTestFillingType extends FillingType {
 
     @Override
     abstract public int[][] getMatrix();
+
+    @Override
+    public String getName() {
+        return toString();
+    }
 }

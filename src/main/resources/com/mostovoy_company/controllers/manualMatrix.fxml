@@ -56,18 +56,25 @@
             <padding>
                 <Insets top="10" left="10" right="10"/>
             </padding>
-            <Button fx:id="applyConfiguration" mnemonicParsing="false" text="Apply"/>
+            <Button fx:id="applyConfiguration" mnemonicParsing="false" text="Добавить"/>
             <Button fx:id="distanceCalculatorType" text="Пифагор"/>
         </HBox>
     </VBox>
     <HBox fx:id="experimentListAndCanvas" spacing="5">
-        <ListView fx:id="experimentListView" maxHeight="Infinity" minWidth="120" maxWidth="120"/>
+
+        <VBox spacing="10" maxHeight="Infinity">
+            <ListView fx:id="experimentListView" maxHeight="Infinity" minWidth="120" maxWidth="175"/>
+            <Button text="Очистить" fx:id="clearListButton"/>
+            <padding>
+                <Insets bottom="20" />
+            </padding>
+        </VBox>
         <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
             <Tab fx:id="gridTab" text="Матрица">
-                    <Canvas fx:id="gridPane"/>
+                <Canvas fx:id="gridPane"/>
             </Tab>
             <Tab fx:id="lightningBoltTab" text="Молния">
-                    <Canvas fx:id="lightningBoltPane"/>
+                <Canvas fx:id="lightningBoltPane"/>
             </Tab>
         </TabPane>
         <VBox spacing="5" fx:id="matrixInfo">

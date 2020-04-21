@@ -20,8 +20,8 @@ public class ExperimentManager {
     public List<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
         List<Experiment> experimentObservableList = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            experimentObservableList.add(new Experiment().name("Эксперимент №" + (i + 1))
-                                                         .matrix(new Matrix(fillingType))
+            experimentObservableList.add(new Experiment().matrix(new Matrix(fillingType))
+                                                         .name(fillingType.getName())
                                                          .clusterization());
         }
         new Thread(() -> experimentObservableList.parallelStream()

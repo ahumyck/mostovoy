@@ -65,6 +65,8 @@ public class ManualMatrixController {
     public HBox experimentListAndCanvas;
     @FXML
     public VBox matrixInfo;
+    @FXML
+    public Button clearListButton;
 
 
     private ObservableList<FillingType> fillingTypesList;
@@ -88,12 +90,15 @@ public class ManualMatrixController {
 
     @FXML
     public void initialize() {
+        experimentListView.setItems(FXCollections.observableArrayList());
         HBox.setHgrow(experimentListAndCanvas, Priority.ALWAYS);
         HBox.setHgrow(mainTabPane, Priority.ALWAYS);
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(fillingTypesList);
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
+        clearListButton.setOnAction(actionEvent -> {
+            experimentListView.getItems().clear();
+        });
         mainTabPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             if (experiment != null)
@@ -104,7 +109,7 @@ public class ManualMatrixController {
             if (experiment != null)
                 paintByCheckBox(experiment, PYTHAGORAS);
         });
-
+        experimentNumber.setText("1");
 
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
@@ -148,16 +153,16 @@ public class ManualMatrixController {
                 double probability = Double.parseDouble(fillingProbability.getText());
                 ((RandomFillingType) fillingType).setPercolationProbability(probability);
                 ((RandomFillingType) fillingType).setSize(size);
-                experimentListView.setItems(FXCollections.observableArrayList(experimentManager.initializeExperimentsParallel(number, fillingType)));
+                experimentListView.getItems().addAll(experimentManager.initializeExperimentsParallel(number, fillingType));
             } else if (fillingType instanceof CustomTestFillingType) {
-                experimentListView.setItems(FXCollections.observableArrayList(experimentManager.initializeExperimentsParallel(number, fillingType)));
+                experimentListView.getItems().addAll(experimentManager.initializeExperimentsParallel(number, fillingType));
             }
         });
     }
 
     void paintByCheckBox(Experiment experiment, String type) {
-        painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 20);
-        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPercolationWay(), experiment.getProgrammings(type), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 60);
+        painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
+        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPercolationWay(), experiment.getProgrammings(type), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
     }
 
     void paintByDistanceResolverAndCheckBox() {
@@ -180,14 +185,14 @@ public class ManualMatrixController {
         addLabelToMatrixInfo("Количество красных клеток: " + statistic.getRedCellCount());
         addLabelToMatrixInfo("Длина перколяционного пути: " + statistic.getPercolationWayLength());
         addLabelToMatrixInfo("Ширина перколяционного пути: " + statistic.getPercolationWayWidth());
-        addLabelToMatrixInfo("Средний размер межластерного интервала: " + statistic.getMidInterClustersInterval());
+        addLabelToMatrixInfo("Средний размер межластерного интервала: " + String.format("%.2f", statistic.getMidInterClustersInterval()));
         addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
     }
 
     private void addLabelToMatrixInfo(String text){
         var label = new Label();
         label.setFont(new Font(14.0));
-        label.setPadding(new Insets(0.0, 0.0, 0.0, 10.0));
+        label.setPadding(new Insets(0.0, 10.0, 0.0, 10.0));
         label.setText(text);
         matrixInfo.getChildren().add(label);
     }

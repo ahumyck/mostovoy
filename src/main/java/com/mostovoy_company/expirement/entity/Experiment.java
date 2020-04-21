@@ -54,7 +54,7 @@ public class Experiment {
     }
 
     public String getName() {
-        return Optional.of(name).orElse(DEFAULT_NAME);
+        return Optional.of(name).orElse(getSize() + "x" + getSize());
     }
 
     public int getSize() {
