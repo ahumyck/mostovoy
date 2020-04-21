@@ -83,8 +83,8 @@ public class ChartsController {
         VBox.setVgrow(statisticChartsTabPane, Priority.ALWAYS);
         configurationWindow.setVisible(false);
         configurationWindow.setOnMouseClicked(mouseEvent -> fxWeaver.loadController(ChartConfigurationController.class).show(getCurrentAvailableCharts()));
+        configurationWindow.setVisible(true);
         applyExperiment.setOnAction(event -> {
-            configurationWindow.setVisible(true);
             final double step = Double.parseDouble(stepProbability.getText());
             Map<Integer, Integer> map = new LinkedHashMap<>();
             List<Integer> sizes = Arrays.stream(this.matrixSize.getText().split(",")).map(Integer::valueOf).collect(Collectors.toList());
