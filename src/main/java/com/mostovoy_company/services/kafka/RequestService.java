@@ -14,83 +14,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
 @Slf4j
-//@Component
+@Component
 public class RequestService {
 
-    @Autowired
-    private ControlService controlService;
-    private ExperimentManager experimentManager;
-    private SessionManager sessionManager;
-    private ResponseService responseService;
     private KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate;
 
     @Autowired
-    public RequestService(ExperimentManager experimentManager, SessionManager sessionManager,
-                          ResponseService responseService,
-                          KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate) {
-        this.experimentManager = experimentManager;
-        this.responseService = responseService;
-        this.sessionManager = sessionManager;
+    public RequestService(KafkaTemplate<Long, RequestMessage> kafkaRequestTemplate) {
         this.kafkaRequestTemplate = kafkaRequestTemplate;
     }
 
-    @KafkaListener(topics = "server.request",
-            containerFactory = "requestMessageKafkaListenerContainerFactory",
-            topicPartitions = @TopicPartition(topic = "server.request", partitions = SessionManager.NODE_NUMBER))
-    public void consumeRequestMessage(final RequestMessage message) throws ExecutionException, InterruptedException {
-        log.info("=>start consumed request message {}", message);
-        performCalculationAndSendResponseInNewThread(message.getSize(), message.getCount(), message.getProbability());
-    }
 
-    private void performCalculationAndSendResponseInNewThread(int size, int count, double probability) {
-        new Thread(() -> {
-            try {
-                performCalculationAndSendResponse(size, count, probability);
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    private void performCalculationAndSendResponse(int size, int count, double probability) throws ExecutionException, InterruptedException {
-        long startTime = System.currentTimeMillis();
-        RandomFillingType fillingType = new RandomFillingType();
-        fillingType.setPercolationProbability(probability);
-        fillingType.setSize(size);
-        ForkJoinPool forkJoinPool = new ForkJoinPool(8);
-        List<Statistic> statistics = forkJoinPool.submit(
-                () -> experimentManager
-                        .getStatistics(count, fillingType, new ConsumeProperties()))
-                .get();
-        responseService.sendResponseMessage(collectStatisticAndBuildResponseMessage(size, probability, statistics));
-        controlService.sendReadyMessage();
-        log.info("=> end consumed request message: " + (System.currentTimeMillis() - startTime));
-    }
-
-    private ResponseMessage collectStatisticAndBuildResponseMessage(int size, double probability, List<Statistic> statistics) {
-        return ResponseMessage.builder()
-//                .sessionId(sessionManager.getCurrentSessionId())
-//                .size(size)
-//                .clusterCount(buildLineChartNode(probability, normalizedStatManager.clusterCountStat(statistics)))
-//                .clusterSize(buildLineChartNode(probability, normalizedStatManager.clusterSizeStat(statistics)))
-//                .addedRedCellCount(buildLineChartNode(probability, normalizedStatManager.redCellsCountStat(statistics)))
-//                .percolationWayLength(buildLineChartNode(probability, normalizedStatManager.wayLengthStat(statistics)))
-//                .redCellsStationDistancesDiscrete(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForDiscrete(statistics)))
-//                .redCellsStationDistancesPythagoras(buildLineChartNode(probability, normalizedStatManager.redCellStationDistanceForPythagoras(statistics)))
-                .build();
-    }
-
-    private LineChartNode buildLineChartNode(double x, double y) {
-        return new LineChartNode(x, y);
-    }
-
-    public void sendRequestMessage(RequestMessage message){
+    public void sendRequestMessage(RequestMessage message) {
         kafkaRequestTemplate.send("server.request", message);
     }
 }

@@ -57,7 +57,7 @@ public class ChartsController {
                             List<LightningBoltIndependentChart> lightningBoltIndependentCharts,
                             List<LightningBoltDependentChart> lightningBoltDependentCharts,
                             ChartsDataRepository chartsDataRepository,
-                            @Qualifier("defaultService") MainService mainService) {
+                            @Qualifier("kafkaSupportService") MainService mainService) {
         this.fxWeaver = fxWeaver;
         this.lightningBoltIndependentCharts = lightningBoltIndependentCharts;
         this.chartsDataRepository = chartsDataRepository;
@@ -84,6 +84,7 @@ public class ChartsController {
                 map.put(sizes.get(i), counts.get(i));
             }
             log.info("=> init: " + map);
+            mainService.initNewSession();
             map.forEach((size, count) ->
                     DoubleStream.iterate(0.0, x -> x + step)
                             .limit(120)
@@ -128,4 +129,3 @@ public class ChartsController {
         }
     }
 }
-

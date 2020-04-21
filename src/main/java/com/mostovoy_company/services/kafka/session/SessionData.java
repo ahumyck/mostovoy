@@ -18,8 +18,8 @@ public class SessionData {
         this.isMaster = isMaster;
     }
 
-    public void addMessage(int count, int size, double probability){
-        queue.add(new RequestMessage(sessionId,null, count, size, probability));
+    public void addMessage(RequestMessage message){
+        queue.add(message);
     }
 
     public RequestMessage nextMessage(){

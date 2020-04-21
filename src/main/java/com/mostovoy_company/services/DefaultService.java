@@ -3,6 +3,7 @@ package com.mostovoy_company.services;
 import com.mostovoy_company.chart.LineChartData;
 import com.mostovoy_company.expirement.ExperimentManager;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
+import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,11 @@ public class DefaultService extends BaseMainService {
     }
 
     @Override
+    protected void addMessage(RequestMessage message) {
+        getQueue().add(message);
+    }
+
+    @Override
     public void consume(ConsumeProperties consumeProperties) {
         new Thread(() ->
         {
@@ -43,4 +49,8 @@ public class DefaultService extends BaseMainService {
         }).start();
     }
 
+    @Override
+    protected ResponseMessage buildResponseMessage() {
+        return ResponseMessage.builder().build();
+    }
 }

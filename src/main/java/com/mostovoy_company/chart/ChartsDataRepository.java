@@ -18,13 +18,13 @@ public class ChartsDataRepository {
         this.charts = charts;
     }
 
-    public void addAll(int size, Map<String, LineChartNode> values) {
-        Platform.runLater(() -> values.forEach((name, value) -> add(name, size, value)));
-    }
-
-    public void add(String name, int size, LineChartNode node) {
-        charts.get(name).add(size, node);
-    }
+//    public void addAll(int size, Map<String, LineChartNode> values) {
+//        Platform.runLater(() -> values.forEach((name, value) -> add(name, size, value)));
+//    }
+//
+//    public void add(String name, int size, LineChartNode node) {
+//        charts.get(name).add(size, node);
+//    }
 
     public void clear() {
         charts.forEach((name, chart) -> chart.clear());
