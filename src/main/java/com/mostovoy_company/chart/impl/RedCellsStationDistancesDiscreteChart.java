@@ -20,7 +20,7 @@ public class RedCellsStationDistancesDiscreteChart extends BaseLineChartData imp
 
     @Override
     protected double getNormalizedCoefficient(int size) {
-        return 1;
+        return 1.0/size;
     }
 
     @Override
@@ -36,14 +36,15 @@ public class RedCellsStationDistancesDiscreteChart extends BaseLineChartData imp
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         AtomicReference<Double> d = new AtomicReference<>(0.0);
-        AtomicInteger n = new AtomicInteger();
+        AtomicInteger n = new AtomicInteger(1);
         statistics.stream()
                   .map(Statistic::getDiscreteDistance)
                   .forEach(pair -> {
                       d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
                       n.addAndGet(pair.getSecond());
                   });
-        message.setRedCellsStationDistancesDiscrete(d.get() / n.get());
+        if(n.get() == 0) message.setRedCellsStationDistancesDiscrete(message.getSize() * message.getSize());
+        else message.setRedCellsStationDistancesDiscrete(d.get() / n.get());
     }
 
     @Override

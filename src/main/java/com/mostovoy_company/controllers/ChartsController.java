@@ -86,7 +86,7 @@ public class ChartsController {
             log.info("=> init: " + map);
             mainService.initNewSession();
             map.forEach((size, count) ->
-                    DoubleStream.iterate(0.0, x -> x + step)
+                    DoubleStream.iterate(0.05, x -> x + step)
                             .limit(120)
                             .filter(x -> x >= 0)
                             .filter(x -> x <= 1.01)
