@@ -130,6 +130,7 @@ public class ChartsController {
             chartsDataRepository.saveChartsToJSON();
         });
         uploadButton.setOnAction(actionEvent -> {
+            chartsDataRepository.clear();
             chartsDataRepository.restoreChartsFormJSON();
         });
     }
