@@ -100,36 +100,32 @@ public class ChartsController {
             mainService.initNewSession();
             map.forEach((size, count) ->
                     DoubleStream.iterate(0.00, x -> x + step)
-                                .limit(120)
-                                .filter(x -> x >= 0)
-                                .filter(x -> x <= 1.01)
-                                .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
+                            .limit(120)
+                            .filter(x -> x >= 0)
+                            .filter(x -> x <= 1.01)
+                            .forEach(probability -> mainService.addExperimentsDescription(count, size, probability)));
             mainService.consume(consumeProperties);
         });
         snapshotButton.setOnAction(actionEvent -> {
-            Node node = statisticChartsTabPane.getSelectionModel().getSelectedItem().getContent();
-            LineChart chart = (LineChart) node;
-            WritableImage writableImage = new WritableImage((int) statisticChartsTabPane.getWidth(), (int) statisticChartsTabPane.getHeight());
-            node.snapshot(new SnapshotParameters(), writableImage);
-            try {
-                File file;
-                int i = 1;
-                do {
-                    file = new File(chart.getTitle() + "(" + i++ + ")" + ".png");
-                } while (file.exists());
-
-                ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
-                System.out.println("snapshot saved: " + file.getAbsolutePath());
-            } catch (IOException ex) {
-                log.error(ex.getMessage(), ex);
+            Optional<File> optionalFile = fxWeaver.loadController(FileChooserController.class).getFileToSave();
+            if (optionalFile.isPresent()) {
+                Node node = statisticChartsTabPane.getSelectionModel().getSelectedItem().getContent();
+                WritableImage writableImage = new WritableImage((int) statisticChartsTabPane.getWidth(), (int) statisticChartsTabPane.getHeight());
+                node.snapshot(new SnapshotParameters(), writableImage);
+                try {
+                    File file = optionalFile.get();
+                    ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
+                } catch (IOException ex) {
+                    log.error(ex.getMessage(), ex);
+                }
             }
         });
         buildChartsTabPane();
         performLightning.setOnAction(actionEvent -> buildChartsTabPane());
 
         saveButton.setOnAction(actionEvent -> {
-            Optional<String> optionalFileName = fxWeaver.loadController(FileChooserController.class).getPossibleFilePathToSave();
-            optionalFileName.ifPresent(s -> chartsDataRepository.saveChartsToJSON(s));
+            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave();
+            optionalFileName.ifPresent(s -> chartsDataRepository.saveChartsToJSON(s.getPath()));
         });
         uploadButton.setOnAction(actionEvent -> {
             Optional<File> optionalFiles = fxWeaver.loadController(FileChooserController.class).getSingleFile();

@@ -127,11 +127,11 @@ public class ManualMatrixController {
         });
 
         saveButton.setOnAction(actionEvent -> {
-            Optional<String> optionalFileName = fxWeaver.loadController(FileChooserController.class).getPossibleFilePathToSave();
+            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave();
             if(optionalFileName.isPresent()){
                 Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
                 if(selectedItem != null){
-                    selectedItem.saveExperimentToJson(optionalFileName.get());
+                    selectedItem.saveExperimentToJson(optionalFileName.get().getPath());
                 }
             }
         });

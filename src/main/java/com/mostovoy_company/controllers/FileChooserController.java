@@ -58,14 +58,14 @@ public class FileChooserController {
         else return Optional.of(file);
     }
 
-    public Optional<String> getPossibleFilePathToSave() {
+    public Optional<File> getFileToSave() {
         Stage stage = initializeStage();
         FileChooser chooser = new FileChooser();
         stage.show();
         chooser.setTitle("Сохранение файла");
         File file = chooser.showSaveDialog(stage);
         stage.close();
-        if (file != null) return Optional.of(file.getPath());
+        if (file != null) return Optional.of(file);
         else return Optional.empty();
     }
 }
