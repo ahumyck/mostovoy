@@ -2,6 +2,7 @@ package com.mostovoy_company.expirement.entity;
 
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.expirement.filling.FillingType;
 import com.mostovoy_company.expirement.lightningbolt.Paired;
@@ -13,9 +14,11 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Matrix {
+    @Expose
     private Cell[][] matrix;
-    public static final int OFFSET = 1;
+    @Expose
     private int clusterCounter = 0;
+    public static final int OFFSET = 1;
 
     private void init(int size){
         int actualSize = size + 2 * OFFSET;

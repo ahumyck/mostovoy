@@ -1,8 +1,7 @@
 package com.mostovoy_company.controllers;
 
-import com.mostovoy_company.expirement.entity.Matrix;
-import com.mostovoy_company.expirement.entity.Experiment;
 import com.mostovoy_company.expirement.ExperimentManager;
+import com.mostovoy_company.expirement.entity.Experiment;
 import com.mostovoy_company.expirement.entity.Statistic;
 import com.mostovoy_company.expirement.filling.FillingType;
 import com.mostovoy_company.expirement.filling.RandomFillingType;
@@ -15,16 +14,20 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import lombok.var;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-import static com.mostovoy_company.expirement.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
 import static com.mostovoy_company.expirement.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
 
 @FxmlView("manualMatrix.fxml")
@@ -67,19 +70,25 @@ public class ManualMatrixController {
     public VBox matrixInfo;
     @FXML
     public Button clearListButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    public Button uploadButton;
 
 
     private ObservableList<FillingType> fillingTypesList;
     private ExperimentManager experimentManager;
     private Painter painter;
+    private FxWeaver fxWeaver;
 
 
     public ManualMatrixController(List<FillingType> fillingTypesList,
                                   ExperimentManager experimentManager,
-                                  Painter painter) {
+                                  Painter painter, FxWeaver fxWeaver) {
         this.fillingTypesList = FXCollections.observableArrayList(fillingTypesList);
         this.experimentManager = experimentManager;
         this.painter = painter;
+        this.fxWeaver = fxWeaver;
     }
 
     public Node getContent() {
@@ -102,29 +111,35 @@ public class ManualMatrixController {
         mainTabPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             if (experiment != null)
-                paintByCheckBox(experiment, PYTHAGORAS);
+                paintByCheckBox(experiment);
         });
         mainTabPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             if (experiment != null)
-                paintByCheckBox(experiment, PYTHAGORAS);
+                paintByCheckBox(experiment);
         });
         experimentNumber.setText("1");
 
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            paintByCheckBox(experiment, PYTHAGORAS);
+            paintByCheckBox(experiment);
             showMatrixInfo(experiment);
-//            try {
-//                experiment.getMatrix().toJSON(filepath + experiment.toString());
-//                System.out.println("saving file: " + filepath + experiment.toString());
-//            } catch (IOException e) {
-//                System.out.println("Unable to save matrix: " + filepath + experiment.toString());
-//            }
         });
-        distanceCalculatorType.setOnAction(actionEvent -> {
-            paintByDistanceResolverAndCheckBox();
+
+        saveButton.setOnAction(actionEvent -> {
+            Optional<String> optionalFileName = fxWeaver.loadController(FileChooserController.class).getPossibleFilePathToSave();
+            if(optionalFileName.isPresent()){
+                Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
+                if(selectedItem != null){
+                    selectedItem.saveExperimentToJson(optionalFileName.get());
+                }
+            }
         });
+        uploadButton.setOnAction(actionEvent -> {
+            Optional<List<File>> optionalFiles = fxWeaver.loadController(FileChooserController.class).getMultipleFiles();
+            optionalFiles.ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)));
+        });
+
 
         fillingProbability.setVisible(false);
         probabilityLabel.setVisible(false);
@@ -144,7 +159,6 @@ public class ManualMatrixController {
             }
         });
         applyConfiguration.setOnAction(actionEvent -> {
-//            loadFiles();
             String txt = experimentNumber.getText();
             int number = Integer.parseInt(txt);
             FillingType fillingType = fillingTypes.getValue();
@@ -160,21 +174,9 @@ public class ManualMatrixController {
         });
     }
 
-    void paintByCheckBox(Experiment experiment, String type) {
+    void paintByCheckBox(Experiment experiment) {
         painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
-        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPercolationWay(), experiment.getProgrammings(type), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
-    }
-
-    void paintByDistanceResolverAndCheckBox() {
-        if (distanceCalculatorType.getText().equals(PYTHAGORAS)) {
-            distanceCalculatorType.setText(DISCRETE);
-            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            paintByCheckBox(experiment, DISCRETE);
-        } else if (distanceCalculatorType.getText().equals(DISCRETE)) {
-            final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            distanceCalculatorType.setText(PYTHAGORAS);
-            paintByCheckBox(experiment, PYTHAGORAS);
-        }
+        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPercolationWay(), experiment.getProgrammings(PYTHAGORAS), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
     }
 
     private void showMatrixInfo(Experiment experiment) {
@@ -197,18 +199,16 @@ public class ManualMatrixController {
         matrixInfo.getChildren().add(label);
     }
 
-    void loadFiles() {
+    private ObservableList<Experiment> loadExperiments(List<File> files) {
         ObservableList<Experiment> matrixObservableList = FXCollections.observableArrayList();
-        for (int i = 1; i < Integer.MAX_VALUE; i++) {
-            String currentFilename = filepath + "Эксперимент №" + i;
+        for (int i = 0; i < files.size(); i++) {
+            File file = files.get(i);
             try {
-                Matrix matrix = Matrix.fromJSON(currentFilename);
-                Experiment experiment = new Experiment().name("Эксперимент №" + i).matrix(matrix).clusterization();
+                Experiment experiment = Experiment.getExperimentFromJson(file.getPath());
                 matrixObservableList.add(experiment);
-            } catch (IOException e) {
-                break;
+            } catch (IOException ignored) {
             }
         }
-        experimentListView.setItems(matrixObservableList);
+        return matrixObservableList;
     }
 }

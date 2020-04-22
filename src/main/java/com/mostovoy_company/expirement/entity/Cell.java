@@ -1,20 +1,22 @@
 package com.mostovoy_company.expirement.entity;
 
 
-public class Cell {
-    private CellType type;
-    private int clusterMark = 0;
-    private int x;
-    private int y;
-    public int getX()
-    {
-        return x - Matrix.OFFSET;
-    }
+import com.google.gson.annotations.Expose;
+import lombok.EqualsAndHashCode;
 
-    public int getY()
-    {
-        return y - Matrix.OFFSET;
-    }
+import java.util.Objects;
+
+@EqualsAndHashCode
+public class Cell {
+    @Expose
+    private CellType type;
+    @Expose
+    private int clusterMark = 0;
+    @Expose
+    private int x;
+    @Expose
+    private int y;
+
     public Cell(int x, int y) {
         this.x = x;
         this.y = y;
@@ -27,12 +29,16 @@ public class Cell {
         this.type = type;
     }
 
-    public Cell(int x, int y, CellType type, int clusterMark){
-        this.x = x;
-        this.y = y;
-        this.type = type;
-        this.clusterMark = clusterMark;
+    public Cell(Cell cell){
+        this.x = cell.x + Matrix.OFFSET;
+        this.y = cell.x + Matrix.OFFSET;
+        this.type = cell.type;
+        this.clusterMark = cell.clusterMark;
     }
+
+    public int getX() { return x - Matrix.OFFSET; }
+
+    public int getY() { return y - Matrix.OFFSET; }
 
     public boolean isWhite(){ return type.equals(CellType.WHITE); }
 

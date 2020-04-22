@@ -1,5 +1,6 @@
 package com.mostovoy_company.expirement.lightningbolt;
 
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Paired<V,T>{
+    @Expose
     private V first;
+    @Expose
     private T second;
 
     @Override

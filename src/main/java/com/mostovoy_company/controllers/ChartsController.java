@@ -126,12 +126,17 @@ public class ChartsController {
         });
         buildChartsTabPane();
         performLightning.setOnAction(actionEvent -> buildChartsTabPane());
+
         saveButton.setOnAction(actionEvent -> {
-            chartsDataRepository.saveChartsToJSON();
+            Optional<String> optionalFileName = fxWeaver.loadController(FileChooserController.class).getPossibleFilePathToSave();
+            optionalFileName.ifPresent(s -> chartsDataRepository.saveChartsToJSON(s));
         });
         uploadButton.setOnAction(actionEvent -> {
-            chartsDataRepository.clear();
-            chartsDataRepository.restoreChartsFormJSON();
+            Optional<File> optionalFiles = fxWeaver.loadController(FileChooserController.class).getSingleFile();
+            if (optionalFiles.isPresent()) {
+                chartsDataRepository.clear();
+                chartsDataRepository.restoreChartsFormJSON(optionalFiles.get().getPath());
+            }
         });
     }
 

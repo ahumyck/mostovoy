@@ -1,12 +1,19 @@
 package com.mostovoy_company.expirement.entity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.expirement.lightningbolt.LightningBolt;
+import com.mostovoy_company.expirement.lightningbolt.Paired;
 import com.mostovoy_company.expirement.programminPercolation.distance.DistanceCalculatorTypeResolver;
 import com.mostovoy_company.expirement.programminPercolation.percolation.PercolationProgramming;
 import com.mostovoy_company.expirement.programminPercolation.percolation.PercolationRelation;
-import com.mostovoy_company.expirement.lightningbolt.Paired;
 import lombok.NoArgsConstructor;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +22,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @NoArgsConstructor
 public class Experiment {
 
-    private final static String DEFAULT_NAME = "noname";
-    private Statistic statistic = new Statistic();
-    private String name;
-    private Matrix matrix;
-    private List<Cell> percolationWay;
+    @Expose(deserialize = false, serialize = false)
     private LightningBolt lightningBolt;
+
+    @Expose
+    private Statistic statistic = new Statistic();
+    @Expose
+    private String name;
+    @Expose
+    private Matrix matrix;
+    @Expose
+    private List<Cell> percolationWay;
 
     public Experiment matrix(Matrix matrix) {
         this.matrix = matrix;
@@ -140,5 +152,25 @@ public class Experiment {
 
     public Statistic getExperimentStatistic() {
         return statistic;
+    }
+
+    public void saveExperimentToJson(String filename) {
+        try (FileWriter fileWriter = new FileWriter(filename)) {
+            new GsonBuilder()
+                    .setPrettyPrinting()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create().toJson(this, fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Experiment getExperimentFromJson(String filename) throws IOException {
+        FileReader fileReader = new FileReader(filename);
+        JsonReader jsonReader = new JsonReader(fileReader);
+        Experiment experiment = new Gson().fromJson(jsonReader, Experiment.class);
+        fileReader.close();
+        jsonReader.close();
+        return experiment;
     }
 }
