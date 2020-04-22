@@ -157,7 +157,6 @@ public class Experiment {
     public void saveExperimentToJson(String filename) {
         try (FileWriter fileWriter = new FileWriter(filename)) {
             new GsonBuilder()
-                    .setPrettyPrinting()
                     .excludeFieldsWithoutExposeAnnotation()
                     .create().toJson(this, fileWriter);
         } catch (IOException e) {

@@ -107,7 +107,7 @@ public class ChartsController {
             mainService.consume(consumeProperties);
         });
         snapshotButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFile = fxWeaver.loadController(FileChooserController.class).getFileToSave();
+            Optional<File> optionalFile = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.pngExtensionFilter);
             if (optionalFile.isPresent()) {
                 Node node = statisticChartsTabPane.getSelectionModel().getSelectedItem().getContent();
                 WritableImage writableImage = new WritableImage((int) statisticChartsTabPane.getWidth(), (int) statisticChartsTabPane.getHeight());
@@ -124,11 +124,11 @@ public class ChartsController {
         performLightning.setOnAction(actionEvent -> buildChartsTabPane());
 
         saveButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave();
+            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter);
             optionalFileName.ifPresent(s -> chartsDataRepository.saveChartsToJSON(s.getPath()));
         });
         uploadButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFiles = fxWeaver.loadController(FileChooserController.class).getSingleFile();
+            Optional<File> optionalFiles = fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter);
             if (optionalFiles.isPresent()) {
                 chartsDataRepository.clear();
                 chartsDataRepository.restoreChartsFormJSON(optionalFiles.get().getPath());

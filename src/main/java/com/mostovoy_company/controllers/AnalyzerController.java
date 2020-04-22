@@ -1,9 +1,9 @@
 package com.mostovoy_company.controllers;
 
 import com.mostovoy_company.expirement.table_view.TableViewAnalyzerData;
+import com.mostovoy_company.expirement.table_view.TableViewAnalyzerDataRepository;
 import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerManager;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -13,8 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Optional;
 
 
 @Component
@@ -33,11 +38,18 @@ public class AnalyzerController {
     public TableView<TableViewAnalyzerData> analyzerDataTable;
     @FXML
     public HBox analyzer;
+    @FXML
+    public Button saveButton;
+    @FXML
+    public Button uploadButton;
 
     private AnalyzerManager analyzerManager;
+    private FxWeaver fxWeaver;
+    private TableViewAnalyzerDataRepository dataRepository = new TableViewAnalyzerDataRepository();
 
-    public AnalyzerController(AnalyzerManager analyzerManager) {
+    public AnalyzerController(AnalyzerManager analyzerManager, FxWeaver fxWeaver) {
         this.analyzerManager = analyzerManager;
+        this.fxWeaver = fxWeaver;
     }
 
     public Node getContent() {
@@ -90,8 +102,25 @@ public class AnalyzerController {
             int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
             int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
             double probability = Double.parseDouble(this.concentrationAnalyzer.getText());
-            ObservableList<TableViewAnalyzerData> analyzerDataObservableList = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
-            analyzerDataTable.setItems(analyzerDataObservableList);
+            dataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
+            analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
+        });
+
+        saveButton.setOnAction(actionEvent -> {
+            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter);
+            optionalFileName.ifPresent(file -> dataRepository.saveRepositoryToJson(file.getPath()));
+        });
+        uploadButton.setOnAction(actionEvent -> {
+            Optional<File> optionalFile = fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter);
+            optionalFile.ifPresent(file ->{
+                try {
+                    dataRepository = TableViewAnalyzerDataRepository.getRepositoryFromJson(file.getPath());
+                    analyzerDataTable.getItems().clear();
+                    analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
+                } catch (IOException e) {
+                    System.err.println("No such file exception");
+                }
+            });
         });
     }
 }

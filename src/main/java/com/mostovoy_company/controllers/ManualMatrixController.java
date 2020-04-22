@@ -127,7 +127,7 @@ public class ManualMatrixController {
         });
 
         saveButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave();
+            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter);
             if(optionalFileName.isPresent()){
                 Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
                 if(selectedItem != null){
@@ -136,7 +136,7 @@ public class ManualMatrixController {
             }
         });
         uploadButton.setOnAction(actionEvent -> {
-            Optional<List<File>> optionalFiles = fxWeaver.loadController(FileChooserController.class).getMultipleFiles();
+            Optional<List<File>> optionalFiles = fxWeaver.loadController(FileChooserController.class).getMultipleFiles(FileChooserController.jsonExtensionFilter);
             optionalFiles.ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)));
         });
 
