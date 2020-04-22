@@ -20,7 +20,7 @@ public class PercolationThresholdChart extends BaseLineChartData implements Ligh
 
     @Override
     protected double getNormalizedCoefficient(int size) {
-        return 1.0;
+        return 100;
     }
 
     @Override
