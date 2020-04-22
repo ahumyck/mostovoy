@@ -25,46 +25,27 @@ public class FileChooserController {
     public void initialize(){
     }
 
-    private Stage initializeStage(){
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(Main.pStage);
-        //todo: убрать эту хрень
-        stage.setMaxHeight(1);
-        stage.setMaxWidth(1);
-        return stage;
-    }
-
 
     public Optional<List<File>> getMultipleFiles(){
-        Stage stage = initializeStage();
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Загрузка файлов");
-        stage.show();
-        List<File> files = chooser.showOpenMultipleDialog(stage);
-        stage.close();
+        List<File> files = chooser.showOpenMultipleDialog(Main.pStage);
         if(files == null) return Optional.empty();
         else return Optional.of(files);
     }
 
     public Optional<File> getSingleFile(){
-        Stage stage = initializeStage();
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Загрузка файлов");
-        stage.show();
-        File file = chooser.showOpenDialog(stage);
-        stage.close();
+        File file = chooser.showOpenDialog(Main.pStage);
         if(file == null) return Optional.empty();
         else return Optional.of(file);
     }
 
     public Optional<File> getFileToSave() {
-        Stage stage = initializeStage();
         FileChooser chooser = new FileChooser();
-        stage.show();
         chooser.setTitle("Сохранение файла");
-        File file = chooser.showSaveDialog(stage);
-        stage.close();
+        File file = chooser.showSaveDialog(Main.pStage);
         if (file != null) return Optional.of(file);
         else return Optional.empty();
     }
