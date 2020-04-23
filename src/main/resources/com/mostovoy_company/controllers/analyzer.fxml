@@ -7,7 +7,7 @@
 <HBox spacing="15" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.mostovoy_company.controllers.AnalyzerController"
-      fx:id="analyzer">
+      fx:id="hBox">
     <padding>
         <Insets top="10" left="10" right="10"/>
     </padding>
@@ -16,8 +16,6 @@
         <TextField fx:id="matrixSizeAnalyzer"/>
         <Label text="Количество матриц:"/>
         <TextField fx:id="matrixCountAnalyzer"/>
-        <Label text="Концентрация:"/>
-        <TextField fx:id="concentrationAnalyzer"/>
         <Button fx:id="applyAnalyzerExperiment" mnemonicParsing="false" text="Apply"/>
         <HBox spacing="10">
             <padding>
@@ -27,5 +25,12 @@
             <Button fx:id="uploadButton" text="Upload"/>
         </HBox>
     </VBox>
-    <TableView fx:id="analyzerDataTable"/>
+    <VBox spacing="50">
+        <padding>
+            <Insets top="10" left="10" right="10"/>
+        </padding>
+        <TableView fx:id="tableWhiteColumn" prefHeight="150" maxHeight="225" maxWidth="Infinity"/>
+        <TableView fx:id="tableWhiteRow" prefHeight="150" maxHeight="225" maxWidth="Infinity"/>
+        <TableView fx:id="tableBlack" prefHeight="150" maxHeight="225" maxWidth="Infinity"/>
+    </VBox>
 </HBox>

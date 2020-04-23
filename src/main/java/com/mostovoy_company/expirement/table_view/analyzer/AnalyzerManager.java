@@ -2,9 +2,6 @@ package com.mostovoy_company.expirement.table_view.analyzer;
 
 import com.mostovoy_company.expirement.entity.Matrix;
 import com.mostovoy_company.expirement.filling.RandomFillingType;
-import com.mostovoy_company.expirement.table_view.TableViewAnalyzerData;
-import com.mostovoy_company.expirement.table_view.TableViewAnalyzerDataRepository;
-import com.mostovoy_company.expirement.table_view.analyzer.data_block.AnalyzerData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,6 @@
 package com.mostovoy_company.expirement.table_view;
 
-import com.mostovoy_company.expirement.table_view.analyzer.data_block.AnalyzerData;
-import com.mostovoy_company.expirement.table_view.analyzer.data_block.BlackBlockData;
-import com.mostovoy_company.expirement.table_view.analyzer.data_block.WhiteBlockData;
+import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,20 +28,18 @@ public class TableViewAnalyzerData {
         this.size = String.valueOf(data.getSize());
         this.probability = String.format("%.2f", data.getProbability());
 
-        WhiteBlockData whiteBlockData = data.getWhiteBlockData();
-        this.averageWhiteCellsPerColumns = String.format("%.2f", whiteBlockData.getWhileCellsAveragePerColumn());
-        this.minWhiteCellsPerColumn = String.valueOf(whiteBlockData.getMinWhiteCellsColumn());
-        this.maxWhiteCellsPerColumn = String.valueOf(whiteBlockData.getMaxWhiteCellsColumn());
-        this.averageWhiteCellsPerRow = String.format("%.2f", whiteBlockData.getWhiteCellsAveragePerRow());
-        this.minWhiteCellsPerRow = String.valueOf(whiteBlockData.getMinWhiteCellsRow());
-        this.maxWhiteCellsPerRow = String.valueOf(whiteBlockData.getMaxWhiteCellsRow());
+        this.averageWhiteCellsPerColumns = String.format("%.2f", data.getWhileCellsAveragePerColumn());
+        this.minWhiteCellsPerColumn = String.valueOf(data.getMinWhiteCellsColumn());
+        this.maxWhiteCellsPerColumn = String.valueOf(data.getMaxWhiteCellsColumn());
+        this.averageWhiteCellsPerRow = String.format("%.2f", data.getWhiteCellsAveragePerRow());
+        this.minWhiteCellsPerRow = String.valueOf(data.getMinWhiteCellsRow());
+        this.maxWhiteCellsPerRow = String.valueOf(data.getMaxWhiteCellsRow());
 
 
-        BlackBlockData blackBlockData = data.getBlackBlockData();
-        this.sumBlackCell = String.valueOf(blackBlockData.getSumBlackCell());
-        if(blackBlockData.getEmptyRows().isEmpty()) this.emptyRows = " - ";
-        else this.emptyRows = blackBlockData.getEmptyRows().toString();
-        this.averageBlackCells = String.format("%.2f", blackBlockData.getAverageBlackCells());
+        this.sumBlackCell = String.valueOf(data.getSumBlackCell());
+        if(data.getEmptyRows().isEmpty()) this.emptyRows = " - ";
+        else this.emptyRows = data.getEmptyRows().toString();
+        this.averageBlackCells = String.format("%.2f", data.getAverageBlackCellsPerRow());
 
     }
 }

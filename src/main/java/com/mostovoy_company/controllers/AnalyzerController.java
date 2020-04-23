@@ -1,10 +1,12 @@
 package com.mostovoy_company.controllers;
 
-import com.mostovoy_company.expirement.table_view.TableViewAnalyzerData;
-import com.mostovoy_company.expirement.table_view.TableViewAnalyzerDataRepository;
+import com.mostovoy_company.expirement.table_view.TableViewData;
 import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerDataRepository;
 import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerManager;
+import com.mostovoy_company.expirement.table_view.stats.StatisticBlockData;
+import com.mostovoy_company.expirement.table_view.stats.StatisticModule;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -18,7 +20,9 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 @Component
@@ -28,100 +32,133 @@ public class AnalyzerController {
     @FXML
     public TextField matrixCountAnalyzer;
     @FXML
-    public TextField concentrationAnalyzer;
-    @FXML
     public TextField matrixSizeAnalyzer;
     @FXML
     public Button applyAnalyzerExperiment;
     @FXML
-    public TableView<TableViewAnalyzerData> analyzerDataTable;
-    @FXML
-    public HBox analyzer;
+    public HBox hBox;
     @FXML
     public Button saveButton;
     @FXML
     public Button uploadButton;
+    @FXML
+    public TableView<TableViewData> tableWhiteColumn;
+    @FXML
+    public TableView<TableViewData> tableWhiteRow;
+    @FXML
+    public TableView<TableViewData> tableBlack;
 
     private AnalyzerManager analyzerManager;
+    private StatisticModule statisticModule;
     private FxWeaver fxWeaver;
-    private TableViewAnalyzerDataRepository dataRepository = new TableViewAnalyzerDataRepository();
 
-    public AnalyzerController(AnalyzerManager analyzerManager, FxWeaver fxWeaver) {
+    public AnalyzerController(AnalyzerManager analyzerManager, StatisticModule statisticModule, FxWeaver fxWeaver) {
         this.analyzerManager = analyzerManager;
+        this.statisticModule = statisticModule;
         this.fxWeaver = fxWeaver;
     }
 
     public Node getContent() {
-        return this.analyzer;
+        return this.hBox;
     }
 
 
     @FXML
     public void initialize() {
-//        HBox.setHgrow(analyzerDataTable, Priority.ALWAYS);
-//        analyzerDataTable.setColumnResizePolicy((param) -> true);
-        HBox.setHgrow(analyzerDataTable, Priority.ALWAYS);
-        TableColumn<TableViewAnalyzerData, String> sizeColumn = new TableColumn<>("L");
-        TableColumn<TableViewAnalyzerData, String> probabilityColumn = new TableColumn<>("Концентрация");
-        TableColumn<TableViewAnalyzerData, String> averageWhiteCellsPerColumn = new TableColumn<>("Среднее белых в столбце");
-        TableColumn<TableViewAnalyzerData, String> minWhiteCellsPerColumn = new TableColumn<>("Минимальное белых в столбце");
-        TableColumn<TableViewAnalyzerData, String> maxWhiteCellsPerColumn = new TableColumn<>("Максимальное белых в столбце");
+        initializeTables();
 
-        TableColumn<TableViewAnalyzerData, String> averageWhiteCellsPerRow = new TableColumn<>("Среднее белых в строке");
-        TableColumn<TableViewAnalyzerData, String> minWhiteCellsPerRow = new TableColumn<>("Минимальное белых в строке");
-        TableColumn<TableViewAnalyzerData, String> maxWhiteCellsPerRow = new TableColumn<>("Максимальное белых в строке");
-
-        TableColumn<TableViewAnalyzerData, String> sumBlackCells = new TableColumn<>("Сумма черных по строкам");
-        TableColumn<TableViewAnalyzerData, String> emptyRows = new TableColumn<>("Пустые строки");
-        TableColumn<TableViewAnalyzerData, String> averageBlackCells = new TableColumn<>("Среднее черных в строке");
-
-
-        sizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
-        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>("probability"));
-
-        averageWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("averageWhiteCellsPerColumns"));
-        minWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("minWhiteCellsPerColumn"));
-        maxWhiteCellsPerColumn.setCellValueFactory(new PropertyValueFactory<>("maxWhiteCellsPerColumn"));
-
-        averageWhiteCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("averageWhiteCellsPerRow"));
-        minWhiteCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("minWhiteCellsPerRow"));
-        maxWhiteCellsPerRow.setCellValueFactory(new PropertyValueFactory<>("maxWhiteCellsPerRow"));
-
-        sumBlackCells.setCellValueFactory(new PropertyValueFactory<>("sumBlackCell"));
-        emptyRows.setCellValueFactory(new PropertyValueFactory<>("emptyRows"));
-        averageBlackCells.setCellValueFactory(new PropertyValueFactory<>("averageBlackCells"));
-
-        analyzerDataTable.setItems(FXCollections.observableArrayList());
-        analyzerDataTable.getColumns().clear();
-        analyzerDataTable.getColumns().addAll(sizeColumn, probabilityColumn,
-                averageWhiteCellsPerColumn, minWhiteCellsPerColumn, maxWhiteCellsPerColumn,
-                averageWhiteCellsPerRow, minWhiteCellsPerRow, maxWhiteCellsPerRow,
-                sumBlackCells, emptyRows, averageBlackCells);
         applyAnalyzerExperiment.setOnAction(event -> {
             int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
             int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
-            double probability = Double.parseDouble(this.concentrationAnalyzer.getText());
+            double probability = 0.2;
 
             AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
-            this.dataRepository = new TableViewAnalyzerDataRepository(analyzerDataRepository);
-            analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
+            StatisticBlockData statisticBlockData = statisticModule.gatherStatistic(analyzerDataRepository);
+            TableViewData tableBlackData = statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize,probability);
+            TableViewData dataForWhiteColumn = statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize,probability);
+            TableViewData dataForWhiteRow = statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize,probability);
+            tableBlack.getItems().addAll(tableBlackData);
+            tableWhiteRow.getItems().addAll(dataForWhiteRow);
+            tableWhiteColumn.getItems().addAll(dataForWhiteColumn);
         });
+//
+//        saveButton.setOnAction(actionEvent -> {
+//            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
+//                    .ifPresent(file -> dataRepository.saveRepositoryToJson(file.getPath()));
+//        });
+//        uploadButton.setOnAction(actionEvent -> {
+//            fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter)
+//                    .ifPresent(file -> {
+//                        try {
+//                            dataRepository = TableViewAnalyzerDataRepository.getRepositoryFromJson(file.getPath());
+//                            analyzerDataTable.getItems().clear();
+//                            analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
+//                        } catch (IOException e) {
+//                            System.err.println("No such file exception");
+//                        }
+//                    });
+//        });
+    }
 
-        saveButton.setOnAction(actionEvent -> {
-            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
-                    .ifPresent(file -> dataRepository.saveRepositoryToJson(file.getPath()));
-        });
-        uploadButton.setOnAction(actionEvent -> {
-            fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter)
-                    .ifPresent(file -> {
-                        try {
-                            dataRepository = TableViewAnalyzerDataRepository.getRepositoryFromJson(file.getPath());
-                            analyzerDataTable.getItems().clear();
-                            analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
-                        } catch (IOException e) {
-                            System.err.println("No such file exception");
-                        }
-                    });
-        });
+    void initializeTables() {
+        List<String> params = generateList("firstParamAverage", "firstParamDispersion",
+                "secondParamAverage", "secondParamDispersion",
+                "thirdParamAverage", "thirdParamDispersion"
+        );
+        initializeTableView(tableWhiteColumn,
+                generateList("Статистика среднего белых в столбце",
+                        "Статистика минимального белых в столбце", "Статистика максимального белых в столбце"),
+                params);
+        initializeTableView(tableWhiteRow,
+                generateList("Статистика среднего белых в строке",
+                        "Статистика минимального белых в строке", "Статистика максимального белых в строке"),
+                params);
+        initializeTableView(tableBlack,
+                generateList("Статистика количества черных клеток",
+                        "Статистика пустых строк", "Статистика среднего черных в строке"),
+                params);
+    }
+
+    void initializeTableView(TableView<TableViewData> tableView, List<String> columnsNames, List<String> propertyNames) {
+        HBox.setHgrow(tableView, Priority.ALWAYS);
+        tableView.setColumnResizePolicy((param) -> true);
+
+        List<TableColumn<TableViewData, String>> columns = new ArrayList<>();
+        for (String columnName : columnsNames) {
+            columns.add(initializeTableColumn(columnName));
+        }
+
+        int counter = 0;
+        for (TableColumn<TableViewData, String> column : columns) {
+            ObservableList<TableColumn<TableViewData, ?>> subColumns = column.getColumns();
+            for (TableColumn<TableViewData, ?> tableViewTempTableColumn : subColumns) {
+                tableViewTempTableColumn.setCellValueFactory(new PropertyValueFactory<>(propertyNames.get(counter++)));
+            }
+        }
+
+        tableView.setItems(FXCollections.observableArrayList());
+        tableView.getColumns().clear();
+        tableView.getColumns().add(initializeBaseTableColumns("L", "size"));
+        tableView.getColumns().add(initializeBaseTableColumns("концентрация", "percolation"));
+        tableView.getColumns().addAll(columns);
+    }
+
+
+    TableColumn<TableViewData, String> initializeTableColumn(String columnName) {
+        TableColumn<TableViewData, String> param = new TableColumn<>(columnName);
+        TableColumn<TableViewData, String> averageFirstParam = new TableColumn<>("Среднее");
+        TableColumn<TableViewData, String> dispersionFirstParam = new TableColumn<>("СКО");
+        param.getColumns().addAll(averageFirstParam, dispersionFirstParam);
+        return param;
+    }
+
+    TableColumn<TableViewData, String> initializeBaseTableColumns(String columnName, String propertyName) {
+        TableColumn<TableViewData, String> column = new TableColumn<>(columnName);
+        column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
+        return column;
+    }
+
+    List<String> generateList(String... strings) {
+        return new ArrayList<>(Arrays.asList(strings));
     }
 }

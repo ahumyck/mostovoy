@@ -1,8 +1,5 @@
 package com.mostovoy_company.expirement.table_view.analyzer;
 
-import com.mostovoy_company.expirement.table_view.analyzer.data_block.AnalyzerData;
-import com.mostovoy_company.expirement.table_view.analyzer.data_block.BlackBlockData;
-import com.mostovoy_company.expirement.table_view.analyzer.data_block.WhiteBlockData;
 import com.mostovoy_company.expirement.entity.Matrix;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +13,7 @@ public class AnalyzerModule {
     public AnalyzerModule() {
     }
 
-    public AnalyzerData gatherData(Matrix matrix, double probability){
+    public AnalyzerData gatherData(Matrix matrix, double probability) {
         int actualSize = matrix.getSize();
 
         List<Integer> blackCellsPerRow = new ArrayList<>();
@@ -31,58 +28,41 @@ public class AnalyzerModule {
             int whiteCellRowCounter = 0;
             int whiteCellColumnCounter = 0;
             for (int j = Matrix.OFFSET; j < actualSize - Matrix.OFFSET; j++) {
-                if(matrix.getCell(i,j).isBlack()){
+                if (matrix.getCell(i, j).isBlack()) {
                     blackCellRowCounter++;
                     totalBlackCells++;
-                }
-                else if(matrix.getCell(i,j).isWhite()){
+                } else if (matrix.getCell(i, j).isWhite()) {
                     whiteCellRowCounter++;
                 }
 
-                if(matrix.getCell(j,i).isWhite()){
+                if (matrix.getCell(j, i).isWhite()) {
                     whiteCellColumnCounter++;
                 }
             }
-            if(blackCellRowCounter == 0) emptyRows.add(i - Matrix.OFFSET);
+            if (blackCellRowCounter == 0) emptyRows.add(i - Matrix.OFFSET);
             whiteCellsPerColumn.add(whiteCellColumnCounter);
             whiteCellsPerRow.add(whiteCellRowCounter);
             blackCellsPerRow.add(blackCellRowCounter);
         }
 
-        return new AnalyzerData(actualSize - 2 * Matrix.OFFSET, probability,
-                gatherDataToBlackBlock(blackCellsPerRow, emptyRows, totalBlackCells),
-                gatherDataToWhiteBlock(whiteCellsPerColumn, whiteCellsPerRow));
+        return new AnalyzerData(
+                actualSize - 2 * Matrix.OFFSET,
+                probability,
+                totalBlackCells,
+                emptyRows,
+                blackCellsPerRow.stream().mapToDouble(i -> i)
+                        .average().getAsDouble(),
+                whiteCellsPerColumn.stream().mapToDouble(i -> i)
+                        .average().getAsDouble(),
+                whiteCellsPerRow.stream().mapToDouble(i -> i)
+                        .average().getAsDouble(),
+                whiteCellsPerColumn.stream().mapToInt(i -> i)
+                        .max().getAsInt(),
+                whiteCellsPerColumn.stream().mapToInt(i -> i)
+                        .min().getAsInt(),
+                whiteCellsPerRow.stream().mapToInt(i -> i)
+                        .max().getAsInt(),
+                whiteCellsPerRow.stream().mapToInt(i -> i)
+                        .min().getAsInt());
     }
-
-
-    private WhiteBlockData gatherDataToWhiteBlock(List<Integer> whiteCellsPerColumn, List<Integer> whiteCellsPerRow){
-        int maxOfColumns = whiteCellsPerColumn.stream().mapToInt(i -> i)
-                .max().getAsInt();
-        int maxOfRows = whiteCellsPerRow.stream().mapToInt(i->i)
-                .max().getAsInt();
-
-        int minOfColumns = whiteCellsPerColumn.stream().mapToInt(i -> i)
-                .min().getAsInt();
-        int minOfRows = whiteCellsPerRow.stream().mapToInt(i->i)
-                .min().getAsInt();
-
-
-        double averageOfColumns = whiteCellsPerColumn.stream().mapToDouble(i -> i)
-                .average().getAsDouble();
-        double averageOfRows = whiteCellsPerRow.stream().mapToDouble(i->i)
-                .average().getAsDouble();
-
-        return new WhiteBlockData(averageOfColumns, averageOfRows, maxOfColumns, minOfColumns, maxOfRows, minOfRows);
-
-    }
-
-    private BlackBlockData gatherDataToBlackBlock(List<Integer> blackCellsPerRow, List<Integer> emptyRows, int totalBlackCells){
-        double averageBlackCells = blackCellsPerRow.stream()
-                .mapToDouble(v -> v)
-                .average().getAsDouble();
-
-        return new BlackBlockData(totalBlackCells, emptyRows, averageBlackCells);
-    }
-
-
 }
