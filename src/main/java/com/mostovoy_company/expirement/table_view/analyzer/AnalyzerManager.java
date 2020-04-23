@@ -4,6 +4,7 @@ import com.mostovoy_company.expirement.entity.Matrix;
 import com.mostovoy_company.expirement.filling.RandomFillingType;
 import com.mostovoy_company.expirement.table_view.TableViewAnalyzerData;
 import com.mostovoy_company.expirement.table_view.TableViewAnalyzerDataRepository;
+import com.mostovoy_company.expirement.table_view.analyzer.data_block.AnalyzerData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +17,16 @@ public class AnalyzerManager {
     @Autowired
     private AnalyzerModule analyzerModule;
 
-    public TableViewAnalyzerDataRepository initializeAnalyzerExperiments(int number, int matrixSize, double probability) {
+    public AnalyzerDataRepository initializeAnalyzerExperiments(int number, int matrixSize, double probability) {
         RandomFillingType fillingType = new RandomFillingType();
         fillingType.setSize(matrixSize);
         fillingType.setPercolationProbability(probability);
-        List<TableViewAnalyzerData> analyzerDataObservableList = new ArrayList<>();
+        List<AnalyzerData> analyzerDataObservableList = new ArrayList<>();
 
         for (int i = 0; i < number; i++)
-            analyzerDataObservableList.add(new TableViewAnalyzerData(analyzerModule.gatherData(new Matrix(fillingType),probability)));
+            analyzerDataObservableList.add(analyzerModule.gatherData(new Matrix(fillingType),probability));
 
 
-        return new TableViewAnalyzerDataRepository(analyzerDataObservableList);
+        return new AnalyzerDataRepository(analyzerDataObservableList);
     }
 }

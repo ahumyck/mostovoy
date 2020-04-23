@@ -10,7 +10,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Priority;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,10 +60,6 @@ public class ChartsController {
     private List<LightningBoltDependentChart> lightningBoltDependentCharts;
 
 
-    public Node getContent() {
-        return statisticChartsAnchorPane;
-    }
-
     public ChartsController(FxWeaver fxWeaver,
                             List<LightningBoltIndependentChart> lightningBoltIndependentCharts,
                             List<LightningBoltDependentChart> lightningBoltDependentCharts,
@@ -76,6 +70,10 @@ public class ChartsController {
         this.chartsDataRepository = chartsDataRepository;
         this.mainService = mainService;
         this.lightningBoltDependentCharts = lightningBoltDependentCharts;
+    }
+
+    public Node getContent() {
+        return statisticChartsAnchorPane;
     }
 
     @FXML
@@ -107,32 +105,31 @@ public class ChartsController {
             mainService.consume(consumeProperties);
         });
         snapshotButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFile = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.pngExtensionFilter);
-            if (optionalFile.isPresent()) {
-                Node node = statisticChartsTabPane.getSelectionModel().getSelectedItem().getContent();
-                WritableImage writableImage = new WritableImage((int) statisticChartsTabPane.getWidth(), (int) statisticChartsTabPane.getHeight());
-                node.snapshot(new SnapshotParameters(), writableImage);
-                try {
-                    File file = optionalFile.get();
-                    ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
-                } catch (IOException ex) {
-                    log.error(ex.getMessage(), ex);
-                }
-            }
+            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.pngExtensionFilter)
+                    .ifPresent(file -> {
+                        Node node = statisticChartsTabPane.getSelectionModel().getSelectedItem().getContent();
+                        WritableImage writableImage = new WritableImage((int) statisticChartsTabPane.getWidth(), (int) statisticChartsTabPane.getHeight());
+                        node.snapshot(new SnapshotParameters(), writableImage);
+                        try {
+                            ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
+                        } catch (IOException ex) {
+                            log.error(ex.getMessage(), ex);
+                        }
+                    });
         });
         buildChartsTabPane();
         performLightning.setOnAction(actionEvent -> buildChartsTabPane());
 
         saveButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter);
-            optionalFileName.ifPresent(s -> chartsDataRepository.saveChartsToJSON(s.getPath()));
+            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
+                    .ifPresent(file -> chartsDataRepository.saveChartsToJSON(file.getPath()));
         });
         uploadButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFiles = fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter);
-            if (optionalFiles.isPresent()) {
-                chartsDataRepository.clear();
-                chartsDataRepository.restoreChartsFormJSON(optionalFiles.get().getPath());
-            }
+            fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter)
+                    .ifPresent(file -> {
+                        chartsDataRepository.clear();
+                        chartsDataRepository.restoreChartsFormJSON(file.getPath());
+                    });
         });
     }
 

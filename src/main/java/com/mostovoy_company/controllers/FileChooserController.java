@@ -23,29 +23,29 @@ public class FileChooserController {
     public void initialize(){
     }
 
-    private FileChooser makeFileChooser(String title, FileChooser.ExtensionFilter filter){
+    private FileChooser makeFileChooser(String title, FileChooser.ExtensionFilter... filters){
         FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().add(filter);
+        chooser.getExtensionFilters().addAll(filters);
         chooser.setTitle(title);
         return chooser;
     }
 
-    public Optional<List<File>> getMultipleFiles(FileChooser.ExtensionFilter filter){
-        FileChooser chooser = makeFileChooser("Загрузка файлов", filter);
+    public Optional<List<File>> getMultipleFiles(FileChooser.ExtensionFilter... filters){
+        FileChooser chooser = makeFileChooser("Загрузка файлов", filters);
         List<File> files = chooser.showOpenMultipleDialog(Main.pStage);
         if(files == null) return Optional.empty();
         else return Optional.of(files);
     }
 
-    public Optional<File> getSingleFile(FileChooser.ExtensionFilter filter){
-        FileChooser chooser = makeFileChooser("Загрузка файла", filter);
+    public Optional<File> getSingleFile(FileChooser.ExtensionFilter... filters){
+        FileChooser chooser = makeFileChooser("Загрузка файла", filters);
         File file = chooser.showOpenDialog(Main.pStage);
         if(file == null) return Optional.empty();
         else return Optional.of(file);
     }
 
-    public Optional<File> getFileToSave(FileChooser.ExtensionFilter filter) {
-        FileChooser chooser = makeFileChooser("Сохранение файла", filter);
+    public Optional<File> getFileToSave(FileChooser.ExtensionFilter... filters) {
+        FileChooser chooser = makeFileChooser("Сохранение файла", filters);
         File file = chooser.showSaveDialog(Main.pStage);
         if (file != null) return Optional.of(file);
         else return Optional.empty();

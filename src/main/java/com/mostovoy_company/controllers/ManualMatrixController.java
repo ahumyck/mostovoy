@@ -80,7 +80,7 @@ public class ManualMatrixController {
     private ExperimentManager experimentManager;
     private Painter painter;
     private FxWeaver fxWeaver;
-
+    private String filepath = System.getProperty("user.dir") + "/src/main/resources/matrix/";
 
     public ManualMatrixController(List<FillingType> fillingTypesList,
                                   ExperimentManager experimentManager,
@@ -94,8 +94,6 @@ public class ManualMatrixController {
     public Node getContent() {
         return this.manualMatrixAnchorPane;
     }
-
-    private String filepath = System.getProperty("user.dir") + "/src/main/resources/matrix/";
 
     @FXML
     public void initialize() {
@@ -127,17 +125,17 @@ public class ManualMatrixController {
         });
 
         saveButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter);
-            if(optionalFileName.isPresent()){
-                Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
-                if(selectedItem != null){
-                    selectedItem.saveExperimentToJson(optionalFileName.get().getPath());
-                }
-            }
+            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
+                    .ifPresent(file -> {
+                        Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
+                        if (selectedItem != null) {
+                            selectedItem.saveExperimentToJson(file.getPath());
+                        }
+                    });
         });
         uploadButton.setOnAction(actionEvent -> {
-            Optional<List<File>> optionalFiles = fxWeaver.loadController(FileChooserController.class).getMultipleFiles(FileChooserController.jsonExtensionFilter);
-            optionalFiles.ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)));
+            fxWeaver.loadController(FileChooserController.class).getMultipleFiles(FileChooserController.jsonExtensionFilter)
+                    .ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)));
         });
 
 
@@ -191,7 +189,7 @@ public class ManualMatrixController {
         addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
     }
 
-    private void addLabelToMatrixInfo(String text){
+    private void addLabelToMatrixInfo(String text) {
         var label = new Label();
         label.setFont(new Font(14.0));
         label.setPadding(new Insets(0.0, 10.0, 0.0, 10.0));

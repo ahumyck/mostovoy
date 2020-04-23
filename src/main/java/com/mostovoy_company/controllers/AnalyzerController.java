@@ -2,6 +2,7 @@ package com.mostovoy_company.controllers;
 
 import com.mostovoy_company.expirement.table_view.TableViewAnalyzerData;
 import com.mostovoy_company.expirement.table_view.TableViewAnalyzerDataRepository;
+import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerDataRepository;
 import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -17,9 +18,7 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 
 @Component
@@ -102,25 +101,27 @@ public class AnalyzerController {
             int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
             int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
             double probability = Double.parseDouble(this.concentrationAnalyzer.getText());
-            dataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
+
+            AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
+            this.dataRepository = new TableViewAnalyzerDataRepository(analyzerDataRepository);
             analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
         });
 
         saveButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter);
-            optionalFileName.ifPresent(file -> dataRepository.saveRepositoryToJson(file.getPath()));
+            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
+                    .ifPresent(file -> dataRepository.saveRepositoryToJson(file.getPath()));
         });
         uploadButton.setOnAction(actionEvent -> {
-            Optional<File> optionalFile = fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter);
-            optionalFile.ifPresent(file ->{
-                try {
-                    dataRepository = TableViewAnalyzerDataRepository.getRepositoryFromJson(file.getPath());
-                    analyzerDataTable.getItems().clear();
-                    analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
-                } catch (IOException e) {
-                    System.err.println("No such file exception");
-                }
-            });
+            fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter)
+                    .ifPresent(file -> {
+                        try {
+                            dataRepository = TableViewAnalyzerDataRepository.getRepositoryFromJson(file.getPath());
+                            analyzerDataTable.getItems().clear();
+                            analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
+                        } catch (IOException e) {
+                            System.err.println("No such file exception");
+                        }
+                    });
         });
     }
 }
