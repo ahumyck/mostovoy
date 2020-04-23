@@ -16,6 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
@@ -74,9 +76,9 @@ public class AnalyzerController {
 
             AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
             StatisticBlockData statisticBlockData = statisticModule.gatherStatistic(analyzerDataRepository);
-            TableViewData tableBlackData = statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize,probability);
-            TableViewData dataForWhiteColumn = statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize,probability);
-            TableViewData dataForWhiteRow = statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize,probability);
+            TableViewData tableBlackData = statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability);
+            TableViewData dataForWhiteColumn = statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability);
+            TableViewData dataForWhiteRow = statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability);
             tableBlack.getItems().addAll(tableBlackData);
             tableWhiteRow.getItems().addAll(dataForWhiteRow);
             tableWhiteColumn.getItems().addAll(dataForWhiteColumn);
@@ -120,9 +122,9 @@ public class AnalyzerController {
     }
 
     void initializeTableView(TableView<TableViewData> tableView, List<String> columnsNames, List<String> propertyNames) {
-        HBox.setHgrow(tableView, Priority.ALWAYS);
-        tableView.setColumnResizePolicy((param) -> true);
-
+        VBox.setVgrow(tableView, Priority.ALWAYS);
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         List<TableColumn<TableViewData, String>> columns = new ArrayList<>();
         for (String columnName : columnsNames) {
             columns.add(initializeTableColumn(columnName));

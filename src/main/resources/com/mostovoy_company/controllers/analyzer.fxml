@@ -4,6 +4,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.StackPane?>
+
 <HBox spacing="15" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.mostovoy_company.controllers.AnalyzerController"
@@ -25,12 +27,22 @@
             <Button fx:id="uploadButton" text="Upload"/>
         </HBox>
     </VBox>
-    <VBox spacing="50">
+
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
         <padding>
-            <Insets top="10" left="10" right="10"/>
+            <Insets top="10" left="10" right="10" bottom="20"/>
         </padding>
-        <TableView fx:id="tableWhiteColumn" prefHeight="150" maxHeight="225" maxWidth="Infinity"/>
-        <TableView fx:id="tableWhiteRow" prefHeight="150" maxHeight="225" maxWidth="Infinity"/>
-        <TableView fx:id="tableBlack" prefHeight="150" maxHeight="225" maxWidth="Infinity"/>
+        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <Tab text="1">
+                <TableView fx:id="tableWhiteColumn" prefHeight="150"/>
+            </Tab>
+            <Tab text="2">
+                <TableView fx:id="tableWhiteRow" prefHeight="150"/>
+            </Tab>
+            <Tab text="3">
+                <TableView fx:id="tableBlack" prefHeight="150"/>
+            </Tab>
+        </TabPane>
     </VBox>
+
 </HBox>
