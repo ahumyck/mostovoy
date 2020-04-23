@@ -1,7 +1,7 @@
 package com.mostovoy_company.services;
 
 import com.mostovoy_company.chart.LineChartData;
-import com.mostovoy_company.expirement.ExperimentManager;
+import com.mostovoy_company.expirement.chart_experiment.ExperimentManager;
 import com.mostovoy_company.services.kafka.ControlService;
 import com.mostovoy_company.services.kafka.ResponseService;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
@@ -10,10 +10,8 @@ import com.mostovoy_company.services.kafka.session.SessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 //@Service
 @Slf4j

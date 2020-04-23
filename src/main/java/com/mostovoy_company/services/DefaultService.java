@@ -1,7 +1,7 @@
 package com.mostovoy_company.services;
 
 import com.mostovoy_company.chart.LineChartData;
-import com.mostovoy_company.expirement.ExperimentManager;
+import com.mostovoy_company.expirement.chart_experiment.ExperimentManager;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;

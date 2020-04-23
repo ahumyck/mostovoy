@@ -1,8 +1,8 @@
 package com.mostovoy_company.paint;
 
-import com.mostovoy_company.expirement.entity.Cell;
-import com.mostovoy_company.expirement.entity.Matrix;
-import com.mostovoy_company.expirement.programminPercolation.percolation.PercolationRelation;
+import com.mostovoy_company.expirement.chart_experiment.entity.Cell;
+import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
+import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationRelation;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

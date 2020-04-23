@@ -16,16 +16,11 @@
     <VBox spacing="10">
         <Label text="Размер матрицы:"/>
         <TextField fx:id="matrixSizeAnalyzer"/>
+        <Label text="Шаг концентрации:"/>
+        <TextField fx:id="stepProbability"/>
         <Label text="Количество матриц:"/>
         <TextField fx:id="matrixCountAnalyzer"/>
         <Button fx:id="applyAnalyzerExperiment" mnemonicParsing="false" text="Apply"/>
-        <HBox spacing="10">
-            <padding>
-                <Insets top="10" left="10" right="10"/>
-            </padding>
-            <Button fx:id="saveButton" mnemonicParsing="false" text="Save"/>
-            <Button fx:id="uploadButton" text="Upload"/>
-        </HBox>
     </VBox>
 
     <VBox spacing="20" HBox.hgrow="ALWAYS">
@@ -33,13 +28,13 @@
             <Insets top="10" left="10" right="10" bottom="20"/>
         </padding>
         <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-            <Tab text="1">
+            <Tab text="Статистика пустых клеток в матрицах по столбцам">
                 <TableView fx:id="tableWhiteColumn" prefHeight="150"/>
             </Tab>
-            <Tab text="2">
+            <Tab text="Статистика пустых клеток в матрицах по строкам">
                 <TableView fx:id="tableWhiteRow" prefHeight="150"/>
             </Tab>
-            <Tab text="3">
+            <Tab text="Статистика черных клеток в матрицах по строкам">
                 <TableView fx:id="tableBlack" prefHeight="150"/>
             </Tab>
         </TabPane>

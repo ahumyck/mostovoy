@@ -1,11 +1,11 @@
 package com.mostovoy_company.controllers;
 
-import com.mostovoy_company.expirement.ExperimentManager;
-import com.mostovoy_company.expirement.entity.Experiment;
-import com.mostovoy_company.expirement.entity.Statistic;
-import com.mostovoy_company.expirement.filling.FillingType;
-import com.mostovoy_company.expirement.filling.RandomFillingType;
-import com.mostovoy_company.expirement.filling.customs.CustomTestFillingType;
+import com.mostovoy_company.expirement.chart_experiment.ExperimentManager;
+import com.mostovoy_company.expirement.chart_experiment.entity.Experiment;
+import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.filling.FillingType;
+import com.mostovoy_company.expirement.chart_experiment.filling.RandomFillingType;
+import com.mostovoy_company.expirement.chart_experiment.filling.customs.CustomTestFillingType;
 import com.mostovoy_company.paint.Painter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,9 +26,8 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
-import static com.mostovoy_company.expirement.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
+import static com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
 
 @FxmlView("manualMatrix.fxml")
 @Component

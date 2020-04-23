@@ -1,10 +1,11 @@
 package com.mostovoy_company.controllers;
 
-import com.mostovoy_company.expirement.table_view.TableViewData;
-import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerDataRepository;
-import com.mostovoy_company.expirement.table_view.analyzer.AnalyzerManager;
-import com.mostovoy_company.expirement.table_view.stats.StatisticBlockData;
-import com.mostovoy_company.expirement.table_view.stats.StatisticModule;
+import com.mostovoy_company.expirement.table_experiment.TableViewData;
+import com.mostovoy_company.expirement.table_experiment.analyzer.AnalyzerDataRepository;
+import com.mostovoy_company.expirement.table_experiment.analyzer.AnalyzerManager;
+import com.mostovoy_company.expirement.table_experiment.stats.StatisticBlockData;
+import com.mostovoy_company.expirement.table_experiment.stats.StatisticModule;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,15 +17,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 
 @Component
@@ -40,15 +42,13 @@ public class AnalyzerController {
     @FXML
     public HBox hBox;
     @FXML
-    public Button saveButton;
-    @FXML
-    public Button uploadButton;
-    @FXML
     public TableView<TableViewData> tableWhiteColumn;
     @FXML
     public TableView<TableViewData> tableWhiteRow;
     @FXML
     public TableView<TableViewData> tableBlack;
+    @FXML
+    public TextField stepProbability;
 
     private AnalyzerManager analyzerManager;
     private StatisticModule statisticModule;
@@ -70,36 +70,30 @@ public class AnalyzerController {
         initializeTables();
 
         applyAnalyzerExperiment.setOnAction(event -> {
+            tableBlack.getItems().clear();
+            tableWhiteRow.getItems().clear();
+            tableWhiteColumn.getItems().clear();
             int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
             int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
-            double probability = 0.2;
+            double step = Double.parseDouble(this.stepProbability.getText());
 
-            AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
-            StatisticBlockData statisticBlockData = statisticModule.gatherStatistic(analyzerDataRepository);
-            TableViewData tableBlackData = statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability);
-            TableViewData dataForWhiteColumn = statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability);
-            TableViewData dataForWhiteRow = statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability);
-            tableBlack.getItems().addAll(tableBlackData);
-            tableWhiteRow.getItems().addAll(dataForWhiteRow);
-            tableWhiteColumn.getItems().addAll(dataForWhiteColumn);
+            new Thread(() -> {
+                DoubleStream.iterate(0.00, x -> x + step)
+                        .limit(120)
+                        .filter(x -> x >= 0)
+                        .filter(x -> x < 1.01)
+                        .forEach(probability -> {
+                            AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
+                            StatisticBlockData statisticBlockData = statisticModule.gatherStatistic(analyzerDataRepository);
+                            TableViewData tableBlackData = statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability);
+                            TableViewData dataForWhiteColumn = statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability);
+                            TableViewData dataForWhiteRow = statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability);
+                            tableBlack.getItems().addAll(tableBlackData);
+                            tableWhiteRow.getItems().addAll(dataForWhiteRow);
+                            tableWhiteColumn.getItems().addAll(dataForWhiteColumn);
+                        });
+            }).start();
         });
-//
-//        saveButton.setOnAction(actionEvent -> {
-//            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
-//                    .ifPresent(file -> dataRepository.saveRepositoryToJson(file.getPath()));
-//        });
-//        uploadButton.setOnAction(actionEvent -> {
-//            fxWeaver.loadController(FileChooserController.class).getSingleFile(FileChooserController.jsonExtensionFilter)
-//                    .ifPresent(file -> {
-//                        try {
-//                            dataRepository = TableViewAnalyzerDataRepository.getRepositoryFromJson(file.getPath());
-//                            analyzerDataTable.getItems().clear();
-//                            analyzerDataTable.setItems(FXCollections.observableArrayList(dataRepository.getTableViewAnalyzerDataList()));
-//                        } catch (IOException e) {
-//                            System.err.println("No such file exception");
-//                        }
-//                    });
-//        });
     }
 
     void initializeTables() {
@@ -109,11 +103,11 @@ public class AnalyzerController {
         );
         initializeTableView(tableWhiteColumn,
                 generateList("Статистика среднего белых в столбце",
-                        "Статистика минимального белых в столбце", "Статистика максимального белых в столбце"),
+                        "Статистика максимального белых в столбце", "Статистика минимального белых в столбце"),
                 params);
         initializeTableView(tableWhiteRow,
                 generateList("Статистика среднего белых в строке",
-                        "Статистика минимального белых в строке", "Статистика максимального белых в строке"),
+                        "Статистика максимального белых в строке", "Статистика минимального белых в строке"),
                 params);
         initializeTableView(tableBlack,
                 generateList("Статистика количества черных клеток",

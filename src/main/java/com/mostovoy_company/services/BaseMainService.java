@@ -1,17 +1,15 @@
 package com.mostovoy_company.services;
 
 import com.mostovoy_company.chart.LineChartData;
-import com.mostovoy_company.expirement.ExperimentManager;
-import com.mostovoy_company.expirement.entity.Statistic;
-import com.mostovoy_company.expirement.filling.RandomFillingType;
-import com.mostovoy_company.services.kafka.dto.LineChartNode;
+import com.mostovoy_company.expirement.chart_experiment.ExperimentManager;
+import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.filling.RandomFillingType;
 import com.mostovoy_company.services.kafka.dto.RequestMessage;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 

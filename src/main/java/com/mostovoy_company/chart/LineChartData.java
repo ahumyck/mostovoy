@@ -1,15 +1,10 @@
 package com.mostovoy_company.chart;
 
-import com.mostovoy_company.expirement.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import javafx.scene.Node;
-import javafx.scene.chart.LineChart;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
