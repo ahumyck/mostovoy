@@ -28,7 +28,7 @@ public class RandomFillingType extends FillingType {
         int[][] matrix = new int[size][size];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-                if (uniformRealDistribution.sample() <= percolationProbability) matrix[i][j] = 1;
+                if (uniformRealDistribution.sample() < percolationProbability) matrix[i][j] = 1;
                 else matrix[i][j] = 0;
             }
         }
