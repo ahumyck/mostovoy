@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.StackPane?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <HBox spacing="15" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.mostovoy_company.controllers.AnalyzerController"
@@ -20,7 +17,14 @@
         <TextField fx:id="stepProbability"/>
         <Label text="Количество матриц:"/>
         <TextField fx:id="matrixCountAnalyzer"/>
-        <Button fx:id="applyAnalyzerExperiment" mnemonicParsing="false" text="Apply"/>
+        <HBox spacing="10">
+            <Button fx:id="apply" text="Применить"/>
+            <Button fx:id="clear" text="Очистить"/>
+        </HBox>
+        <HBox spacing="10">
+            <Button fx:id="saveButton" text="Сохранить"/>
+            <Button fx:id="uploadButton" text="Загрузить"/>
+        </HBox>
     </VBox>
 
     <VBox spacing="20" HBox.hgrow="ALWAYS">
