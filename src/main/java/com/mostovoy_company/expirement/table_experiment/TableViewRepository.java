@@ -17,10 +17,25 @@ import java.util.Map;
 
 @Component
 public class TableViewRepository {
+
+    public static String blackTableRowName = "Статистика черных клеток в строке";
+    public static String whiteTableRowName = "Статистика белых клеток в строке";
+    public static String whiteTableColumnName = "Статистика белых клеток в столбце";
+
+
     private Map<String, Table<TableViewData>> tables = new HashMap<>();
 
-    public void put(String tableName, TableView<TableViewData> tableView) {
+    public void createTable(String tableName, TableView<TableViewData> tableView) {
         this.tables.put(tableName, new Table<>(tableName, tableView));
+    }
+
+
+    public void clear() {
+        this.tables.forEach((name, table) -> table.getTableView().getItems().clear());
+    }
+
+    public void put(String tableName, TableViewData data){
+
     }
 
     public void saveTablesToJSON(String filename) {
@@ -44,7 +59,4 @@ public class TableViewRepository {
         }
     }
 
-    public void clear() {
-        this.tables.forEach((name, table) -> table.getTableView().getItems().clear());
-    }
 }

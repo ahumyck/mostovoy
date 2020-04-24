@@ -93,12 +93,9 @@ public class AnalyzerController {
                     .forEach(probability -> {
                         AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
                         StatisticBlockData statisticBlockData = statisticModule.gatherStatistic(analyzerDataRepository);
-                        TableViewData tableBlackData = statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability);
-                        TableViewData dataForWhiteColumn = statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability);
-                        TableViewData dataForWhiteRow = statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability);
-                        tableBlack.getItems().addAll(tableBlackData);
-                        tableWhiteRow.getItems().addAll(dataForWhiteRow);
-                        tableWhiteColumn.getItems().addAll(dataForWhiteColumn);
+                        repository.put(TableViewRepository.blackTableRowName, statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability));
+                        repository.put(TableViewRepository.whiteTableRowName, statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability));
+                        repository.put(TableViewRepository.whiteTableColumnName, statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability));
                     })).start();
         });
 
@@ -134,9 +131,9 @@ public class AnalyzerController {
                 generateList("Статистика количества черных клеток",
                         "Статистика пустых строк", "Статистика среднего черных в строке"),
                 params);
-        repository.put("Статистика белых клеток в столбце", tableWhiteColumn);
-        repository.put("Статистика белых клеток в строке", tableWhiteRow);
-        repository.put("Статистика черных клеток в строке", tableBlack);
+        repository.createTable(TableViewRepository.blackTableRowName, tableBlack);
+        repository.createTable(TableViewRepository.whiteTableRowName, tableWhiteRow);
+        repository.createTable(TableViewRepository.whiteTableColumnName, tableWhiteColumn);
     }
 
     private void initializeTableView(TableView<TableViewData> tableView, List<String> columnsNames, List<String> propertyNames) {
