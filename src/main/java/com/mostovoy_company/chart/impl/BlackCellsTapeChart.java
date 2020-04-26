@@ -22,7 +22,7 @@ public class BlackCellsTapeChart extends BaseLineChartData implements LightningB
 
     @Override
     public String getChartName() {
-        return "BlackCellsTapeChart";
+        return "Среднее количество черных клеток в строке в прелах ширины управляемой перколяции";
     }
 
     @Override

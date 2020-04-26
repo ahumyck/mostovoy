@@ -22,7 +22,7 @@ public class DarkRedCellsTapeChart extends BaseLineChartData implements Lightnin
 
     @Override
     public String getChartName() {
-        return "DarkRedCellsTapeChart";
+        return "Среднее количество темно красных клеток в строке в прелах ширины управляемой перколяции";
     }
 
     @Override
