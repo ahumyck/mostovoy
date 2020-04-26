@@ -62,7 +62,7 @@ public class KafkaSupportService extends BaseMainService {
 
     @KafkaListener(topics = {"server.response"}, containerFactory = "responseMessageKafkaListenerContainerFactory")
     public void consumeResponseMessage(ResponseMessage message) {
-        if (message.getSessionId() == sessionManager.getCurrentSessionId()) {
+        if (message.getSessionId() == sessionManager.getCurrentSessionId() && sessionManager.getCurrentSessionData().isMaster()) {
             addDotsToCharts(message);
         }
         log.info("=> consumed response  {}", message);
