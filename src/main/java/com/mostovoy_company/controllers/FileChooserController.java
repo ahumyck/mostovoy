@@ -19,6 +19,8 @@ public class FileChooserController {
     public static FileChooser.ExtensionFilter jsonExtensionFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
     public static FileChooser.ExtensionFilter pngExtensionFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
 
+    private static String lastUsedDirectory = "NULL";
+
     @FXML
     public void initialize(){
     }
@@ -27,27 +29,42 @@ public class FileChooserController {
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().addAll(filters);
         chooser.setTitle(title);
+        if(!lastUsedDirectory.equals("NULL")){
+            File initialDirectory = new File(lastUsedDirectory);
+            chooser.setInitialDirectory(initialDirectory);
+        }
         return chooser;
     }
 
-    public Optional<List<File>> getMultipleFiles(FileChooser.ExtensionFilter... filters){
-        FileChooser chooser = makeFileChooser("Загрузка файлов", filters);
-        List<File> files = chooser.showOpenMultipleDialog(Main.pStage);
+    private Optional<List<File>> handle(List<File> files){
         if(files == null) return Optional.empty();
-        else return Optional.of(files);
+        else {
+            updateLastUsedDirectory(files.get(0));
+            return Optional.of(files);
+        }
+    }
+
+    private Optional<File> handle(File file){
+        if(file == null) return Optional.empty();
+        else {
+            updateLastUsedDirectory(file);
+            return Optional.of(file);
+        }
+    }
+
+    private void updateLastUsedDirectory(File file){
+        lastUsedDirectory = file.getPath().substring(0, file.getPath().length() - file.getName().length());
+    }
+
+    public Optional<List<File>> getMultipleFiles(FileChooser.ExtensionFilter... filters){
+        return handle(makeFileChooser("Загрузка файлов", filters).showOpenMultipleDialog(Main.pStage));
     }
 
     public Optional<File> getSingleFile(FileChooser.ExtensionFilter... filters){
-        FileChooser chooser = makeFileChooser("Загрузка файла", filters);
-        File file = chooser.showOpenDialog(Main.pStage);
-        if(file == null) return Optional.empty();
-        else return Optional.of(file);
+        return handle(makeFileChooser("Загрузка файла", filters).showOpenDialog(Main.pStage));
     }
 
     public Optional<File> getFileToSave(FileChooser.ExtensionFilter... filters) {
-        FileChooser chooser = makeFileChooser("Сохранение файла", filters);
-        File file = chooser.showSaveDialog(Main.pStage);
-        if (file != null) return Optional.of(file);
-        else return Optional.empty();
+        return handle(makeFileChooser("Сохранение файла", filters).showSaveDialog(Main.pStage));
     }
 }
