@@ -79,7 +79,6 @@ public class ManualMatrixController {
     private ExperimentManager experimentManager;
     private Painter painter;
     private FxWeaver fxWeaver;
-    private String filepath = System.getProperty("user.dir") + "/src/main/resources/matrix/";
 
     public ManualMatrixController(List<FillingType> fillingTypesList,
                                   ExperimentManager experimentManager,
@@ -90,7 +89,7 @@ public class ManualMatrixController {
         this.fxWeaver = fxWeaver;
     }
 
-    public Node getContent() {
+    Node getContent() {
         return this.manualMatrixAnchorPane;
     }
 
@@ -102,9 +101,7 @@ public class ManualMatrixController {
         gridSize.setItems(FXCollections.observableArrayList(GridSize.values()));
         fillingTypes.setItems(fillingTypesList);
         experimentListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        clearListButton.setOnAction(actionEvent -> {
-            experimentListView.getItems().clear();
-        });
+        clearListButton.setOnAction(actionEvent -> experimentListView.getItems().clear());
         mainTabPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             if (experiment != null)
@@ -123,19 +120,19 @@ public class ManualMatrixController {
             showMatrixInfo(experiment);
         });
 
-        saveButton.setOnAction(actionEvent -> {
+        saveButton.setOnAction(actionEvent ->
             fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
                     .ifPresent(file -> {
                         Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
                         if (selectedItem != null) {
                             selectedItem.saveExperimentToJson(file.getPath());
                         }
-                    });
-        });
-        uploadButton.setOnAction(actionEvent -> {
+                    })
+        );
+        uploadButton.setOnAction(actionEvent ->
             fxWeaver.loadController(FileChooserController.class).getMultipleFiles(FileChooserController.jsonExtensionFilter)
-                    .ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)));
-        });
+                    .ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)))
+        );
 
 
         fillingProbability.setVisible(false);
@@ -171,7 +168,7 @@ public class ManualMatrixController {
         });
     }
 
-    void paintByCheckBox(Experiment experiment) {
+    private void paintByCheckBox(Experiment experiment) {
         painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
         painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPercolationWay(), experiment.getProgrammings(PYTHAGORAS), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
     }
@@ -198,8 +195,7 @@ public class ManualMatrixController {
 
     private ObservableList<Experiment> loadExperiments(List<File> files) {
         ObservableList<Experiment> matrixObservableList = FXCollections.observableArrayList();
-        for (int i = 0; i < files.size(); i++) {
-            File file = files.get(i);
+        for (File file : files) {
             try {
                 Experiment experiment = Experiment.getExperimentFromJson(file.getPath());
                 matrixObservableList.add(experiment);

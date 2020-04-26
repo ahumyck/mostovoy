@@ -79,9 +79,6 @@ public class AnalyzerController {
         initializeTables();
 
         apply.setOnAction(event -> {
-            tableBlack.getItems().clear();
-            tableWhiteRow.getItems().clear();
-            tableWhiteColumn.getItems().clear();
             int matrixSize = Integer.parseInt(this.matrixSizeAnalyzer.getText());
             int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
             double step = Double.parseDouble(this.stepProbability.getText());

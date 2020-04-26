@@ -35,7 +35,7 @@ public class TableViewRepository {
     }
 
     public void put(String tableName, TableViewData data){
-
+        this.tables.get(tableName).getTableView().getItems().add(data);
     }
 
     public void saveTablesToJSON(String filename) {
