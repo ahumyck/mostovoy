@@ -123,11 +123,11 @@ public class Experiment {
             List<Cell> darkredCells = getProgrammings().stream()
                     .map(PercolationRelation::getDarkRedCell).collect(Collectors.toList());
 
-            for (int column = min; column <= max; column++) {
-                int index = column - min;
+            for (int i = Matrix.OFFSET; i < matrix.getSize() - Matrix.OFFSET; i++) {
+                int index = i - Matrix.OFFSET;
                 blackPerTape.add(0);
                 darkRedPerTape.add(0);
-                for (int i = Matrix.OFFSET; i < matrix.getSize() - Matrix.OFFSET; i++) {
+                for (int column = min; column <= max; column++){
                     Cell cell = matrix.getCell(i, column);
                     if (cell.isBlack() /*&& !this.percolationWay.contains(cell)*/) {
                         blackPerTape.set(index, blackPerTape.get(index) + 1);
