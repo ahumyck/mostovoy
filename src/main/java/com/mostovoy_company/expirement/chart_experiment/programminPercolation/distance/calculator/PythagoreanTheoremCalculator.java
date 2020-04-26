@@ -7,6 +7,6 @@ public class PythagoreanTheoremCalculator implements DistanceCalculator {
     public double calculateDistance(Cell a, Cell b) {
         int dx = a.getX() - b.getX();
         int dy = a.getY() - b.getY();
-        return Math.sqrt(dx*dx + dy*dy);
+        return Math.sqrt(dx * dx + dy * dy);
     }
 }

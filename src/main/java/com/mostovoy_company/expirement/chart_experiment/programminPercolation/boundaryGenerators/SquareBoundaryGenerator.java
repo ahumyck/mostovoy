@@ -10,44 +10,44 @@ public class SquareBoundaryGenerator extends BoundaryGenerator {
         super(matrix);
     }
 
-    private void buildRightWall(Cell centerCell,int x,int y, int boundary){
+    private void buildRightWall(Cell centerCell, int x, int y, int boundary) {
         int x0 = x + boundary;
         int y0 = y - boundary + 1;
-        while(y0 < y + boundary){
+        while (y0 < y + boundary) {
             checkPredicates(centerCell, x0, y0);
             y0++;
         }
     }
 
-    private void buildLeftWall(Cell centerCell,int x,int y, int boundary){
+    private void buildLeftWall(Cell centerCell, int x, int y, int boundary) {
         int x0 = x - boundary;
         int y0 = y - boundary + 1;
-        while(y0 < y + boundary){
+        while (y0 < y + boundary) {
             checkPredicates(centerCell, x0, y0);
             y0++;
         }
     }
 
-    private void buildTopWall(Cell centerCell,int x,int y, int boundary){
+    private void buildTopWall(Cell centerCell, int x, int y, int boundary) {
         int x0 = x - boundary + 1;
         int y0 = y - boundary;
-        while(x0 < x + boundary){
+        while (x0 < x + boundary) {
             checkPredicates(centerCell, x0, y0);
             x0++;
         }
     }
 
-    private void buildBotWall(Cell centerCell,int x,int y, int boundary){
+    private void buildBotWall(Cell centerCell, int x, int y, int boundary) {
         int x0 = x - boundary + 1;
         int y0 = y + boundary;
-        while(x0 < x + boundary){
+        while (x0 < x + boundary) {
             checkPredicates(centerCell, x0, y0);
             x0++;
         }
     }
 
     @Override
-    protected void generate(int boundary, Cell centerCell,int x,int y){
+    protected void generate(int boundary, Cell centerCell, int x, int y) {
         checkPredicates(centerCell, x - boundary, y - boundary);
         checkPredicates(centerCell, x + boundary, y - boundary);
         checkPredicates(centerCell, x - boundary, y + boundary);
@@ -59,7 +59,7 @@ public class SquareBoundaryGenerator extends BoundaryGenerator {
     }
 
     @Override
-    public List<Cell> generateFilledArea(int bound, Cell centerCell){
+    public List<Cell> generateFilledArea(int bound, Cell centerCell) {
         return generateAreaPerimeter(bound, centerCell);
     }
 }

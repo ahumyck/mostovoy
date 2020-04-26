@@ -36,9 +36,9 @@ public class PercolationWayLengthChart extends BaseLineChartData implements Ligh
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setPercolationWayLength(statistics.stream()
-                                                  .mapToDouble(Statistic::getPercolationWayLength)
-                                                  .average()
-                                                  .orElse(0));
+                .mapToDouble(Statistic::getPercolationWayLength)
+                .average()
+                .orElse(0));
     }
 
     @Override

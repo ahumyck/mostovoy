@@ -1,7 +1,7 @@
 package com.mostovoy_company.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Tab;
 import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @FxmlView("main.fxml")
 @Slf4j
 public class MainController {
+    private final FxWeaver fxWeaver;
     @FXML
     public Tab fullExperiment;
-    private final FxWeaver fxWeaver;
     @FXML
     public Tab manualMatrixTab;
     @FXML

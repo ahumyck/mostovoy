@@ -27,11 +27,11 @@ public class ChartConfigurationController {
     public AnchorPane chartConfigurationTabPane;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
     }
 
-    public void show(List<LineChartData> charts){
-        charts.forEach(chart ->{
+    public void show(List<LineChartData> charts) {
+        charts.forEach(chart -> {
             Tab tab = new Tab();
             tab.setContent(chart.getConfigurationTab());
             tab.setText(chart.getTabName());

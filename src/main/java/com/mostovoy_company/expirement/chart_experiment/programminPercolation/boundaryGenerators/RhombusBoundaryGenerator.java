@@ -10,12 +10,12 @@ public class RhombusBoundaryGenerator extends BoundaryGenerator {
     }
 
     @Override
-    protected void generate(int boundary, Cell centerCell,int x,int y){
+    protected void generate(int boundary, Cell centerCell, int x, int y) {
         checkPredicates(centerCell, x - boundary, y);
         checkPredicates(centerCell, x + boundary, y);
         checkPredicates(centerCell, x, y + boundary);
         checkPredicates(centerCell, x, y - boundary);
-        for (int i = 1; i < boundary; i++){
+        for (int i = 1; i < boundary; i++) {
             checkPredicates(centerCell, x - (boundary - i), y - i);
             checkPredicates(centerCell, x - (boundary - i), y + i);
             checkPredicates(centerCell, x + (boundary - i), y - i);

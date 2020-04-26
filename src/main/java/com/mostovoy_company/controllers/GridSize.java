@@ -6,11 +6,11 @@ public enum GridSize {
     SIZE_50x50(50),
     SIZE_100x100(100);
 
+    private final int value;
+
     GridSize(int value) {
         this.value = value;
     }
-
-    private final int value;
 
     public int getValue() {
         return value;

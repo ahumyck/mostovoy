@@ -22,45 +22,45 @@ public class FileChooserController {
     private static String lastUsedDirectory = "NULL";
 
     @FXML
-    public void initialize(){
+    public void initialize() {
     }
 
-    private FileChooser makeFileChooser(String title, FileChooser.ExtensionFilter... filters){
+    private FileChooser makeFileChooser(String title, FileChooser.ExtensionFilter... filters) {
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().addAll(filters);
         chooser.setTitle(title);
-        if(!lastUsedDirectory.equals("NULL")){
+        if (!lastUsedDirectory.equals("NULL")) {
             File initialDirectory = new File(lastUsedDirectory);
             chooser.setInitialDirectory(initialDirectory);
         }
         return chooser;
     }
 
-    private Optional<List<File>> handle(List<File> files){
-        if(files == null) return Optional.empty();
+    private Optional<List<File>> handle(List<File> files) {
+        if (files == null) return Optional.empty();
         else {
             updateLastUsedDirectory(files.get(0));
             return Optional.of(files);
         }
     }
 
-    private Optional<File> handle(File file){
-        if(file == null) return Optional.empty();
+    private Optional<File> handle(File file) {
+        if (file == null) return Optional.empty();
         else {
             updateLastUsedDirectory(file);
             return Optional.of(file);
         }
     }
 
-    private void updateLastUsedDirectory(File file){
+    private void updateLastUsedDirectory(File file) {
         lastUsedDirectory = file.getPath().substring(0, file.getPath().length() - file.getName().length());
     }
 
-    public Optional<List<File>> getMultipleFiles(FileChooser.ExtensionFilter... filters){
+    public Optional<List<File>> getMultipleFiles(FileChooser.ExtensionFilter... filters) {
         return handle(makeFileChooser("Загрузка файлов", filters).showOpenMultipleDialog(Main.pStage));
     }
 
-    public Optional<File> getSingleFile(FileChooser.ExtensionFilter... filters){
+    public Optional<File> getSingleFile(FileChooser.ExtensionFilter... filters) {
         return handle(makeFileChooser("Загрузка файла", filters).showOpenDialog(Main.pStage));
     }
 

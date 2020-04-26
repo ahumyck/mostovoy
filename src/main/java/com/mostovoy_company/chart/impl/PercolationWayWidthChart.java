@@ -36,9 +36,9 @@ public class PercolationWayWidthChart extends BaseLineChartData implements Light
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setPercolationWayWidth(statistics.stream()
-                                                 .mapToDouble(Statistic::getPercolationWayWidth)
-                                                 .average()
-                                                 .orElse(0));
+                .mapToDouble(Statistic::getPercolationWayWidth)
+                .average()
+                .orElse(0));
     }
 
     @Override

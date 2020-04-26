@@ -36,9 +36,9 @@ public class MidInterClustersIntervalSizeChart extends BaseLineChartData impleme
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setInterClusterIntervalSize(statistics.stream()
-                                                      .mapToDouble(Statistic::getMidInterClustersInterval)
-                                                      .average()
-                                                      .orElse(0));
+                .mapToDouble(Statistic::getMidInterClustersInterval)
+                .average()
+                .orElse(0));
 
     }
 

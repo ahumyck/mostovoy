@@ -2,7 +2,7 @@ package com.mostovoy_company.expirement.chart_experiment.lightningbolt;
 
 import java.util.Objects;
 
-public class Distance implements Comparable<Distance>{
+public class Distance implements Comparable<Distance> {
     private int vertex;
     private int distance;
 
@@ -30,7 +30,7 @@ public class Distance implements Comparable<Distance>{
     @Override
     public int compareTo(Distance o) {
 //        return o.distance == distance ? vertex - o.vertex : o.distance < this.distance ? 1 : -1;
-        return distance -o.distance;
+        return distance - o.distance;
     }
 
     @Override

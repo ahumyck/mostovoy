@@ -35,9 +35,9 @@ public class ClusterCountChart extends BaseLineChartData implements LightningBol
 
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setClusterCount(statistics.stream()
-                                          .mapToDouble(Statistic::getClusterCount)
-                                          .average()
-                                          .orElse(0));
+                .mapToDouble(Statistic::getClusterCount)
+                .average()
+                .orElse(0));
     }
 
     @Override

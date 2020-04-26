@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Paired<V,T>{
+public class Paired<V, T> {
     @Expose
     private V first;
     @Expose

@@ -36,9 +36,9 @@ public class PercolationThresholdChart extends BaseLineChartData implements Ligh
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setPercolationThreshold(statistics.stream()
-                                                  .mapToInt(statistic -> statistic.isPercolationizated() ? 1 : 0)
-                                                  .average()
-                                                  .orElse(0));
+                .mapToInt(statistic -> statistic.isPercolationizated() ? 1 : 0)
+                .average()
+                .orElse(0));
     }
 
     @Override

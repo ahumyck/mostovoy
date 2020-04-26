@@ -28,27 +28,27 @@ public class PercolationProgramming {
         this.generator = new RhombusBoundaryGenerator(matrix);
     }
 
-    public PercolationProgramming setDistanceCalculator(DistanceCalculator calculator){
+    public PercolationProgramming setDistanceCalculator(DistanceCalculator calculator) {
         this.calculator = calculator;
         return this;
     }
 
-    private Stream<Cell> streamBlackNotUsedObjects(List<Cell> cells){
+    private Stream<Cell> streamBlackNotUsedObjects(List<Cell> cells) {
         return cells.stream().filter(Cell::isBlack)
                 .filter(cell -> !path.contains(cell))
                 .filter(cell -> !usedPercolationObjects.contains(cell));
     }
 
-    public List<PercolationRelation> getProgrammingPercolationList(int neighborhood){
+    public List<PercolationRelation> getProgrammingPercolationList(int neighborhood) {
         List<PercolationRelation> percolationRelations = new ArrayList<>();
         this.path.stream().map(cell -> findRelationForCurrentCell(cell, neighborhood)).
                 forEach(element -> element.ifPresent(percolationRelations::addAll));
         return percolationRelations;
     }
 
-    private Optional<List<PercolationRelation>> findRelationForCurrentCell(Cell percolationCell,int neighborhood){
+    private Optional<List<PercolationRelation>> findRelationForCurrentCell(Cell percolationCell, int neighborhood) {
         List<Cell> optimalCellsCollection = getOptimalCellsCollection(neighborhood, percolationCell);
-        if(!optimalCellsCollection.isEmpty()){
+        if (!optimalCellsCollection.isEmpty()) {
             return Optional.of(getBestOptimalCells(optimalCellsCollection).stream()
                     .map(goodCell -> new PercolationRelation(goodCell, percolationCell,
                             calculator.calculateDistance(percolationCell, goodCell)))
@@ -57,7 +57,7 @@ public class PercolationProgramming {
         return Optional.empty();
     }
 
-    private List<Cell> getBestOptimalCells(List<Cell> optimalCellsCollection){
+    private List<Cell> getBestOptimalCells(List<Cell> optimalCellsCollection) {
         List<Cell> bestOptimalCells = new ArrayList<>();
         for (Cell optimalCell : optimalCellsCollection) {
             if (!this.usedPercolationObjects.contains(optimalCell)) {
@@ -69,14 +69,14 @@ public class PercolationProgramming {
         return bestOptimalCells;
     }
 
-    private List<Cell> getOptimalCellsCollection(int neighborhood, Cell percolationCell){
+    private List<Cell> getOptimalCellsCollection(int neighborhood, Cell percolationCell) {
         int current = 1;
         List<Cell> collect = new ArrayList<>();
-        while(current <= neighborhood){
+        while (current <= neighborhood) {
             collect = streamBlackNotUsedObjects(generator.generateAreaPerimeter(current, percolationCell))
                     .sorted(Comparator.comparingDouble(a -> calculator.calculateDistance(a, percolationCell)))
                     .collect(Collectors.toList());
-            if(!collect.isEmpty()) return collect;
+            if (!collect.isEmpty()) return collect;
             current++;
         }
         return collect;

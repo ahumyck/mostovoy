@@ -26,8 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
-
 @FxmlView("manualMatrix.fxml")
 @Component
 public class ManualMatrixController {

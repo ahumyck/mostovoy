@@ -1,20 +1,16 @@
 package com.mostovoy_company.chart;
 
-import com.google.gson.annotations.Expose;
 import com.mostovoy_company.controllers.ChartConfigurationTabController;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import com.sun.javafx.charts.Legend;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +18,6 @@ import lombok.var;
 import net.rgielen.fxweaver.core.FxWeaver;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -180,14 +173,14 @@ public abstract class BaseLineChartData implements LineChartData {
         series.setData(data);
         chart.getData().add(series);
         chart.getChildrenUnmodifiable().stream()
-             .filter(child -> child instanceof Legend)
-             .flatMap(legend -> ((Legend) legend).getItems().stream())
-             .forEach(item -> {
-                         XYChart.Series<Number, Number> s = chart.getData().stream().filter(d -> d.getName().equals(item.getText())).collect(Collectors.toList()).get(0);
-                         item.getSymbol().setCursor(Cursor.HAND);
-                         item.getSymbol().setOnMouseClicked(event1 -> s.getNode().setVisible(!s.getNode().isVisible()));
-                     }
-             );
+                .filter(child -> child instanceof Legend)
+                .flatMap(legend -> ((Legend) legend).getItems().stream())
+                .forEach(item -> {
+                            XYChart.Series<Number, Number> s = chart.getData().stream().filter(d -> d.getName().equals(item.getText())).collect(Collectors.toList()).get(0);
+                            item.getSymbol().setCursor(Cursor.HAND);
+                            item.getSymbol().setOnMouseClicked(event1 -> s.getNode().setVisible(!s.getNode().isVisible()));
+                        }
+                );
 
     }
 

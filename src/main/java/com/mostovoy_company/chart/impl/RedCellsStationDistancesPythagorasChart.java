@@ -22,7 +22,7 @@ public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData i
 
     @Override
     protected double getNormalizedCoefficient(int size) {
-        return 1.0/size;
+        return 1.0 / size;
     }
 
     @Override
@@ -40,12 +40,12 @@ public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData i
         AtomicReference<Double> d = new AtomicReference<>(0.0);
         AtomicInteger n = new AtomicInteger(0);
         statistics.stream()
-                  .map(Statistic::getPythagorasDistance)
-                  .forEach(pair -> {
-                      d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
-                      n.addAndGet(pair.getSecond());
-                  });
-        if(n.get() == 0) message.setRedCellsStationDistancesPythagoras(message.getSize() * message.getSize());
+                .map(Statistic::getPythagorasDistance)
+                .forEach(pair -> {
+                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
+                    n.addAndGet(pair.getSecond());
+                });
+        if (n.get() == 0) message.setRedCellsStationDistancesPythagoras(message.getSize() * message.getSize());
         else message.setRedCellsStationDistancesPythagoras(d.get() / n.get());
     }
 

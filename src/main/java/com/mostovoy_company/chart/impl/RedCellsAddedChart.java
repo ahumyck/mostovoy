@@ -36,9 +36,9 @@ public class RedCellsAddedChart extends BaseLineChartData implements LightningBo
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setAddedRedCellCount(statistics.stream()
-                                               .mapToDouble(Statistic::getRedCellCount)
-                                               .average()
-                                               .orElse(0));
+                .mapToDouble(Statistic::getRedCellCount)
+                .average()
+                .orElse(0));
     }
 
     @Override

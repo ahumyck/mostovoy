@@ -36,9 +36,9 @@ public class InterClusterHoleCountChart extends BaseLineChartData implements Lig
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setInterClustersHoleCount(statistics.stream()
-                                                    .mapToDouble(Statistic::getInterClustersHoleCount)
-                                                    .average()
-                                                    .orElse(0));
+                .mapToDouble(Statistic::getInterClustersHoleCount)
+                .average()
+                .orElse(0));
     }
 
     @Override

@@ -33,7 +33,7 @@ public class BlackCellsTapeChart extends BaseLineChartData implements LightningB
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setBlackCellsTape(statistics.stream()
-                .mapToDouble(obj -> obj.getAverageBlackCellsInTape() * obj.getPercolationWayWidth())
+                .mapToDouble(Statistic::getAverageBlackCellsInTape)
                 .average()
                 .orElse(0));
     }
