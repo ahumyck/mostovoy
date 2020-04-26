@@ -67,7 +67,8 @@ public class Matrix {
         for (Cell[] value : this.matrix) {
             cells.addAll(Arrays.asList(value).subList(0, this.matrix.length));
         }
-        return cells.stream().filter(cell -> !cell.isEmpty());
+        return cells.stream()
+                .filter(cell -> !cell.isEmpty());
     }
 
     public int getSize(){

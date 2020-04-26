@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
+import static com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
+
 @Slf4j
 @Component
 public class ExperimentManager {
@@ -21,30 +24,34 @@ public class ExperimentManager {
         List<Experiment> experimentObservableList = new ArrayList<>();
         for (int i = 0; i < number; i++) {
             experimentObservableList.add(new Experiment().matrix(new Matrix(fillingType))
-                                                         .name(fillingType.getName())
-                                                         .clusterization());
+                    .name(fillingType.getName())
+                    .clusterization());
         }
         new Thread(() -> experimentObservableList.parallelStream()
-                                                 .forEach(experiment -> experiment.calculateLightningBolt()
-                                                                                  .calculateProgramingPercolation()
-                                                 )).start();
+                .forEach(experiment -> experiment.calculateLightningBolt()
+                        .calculateProgrammingPercolation(PYTHAGORAS)
+                        .putProgrammingPercolationInStatistic()
+                        .putBlackAndDarkRedCellsPerTapeInStatistics()
+                )).start();
         return experimentObservableList;
     }
 
     public List<Statistic> getStatistics(int count, FillingType fillingType, ConsumeProperties consumeProperties) {
         return Stream.generate(Experiment::new)
-                     .limit(count)
-                     .collect(Collectors.toList())
-                     .parallelStream()
-                     .map(experiment -> {
-                         experiment.matrix(new Matrix(fillingType))
-                                   .clusterization();
-                         if (consumeProperties.isLightningBoltEnable()) {
-                             experiment.calculateLightningBolt()
-                                       .calculateProgramingPercolation();
-                         }
-                         return experiment.clear().getExperimentStatistic();
-                     })
-                     .collect(Collectors.toList());
+                .limit(count)
+                .collect(Collectors.toList())
+                .parallelStream()
+                .map(experiment -> {
+                    experiment.matrix(new Matrix(fillingType))
+                            .clusterization();
+                    if (consumeProperties.isLightningBoltEnable()) {
+                        experiment.calculateLightningBolt()
+                                .calculateProgrammingPercolation(PYTHAGORAS)
+                                .putProgrammingPercolationInStatistic()
+                                .putBlackAndDarkRedCellsPerTapeInStatistics();
+                    }
+                    return experiment.clear().getExperimentStatistic();
+                })
+                .collect(Collectors.toList());
     }
 }

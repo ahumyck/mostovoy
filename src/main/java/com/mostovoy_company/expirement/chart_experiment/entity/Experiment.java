@@ -18,12 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class Experiment {
 
     @Expose(deserialize = false, serialize = false)
     private LightningBolt lightningBolt;
+    @Expose(deserialize = false, serialize = false)
+    private List<PercolationRelation> relations;
 
     @Expose
     private Statistic statistic = new Statistic();
@@ -33,6 +36,15 @@ public class Experiment {
     private Matrix matrix;
     @Expose
     private List<Cell> percolationWay;
+
+    public static Experiment getExperimentFromJson(String filename) throws IOException {
+        FileReader fileReader = new FileReader(filename);
+        JsonReader jsonReader = new JsonReader(fileReader);
+        Experiment experiment = new Gson().fromJson(jsonReader, Experiment.class);
+        fileReader.close();
+        jsonReader.close();
+        return experiment;
+    }
 
     public Experiment matrix(Matrix matrix) {
         this.matrix = matrix;
@@ -45,18 +57,17 @@ public class Experiment {
         return this;
     }
 
-    public Experiment clusterization(){
+    public Experiment clusterization() {
         this.matrix.clusterization();
-        this.statistic.setBlackCellCount((int)matrix.getCountOfBlackCells());
+        this.statistic.setBlackCellCount((int) matrix.getCountOfBlackCells());
         this.statistic.setClusterCount(matrix.getClusterCount());
         return this;
     }
 
-
     public Experiment calculateLightningBolt() {
         this.lightningBolt = new LightningBolt(this.matrix);
-        Paired<List<Cell>, Integer> listIntegerPaired = lightningBolt.calculateShortestPaths().getShortestPath().get();
-        percolationWay = listIntegerPaired.getFirst();
+        Paired<List<Cell>, Integer> listIntegerPaired = this.lightningBolt.calculateShortestPaths().getShortestPath().get();
+        this.percolationWay = listIntegerPaired.getFirst();
         this.statistic.setRedCellCount(getRedCellsCount());
         this.statistic.setPercolationizated(getRedCellsCount() == 0);
         this.statistic.setPercolationWayWidth(percolationWayWidth());
@@ -100,18 +111,58 @@ public class Experiment {
         this.statistic.setInterClustersHoleCount(interClustersSizes.size());
     }
 
+    public Experiment putBlackAndDarkRedCellsPerTapeInStatistics() {
+        int max = getPercolationWay().stream().mapToInt(Cell::getY).max().getAsInt() + Matrix.OFFSET;
+        int min = getPercolationWay().stream().mapToInt(Cell::getY).min().getAsInt() + Matrix.OFFSET;
+
+        if (max - min > 0) {
+            List<Integer> blackPerTape = new ArrayList<>();
+            List<Integer> darkRedPerTape = new ArrayList<>();
+
+
+            List<Cell> darkredCells = getProgrammings().stream()
+                    .map(PercolationRelation::getDarkRedCell).collect(Collectors.toList());
+
+            for (int column = min; column <= max; column++) {
+                int index = column - min;
+                blackPerTape.add(0);
+                darkRedPerTape.add(0);
+                for (int i = Matrix.OFFSET; i < matrix.getSize() - Matrix.OFFSET; i++) {
+                    Cell cell = matrix.getCell(i, column);
+                    if (cell.isBlack() /*&& !this.percolationWay.contains(cell)*/) {
+                        blackPerTape.set(index, blackPerTape.get(index) + 1);
+                        if (darkredCells.contains(cell))
+                            darkRedPerTape.set(index, darkRedPerTape.get(index) + 1);
+                    }
+                }
+            }
+
+            double averageBlackCellsPerTape = blackPerTape.stream().mapToDouble(d -> d).average().orElse(0);
+            double averageDarkRedCellsPerTape = darkRedPerTape.stream().mapToDouble(d -> d).average().orElse(0);
+
+            this.statistic.setAverageDarkRedCellsInTape(averageDarkRedCellsPerTape);
+            this.statistic.setAverageBlackCellsInTape(averageBlackCellsPerTape);
+        } else {
+            this.statistic.setAverageDarkRedCellsInTape(0);
+            this.statistic.setAverageBlackCellsInTape(0);
+        }
+        return this;
+    }
+
     private int percolationWayWidth() {
         int max = getPercolationWay().stream().mapToInt(Cell::getY).max().getAsInt();
         int min = getPercolationWay().stream().mapToInt(Cell::getY).min().getAsInt();
         return max - min + 1;
     }
 
-    public Experiment calculateProgramingPercolation() {
+    public Experiment putProgrammingPercolationInStatistic() {
         String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
         Paired[] averagesWithSize = new Paired[]{new Paired<Double, Integer>(), new Paired<Double, Integer>()};
         for (int i = 0; i < 2; i++) {
             String calculator = calculators[i];
-            List<PercolationRelation> percolationRelations = calculateProgrammingPercolation(calculator);
+            List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
+                    .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(calculator))
+                    .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
             int n = percolationRelations.size();
             double d = percolationRelations.stream()
                     .mapToDouble(PercolationRelation::getDistance)
@@ -128,15 +179,16 @@ public class Experiment {
         return (int) percolationWay.stream().filter(Cell::isWhite).count();
     }
 
-    public List<PercolationRelation> getProgrammings(String distanceCalculatorType) {
-        return calculateProgrammingPercolation(distanceCalculatorType);
+    public List<PercolationRelation> getProgrammings() {
+        return Optional.of(this.relations).orElseThrow(() -> new RuntimeException("NO RELATIONS UNDER PERCOLATION WAY"));
     }
 
-    private List<PercolationRelation> calculateProgrammingPercolation(String distanceCalculatorType) {
+    public Experiment calculateProgrammingPercolation(String distanceCalculatorType) {
         int neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
-        return new PercolationProgramming(matrix, percolationWay)
+        this.relations = new PercolationProgramming(matrix, percolationWay)
                 .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
                 .getProgrammingPercolationList(neighborhood);
+        return this;
     }
 
     @Override
@@ -162,14 +214,5 @@ public class Experiment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static Experiment getExperimentFromJson(String filename) throws IOException {
-        FileReader fileReader = new FileReader(filename);
-        JsonReader jsonReader = new JsonReader(fileReader);
-        Experiment experiment = new Gson().fromJson(jsonReader, Experiment.class);
-        fileReader.close();
-        jsonReader.close();
-        return experiment;
     }
 }

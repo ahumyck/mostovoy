@@ -18,7 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import lombok.var;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
@@ -121,17 +120,17 @@ public class ManualMatrixController {
         });
 
         saveButton.setOnAction(actionEvent ->
-            fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
-                    .ifPresent(file -> {
-                        Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
-                        if (selectedItem != null) {
-                            selectedItem.saveExperimentToJson(file.getPath());
-                        }
-                    })
+                fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
+                        .ifPresent(file -> {
+                            Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
+                            if (selectedItem != null) {
+                                selectedItem.saveExperimentToJson(file.getPath());
+                            }
+                        })
         );
         uploadButton.setOnAction(actionEvent ->
-            fxWeaver.loadController(FileChooserController.class).getMultipleFiles(FileChooserController.jsonExtensionFilter)
-                    .ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)))
+                fxWeaver.loadController(FileChooserController.class).getMultipleFiles(FileChooserController.jsonExtensionFilter)
+                        .ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)))
         );
 
 
@@ -169,8 +168,15 @@ public class ManualMatrixController {
     }
 
     private void paintByCheckBox(Experiment experiment) {
-        painter.paintCanvas(gridPane, experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
-        painter.paintLightningBoltAndRelations(lightningBoltPane, experiment.getPercolationWay(), experiment.getProgrammings(PYTHAGORAS), experiment.getMatrix(), Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
+        painter.paintCanvas(gridPane,
+                experiment.getMatrix(),
+                Math.min(mainTabPane.getWidth(),
+                        mainTabPane.getHeight()) - 30);
+        painter.paintLightningBoltAndRelations(lightningBoltPane,
+                experiment.getPercolationWay(),
+                experiment.getProgrammings(),
+                experiment.getMatrix(),
+                Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
     }
 
     private void showMatrixInfo(Experiment experiment) {
@@ -183,10 +189,13 @@ public class ManualMatrixController {
         addLabelToMatrixInfo("Ширина перколяционного пути: " + statistic.getPercolationWayWidth());
         addLabelToMatrixInfo("Средний размер межластерного интервала: " + String.format("%.2f", statistic.getMidInterClustersInterval()));
         addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
+        addLabelToMatrixInfo("Среднее расстояние установки: " + String.format("%.2f", statistic.getPythagorasDistance().getFirst()));
+        addLabelToMatrixInfo("Среднее черных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageBlackCellsInTape()));
+        addLabelToMatrixInfo("Среднее темнокрасных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageDarkRedCellsInTape()));
     }
 
     private void addLabelToMatrixInfo(String text) {
-        var label = new Label();
+        Label label = new Label();
         label.setFont(new Font(14.0));
         label.setPadding(new Insets(0.0, 10.0, 0.0, 10.0));
         label.setText(text);

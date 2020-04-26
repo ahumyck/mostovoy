@@ -49,16 +49,15 @@
                 <TextField fx:id="stepProbability"/>
             </HBox>
             <CheckBox fx:id="performLightning" text="Молния" selected="true"/>
+            <Button fx:id="applyExperiment" mnemonicParsing="false" text="Apply"/>
         </VBox>
         <VBox spacing="25">
+            <Button fx:id="saveButton" text="Сохранить графики"/>
             <Button fx:id="uploadButton" text="Загрузить графики"/>
             <Button fx:id="configurationWindow" text="Конфигурация"/>
             <Button fx:id="snapshotButton" text="Снимок графика"/>
-            <Button fx:id="saveButton" text="Сохранить графики"/>
         </VBox>
     </HBox>
-    <Button fx:id="applyExperiment" mnemonicParsing="false" text="Apply"/>
-
     <TabPane fx:id="statisticChartsTabPane" tabClosingPolicy="UNAVAILABLE"/>
 </VBox>
 

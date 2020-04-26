@@ -28,10 +28,6 @@ public class LightningBolt {
         return Optional.of(this.shortestPath).get().getFirst().size();
     }
 
-    public List<List<Cell>> getShortestPaths(){
-        return this.paths.stream().map(Paired::getFirst).collect(Collectors.toList());
-    }
-
     public LightningBolt calculateShortestPaths() {
         for (int currentPos = 0; currentPos < this.shiftedSize; currentPos++) {
             Paired<List<Integer>, List<Integer>> inf = findShortestPaths(currentPos);
@@ -57,23 +53,22 @@ public class LightningBolt {
         PriorityQueue<Distance> distanceToOtherNeighborsMap = new PriorityQueue<>();
         int[] parents = new int[this.adjacencyList.size()];
 
-        if(this.matrix.getCell(Matrix.OFFSET, Matrix.OFFSET + start_pos).isWhite()) {
+        if (this.matrix.getCell(Matrix.OFFSET, Matrix.OFFSET + start_pos).isWhite()) {
             distanceToOtherNeighborsMap.add(new Distance(start_pos, this.shiftedSize * this.shiftedSize + 1));
             distanceToOtherNeighbors[start_pos] = this.shiftedSize * this.shiftedSize + 1;
-        }
-        else{
+        } else {
             distanceToOtherNeighborsMap.add(new Distance(start_pos, 0));
             distanceToOtherNeighbors[start_pos] = 0;
         }
 
         int n = this.adjacencyList.keySet().size();
-        for (int i = 0; i < n ; i++) {
+        for (int i = 0; i < n; i++) {
             int v;
             Distance distance;
             do {
                 distance = distanceToOtherNeighborsMap.poll();
                 v = distance.getVertex();
-            } while(visited[v]);
+            } while (visited[v]);
             visited[v] = true;
             final int f_v = v;
             adjacencyList.get(v).forEach(pair -> {

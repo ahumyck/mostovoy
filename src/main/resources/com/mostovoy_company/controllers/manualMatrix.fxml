@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.text.Font?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.mostovoy_company.controllers.ManualMatrixController"
@@ -74,7 +69,7 @@
             <ListView fx:id="experimentListView" maxHeight="Infinity" minWidth="120" maxWidth="175"/>
             <Button text="Очистить" fx:id="clearListButton"/>
             <padding>
-                <Insets bottom="20" />
+                <Insets bottom="20"/>
             </padding>
         </VBox>
         <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
@@ -87,7 +82,5 @@
         </TabPane>
         <VBox spacing="5" fx:id="matrixInfo">
         </VBox>
-        <!--                        <CheckBox fx:id="tapeCheckBox" layoutX="765.0" layoutY="68.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Изолента" />-->
-        <!--                        <TextField fx:id="tapeCount" layoutX="569.0" layoutY="70.0" promptText="Отступ (целое число>0)" />-->
     </HBox>
 </HBox>
