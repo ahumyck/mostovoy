@@ -129,7 +129,7 @@ public class Experiment {
                 darkRedPerTape.add(0);
                 for (int column = min; column <= max; column++){
                     Cell cell = matrix.getCell(i, column);
-                    if (cell.isBlack() /*&& !this.percolationWay.contains(cell)*/) {
+                    if (cell.isBlack() && !this.percolationWay.contains(cell)) {
                         blackPerTape.set(index, blackPerTape.get(index) + 1);
                         if (darkredCells.contains(cell))
                             darkRedPerTape.set(index, darkRedPerTape.get(index) + 1);
@@ -137,11 +137,8 @@ public class Experiment {
                 }
             }
 
-            double averageBlackCellsPerTape = blackPerTape.stream().mapToDouble(d -> d).average().orElse(0);
-            double averageDarkRedCellsPerTape = darkRedPerTape.stream().mapToDouble(d -> d).average().orElse(0);
-
-            this.statistic.setAverageDarkRedCellsInTape(averageDarkRedCellsPerTape);
-            this.statistic.setAverageBlackCellsInTape(averageBlackCellsPerTape);
+            this.statistic.setAverageDarkRedCellsInTape(darkRedPerTape.stream().mapToDouble(d -> d).average().orElse(0));
+            this.statistic.setAverageBlackCellsInTape(blackPerTape.stream().mapToDouble(d -> d).average().orElse(0));
         } else {
             this.statistic.setAverageDarkRedCellsInTape(0);
             this.statistic.setAverageBlackCellsInTape(0);

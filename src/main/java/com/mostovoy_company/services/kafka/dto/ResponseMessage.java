@@ -23,4 +23,6 @@ public class ResponseMessage {
     private double percolationWayWidth;
     private double interClusterIntervalSize;
     private double interClustersHoleCount;
+    private double blackCellsTape;
+    private double darkRedCellsTape;
 }
