@@ -16,6 +16,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -51,7 +52,7 @@ public class ManualMatrixController {
     @FXML
     public Tab lightningBoltTab;
     @FXML
-    public Canvas lightningBoltPane;
+    public StackPane lightningBoltPane;
     @FXML
     public Button distanceCalculatorType;
     @FXML

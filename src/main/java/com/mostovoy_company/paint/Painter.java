@@ -5,7 +5,9 @@ import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationRelation;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +29,7 @@ public class Painter {
         });
     }
 
-    private void drawLines(double size, Matrix matrix, GraphicsContext graphicsContext2D) {
+    private void drawSplitterMatrixLines(double size, Matrix matrix, GraphicsContext graphicsContext2D) {
         matrix.stream().forEach(cell -> {
             graphicsContext2D.setFill(Color.GRAY);
             graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, 0.5);
@@ -48,8 +50,8 @@ public class Painter {
         relations.forEach(relation -> {
             graphicsContext2D.moveTo(relation.getRedCell().getY() * size + size/2, relation.getRedCell().getX() * size + size/2);
             graphicsContext2D.lineTo(relation.getDarkRedCell().getY() * size + size / 2, relation.getDarkRedCell().getX() * size + size / 2);
-            graphicsContext2D.stroke();
         });
+        graphicsContext2D.stroke();
     }
 
     private void paintPath(double size, List<Cell> path, GraphicsContext graphicsContext2D) {
@@ -72,18 +74,19 @@ public class Painter {
         grid.setHeight(gridSize);
         GraphicsContext graphicsContext2D = grid.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
-        graphicsContext2D.fillRect(0, 0, grid.getWidth(), grid.getHeight());
+        graphicsContext2D.fill();
 
         paintClusterMatrix(size, matrix, graphicsContext2D);
-        drawLines(size, matrix, graphicsContext2D);
+        drawSplitterMatrixLines(size, matrix, graphicsContext2D);
     }
 
 
-    public void paintLightningBoltAndRelations(Canvas pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix, double gridSize) {
+    public void paintLightningBoltAndRelations(StackPane pane, List<Cell> path, List<PercolationRelation> relations, Matrix matrix, double gridSize) {
         double size = gridSize / (matrix.getSize() - 2 * Matrix.OFFSET);
-        pane.setHeight(gridSize);
-        pane.setWidth(gridSize);
-        GraphicsContext graphicsContext2D = pane.getGraphicsContext2D();
+        Canvas canvas = new Canvas();
+        canvas.setHeight(gridSize);
+        canvas.setWidth(gridSize);
+        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.fillRect(0, 0, pane.getWidth(), pane.getHeight());
 
@@ -91,9 +94,9 @@ public class Painter {
         paintPath(size, path, graphicsContext2D);
         paintRelations(size, relations, graphicsContext2D);
         drawRelationLines(size, relations, graphicsContext2D);
-        drawLines(size, matrix, graphicsContext2D);
+        drawSplitterMatrixLines(size, matrix, graphicsContext2D);
 
-//        pane.getChildren().clear();
-//        pane.getChildren().add(canvas);
+        pane.getChildren().clear();
+        pane.getChildren().add(canvas);
     }
 }

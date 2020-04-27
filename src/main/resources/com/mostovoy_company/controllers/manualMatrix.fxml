@@ -77,7 +77,7 @@
                 <Canvas fx:id="gridPane"/>
             </Tab>
             <Tab fx:id="lightningBoltTab" text="Молния">
-                <Canvas fx:id="lightningBoltPane"/>
+                <StackPane fx:id="lightningBoltPane"/>
             </Tab>
         </TabPane>
         <VBox spacing="5" fx:id="matrixInfo">
