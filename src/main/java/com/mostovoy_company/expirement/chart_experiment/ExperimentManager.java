@@ -4,8 +4,10 @@ import com.mostovoy_company.expirement.chart_experiment.entity.Experiment;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
 import com.mostovoy_company.expirement.chart_experiment.filling.FillingType;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.NeighborhoodRules;
 import com.mostovoy_company.services.ConsumeProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,12 +15,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver.DISCRETE;
-import static com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver.PYTHAGORAS;
-
 @Slf4j
 @Component
 public class ExperimentManager {
+
+    private NeighborhoodRules rules;
+
+    public ExperimentManager(@Qualifier("defaultRules") NeighborhoodRules rules) {
+        this.rules = rules;
+    }
 
     public List<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
         List<Experiment> experimentObservableList = new ArrayList<>();
@@ -28,8 +33,8 @@ public class ExperimentManager {
                     .clusterization());
         }
         new Thread(() -> experimentObservableList.parallelStream()
-                .forEach(experiment -> experiment.calculateLightningBolt()
-                        .calculateProgrammingPercolation(PYTHAGORAS)
+                .forEach(experiment -> experiment.calculateLightningBolt(rules)
+                        .calculateProgrammingPercolation()
                         .putProgrammingPercolationInStatistic()
                         .putBlackAndDarkRedCellsPerTapeInStatistics()
                 )).start();
@@ -45,8 +50,8 @@ public class ExperimentManager {
                     experiment.matrix(new Matrix(fillingType))
                             .clusterization();
                     if (consumeProperties.isLightningBoltEnable()) {
-                        experiment.calculateLightningBolt()
-                                .calculateProgrammingPercolation(PYTHAGORAS)
+                        experiment.calculateLightningBolt(rules)
+                                .calculateProgrammingPercolation()
                                 .putProgrammingPercolationInStatistic()
                                 .putBlackAndDarkRedCellsPerTapeInStatistics();
                     }

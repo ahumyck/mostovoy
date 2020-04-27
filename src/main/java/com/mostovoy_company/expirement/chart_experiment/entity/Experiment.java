@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.LightningBolt;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.Paired;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.NeighborhoodRules;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationProgramming;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationRelation;
 import lombok.NoArgsConstructor;
@@ -63,8 +64,8 @@ public class Experiment {
         return this;
     }
 
-    public Experiment calculateLightningBolt() {
-        this.lightningBolt = new LightningBolt(this.matrix);
+    public Experiment calculateLightningBolt(NeighborhoodRules rules) {
+        this.lightningBolt = new LightningBolt(this.matrix, rules);
         Paired<List<Cell>, Integer> listIntegerPaired = this.lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.percolationWay = listIntegerPaired.getFirst();
         this.statistic.setRedCellCount(getRedCellsCount());
@@ -170,7 +171,7 @@ public class Experiment {
         return Optional.of(this.relations).orElseThrow(() -> new RuntimeException("NO RELATIONS UNDER PERCOLATION WAY"));
     }
 
-    public Experiment calculateProgrammingPercolation(String distanceCalculatorType) {
+    public Experiment calculateProgrammingPercolation() {
         int neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
         this.relations = new PercolationProgramming(matrix, percolationWay)
                 .getProgrammingPercolationList(neighborhood);

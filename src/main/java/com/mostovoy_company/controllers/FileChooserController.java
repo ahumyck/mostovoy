@@ -29,10 +29,8 @@ public class FileChooserController {
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().addAll(filters);
         chooser.setTitle(title);
-        if (!lastUsedDirectory.equals("NULL")) {
-            File initialDirectory = new File(lastUsedDirectory);
-            chooser.setInitialDirectory(initialDirectory);
-        }
+        if (!lastUsedDirectory.equals("NULL"))
+            chooser.setInitialDirectory(new File(lastUsedDirectory));
         return chooser;
     }
 
