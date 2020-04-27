@@ -1,4 +1,4 @@
-package com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood;
+package com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood;
 
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.Paired;
 

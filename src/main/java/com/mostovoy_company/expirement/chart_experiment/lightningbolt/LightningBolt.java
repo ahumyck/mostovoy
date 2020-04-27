@@ -2,8 +2,7 @@ package com.mostovoy_company.expirement.chart_experiment.lightningbolt;
 
 import com.mostovoy_company.expirement.chart_experiment.entity.Cell;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
-import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.AdjacencyListBuilderByMatrix;
-import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.NeighborhoodRules;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
 
 import java.util.*;
 import java.util.stream.Collectors;

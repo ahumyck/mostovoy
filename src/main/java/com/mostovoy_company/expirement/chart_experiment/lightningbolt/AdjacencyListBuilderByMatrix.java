@@ -1,9 +1,8 @@
-package com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency;
+package com.mostovoy_company.expirement.chart_experiment.lightningbolt;
 
 import com.mostovoy_company.expirement.chart_experiment.entity.Cell;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
-import com.mostovoy_company.expirement.chart_experiment.lightningbolt.Paired;
-import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.NeighborhoodRules;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
 
 import java.util.ArrayList;
 import java.util.HashMap;

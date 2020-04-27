@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.LightningBolt;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.Paired;
-import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.NeighborhoodRules;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationProgramming;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationRelation;
 import lombok.NoArgsConstructor;

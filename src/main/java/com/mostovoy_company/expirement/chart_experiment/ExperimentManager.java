@@ -4,7 +4,7 @@ import com.mostovoy_company.expirement.chart_experiment.entity.Experiment;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
 import com.mostovoy_company.expirement.chart_experiment.filling.FillingType;
-import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.NeighborhoodRules;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
 import com.mostovoy_company.services.ConsumeProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +21,7 @@ public class ExperimentManager {
 
     private NeighborhoodRules rules;
 
-    public ExperimentManager(@Qualifier("diagonalRules") NeighborhoodRules rules) {
+    public ExperimentManager(@Qualifier("defaultRules") NeighborhoodRules rules) {
         this.rules = rules;
     }
 
