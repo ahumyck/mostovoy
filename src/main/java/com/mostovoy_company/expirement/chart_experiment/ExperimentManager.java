@@ -21,7 +21,7 @@ public class ExperimentManager {
 
     private NeighborhoodRules rules;
 
-    public ExperimentManager(@Qualifier("defaultRules") NeighborhoodRules rules) {
+    public ExperimentManager(@Qualifier("diagonalRules") NeighborhoodRules rules) {
         this.rules = rules;
     }
 

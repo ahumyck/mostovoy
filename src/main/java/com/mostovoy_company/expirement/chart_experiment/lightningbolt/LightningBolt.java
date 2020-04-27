@@ -3,7 +3,6 @@ package com.mostovoy_company.expirement.chart_experiment.lightningbolt;
 import com.mostovoy_company.expirement.chart_experiment.entity.Cell;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.AdjacencyListBuilderByMatrix;
-import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.DefaultRules;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.adjacency.neighborhood.NeighborhoodRules;
 
 import java.util.*;
@@ -65,24 +64,28 @@ public class LightningBolt {
 
         int n = this.adjacencyList.keySet().size();
         for (int i = 0; i < n; i++) {
-            int v;
+            int v = Integer.MAX_VALUE;
             Distance distance;
             do {
                 distance = distanceToOtherNeighborsMap.poll();
+                if (distance == null) break;
                 v = distance.getVertex();
             } while (visited[v]);
-            visited[v] = true;
-            final int f_v = v;
-            adjacencyList.get(v).forEach(pair -> {
-                int to = pair.getFirst();
-                int len = pair.getSecond();
-                int newValue = distanceToOtherNeighbors[f_v] + len;
-                if (newValue < distanceToOtherNeighbors[to]) {
-                    distanceToOtherNeighborsMap.add(new Distance(to, newValue));
-                    distanceToOtherNeighbors[to] = newValue;
-                    parents[to] = f_v;
-                }
-            });
+            if (distance != null) {
+                visited[v] = true;
+                final int f_v = v;
+                adjacencyList.get(v).forEach(pair -> {
+                    int to = pair.getFirst();
+                    int len = pair.getSecond();
+                    int newValue = distanceToOtherNeighbors[f_v] + len;
+                    if (newValue < distanceToOtherNeighbors[to]) {
+                        distanceToOtherNeighborsMap.add(new Distance(to, newValue));
+                        distanceToOtherNeighbors[to] = newValue;
+                        parents[to] = f_v;
+                    }
+                });
+            }
+            else break;
         }
         return new Paired<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
     }
