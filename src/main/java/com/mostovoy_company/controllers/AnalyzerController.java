@@ -1,7 +1,7 @@
 package com.mostovoy_company.controllers;
 
 import com.mostovoy_company.expirement.table_experiment.TableViewData;
-import com.mostovoy_company.expirement.table_experiment.TableViewRepository;
+import com.mostovoy_company.expirement.table_experiment.TableRepository;
 import com.mostovoy_company.expirement.table_experiment.analyzer.AnalyzerDataRepository;
 import com.mostovoy_company.expirement.table_experiment.analyzer.AnalyzerManager;
 import com.mostovoy_company.expirement.table_experiment.stats.StatisticBlockData;
@@ -47,7 +47,7 @@ public class AnalyzerController {
     @FXML
     public TableView<TableViewData> tableWhiteRow;
     @FXML
-    public TableView<TableViewData> tableBlack;
+    public TableView<TableViewData> tableBlackRow;
     @FXML
     public TextField stepProbability;
     @FXML
@@ -59,10 +59,10 @@ public class AnalyzerController {
 
     private AnalyzerManager analyzerManager;
     private StatisticModule statisticModule;
-    private TableViewRepository repository;
+    private TableRepository repository;
     private FxWeaver fxWeaver;
 
-    public AnalyzerController(AnalyzerManager analyzerManager, StatisticModule statisticModule, TableViewRepository repository, FxWeaver fxWeaver) {
+    public AnalyzerController(AnalyzerManager analyzerManager, StatisticModule statisticModule, TableRepository repository, FxWeaver fxWeaver) {
         this.analyzerManager = analyzerManager;
         this.statisticModule = statisticModule;
         this.repository = repository;
@@ -90,9 +90,9 @@ public class AnalyzerController {
                     .forEach(probability -> {
                         AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
                         StatisticBlockData statisticBlockData = statisticModule.gatherStatistic(analyzerDataRepository);
-                        repository.put(TableViewRepository.blackTableRowName, statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability));
-                        repository.put(TableViewRepository.whiteTableRowName, statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability));
-                        repository.put(TableViewRepository.whiteTableColumnName, statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability));
+                        repository.put(TableRepository.blackTableRowName, statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability));
+                        repository.put(TableRepository.whiteTableRowName, statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability));
+                        repository.put(TableRepository.whiteTableColumnName, statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability));
                     })).start();
         });
 
@@ -124,13 +124,13 @@ public class AnalyzerController {
                 generateList("Статистика среднего белых в строке",
                         "Статистика максимального белых в строке", "Статистика минимального белых в строке"),
                 params);
-        initializeTableView(tableBlack,
-                generateList("Статистика количества черных клеток",
+        initializeTableView(tableBlackRow,
+                generateList("Статистика суммы черных клеток по столбцам",
                         "Статистика пустых строк", "Статистика среднего черных в строке"),
                 params);
-        repository.createTable(TableViewRepository.blackTableRowName, tableBlack);
-        repository.createTable(TableViewRepository.whiteTableRowName, tableWhiteRow);
-        repository.createTable(TableViewRepository.whiteTableColumnName, tableWhiteColumn);
+        repository.createTable(TableRepository.blackTableRowName, tableBlackRow);
+        repository.createTable(TableRepository.whiteTableRowName, tableWhiteRow);
+        repository.createTable(TableRepository.whiteTableColumnName, tableWhiteColumn);
     }
 
     private void initializeTableView(TableView<TableViewData> tableView, List<String> columnsNames, List<String> propertyNames) {

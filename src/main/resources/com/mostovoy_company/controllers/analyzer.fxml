@@ -39,7 +39,7 @@
                 <TableView fx:id="tableWhiteRow" prefHeight="150"/>
             </Tab>
             <Tab text="Статистика черных клеток в матрицах по строкам">
-                <TableView fx:id="tableBlack" prefHeight="150"/>
+                <TableView fx:id="tableBlackRow" prefHeight="150"/>
             </Tab>
         </TabPane>
     </VBox>

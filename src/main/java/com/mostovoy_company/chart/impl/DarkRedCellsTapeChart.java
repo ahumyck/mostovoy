@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+//@Component
 public class DarkRedCellsTapeChart extends BaseLineChartData implements LightningBoltDependentChart {
     public DarkRedCellsTapeChart(FxWeaver fxWeaver) {
         super(fxWeaver);

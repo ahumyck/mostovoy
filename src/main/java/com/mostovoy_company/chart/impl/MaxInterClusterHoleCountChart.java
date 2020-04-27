@@ -11,32 +11,31 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Order(8)
-public class MidInterClustersIntervalSizeChart extends BaseLineChartData implements LightningBoltDependentChart {
-
-    public MidInterClustersIntervalSizeChart(FxWeaver fxWeaver) {
+@Order(9)
+public class MaxInterClusterHoleCountChart extends BaseLineChartData implements LightningBoltDependentChart {
+    public MaxInterClusterHoleCountChart(FxWeaver fxWeaver) {
         super(fxWeaver);
     }
 
     @Override
     protected double getNormalizedCoefficient(int size) {
-        return 1.0;
+        return 0;
     }
 
     @Override
     public String getChartName() {
-        return "Среднее растояние между кластерами";
+        return "Максимальное растояние между кластерами";
     }
 
     @Override
     public String getTabName() {
-        return "Межкластерное расстояние";
+        return "Максимальное межкластерное расстояние";
     }
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        message.setMidInterClusterIntervalSize(statistics.stream()
-                .mapToDouble(Statistic::getMidInterClustersInterval)
+        message.setMaxInterClusterIntervalSize(statistics.stream()
+                .mapToDouble(Statistic::getMaxInterClusterHoleSize)
                 .average()
                 .orElse(0));
 
@@ -44,6 +43,6 @@ public class MidInterClustersIntervalSizeChart extends BaseLineChartData impleme
 
     @Override
     public void parseResponseMessage(ResponseMessage message) {
-        parseResponseMessageAndAdd(message, message.getMidInterClusterIntervalSize());
+        parseResponseMessageAndAdd(message, message.getMaxInterClusterIntervalSize());
     }
 }

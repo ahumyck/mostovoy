@@ -20,10 +20,12 @@ public class Statistic {
     private int blackCellCount;
     @Expose
     private int percolationWayLength;
+
     @Expose
-    private Paired<Double,Integer> pythagorasDistance;
+    private int relationsCounter;
     @Expose
-    private Paired<Double, Integer> discreteDistance;
+    private double midDarkRedCellsStation;
+
     @Expose
     private boolean percolationizated;
     @Expose
@@ -31,9 +33,12 @@ public class Statistic {
     @Expose
     private double midInterClustersInterval;
     @Expose
+    private double maxInterClusterHoleSize;
+    @Expose
     private int interClustersHoleCount;
     @Expose
     private double averageBlackCellsInTape;
     @Expose
     private double averageDarkRedCellsInTape;
+
 }

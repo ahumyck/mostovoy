@@ -102,18 +102,18 @@ public class ManualMatrixController {
         mainTabPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             if (experiment != null)
-                paintByCheckBox(experiment);
+                paintExperiment(experiment);
         });
         mainTabPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
             if (experiment != null)
-                paintByCheckBox(experiment);
+                paintExperiment(experiment);
         });
         experimentNumber.setText("1");
 
         experimentListView.setOnMouseClicked(item -> {
             final Experiment experiment = experimentListView.getSelectionModel().getSelectedItem();
-            paintByCheckBox(experiment);
+            paintExperiment(experiment);
             showMatrixInfo(experiment);
         });
 
@@ -165,11 +165,10 @@ public class ManualMatrixController {
         });
     }
 
-    private void paintByCheckBox(Experiment experiment) {
+    private void paintExperiment(Experiment experiment) {
         painter.paintCanvas(gridPane,
                 experiment.getMatrix(),
-                Math.min(mainTabPane.getWidth(),
-                        mainTabPane.getHeight()) - 30);
+                Math.min(mainTabPane.getWidth(), mainTabPane.getHeight()) - 30);
         painter.paintLightningBoltAndRelations(lightningBoltPane,
                 experiment.getPercolationWay(),
                 experiment.getProgrammings(),
@@ -187,7 +186,7 @@ public class ManualMatrixController {
         addLabelToMatrixInfo("Ширина перколяционного пути: " + statistic.getPercolationWayWidth());
         addLabelToMatrixInfo("Средний размер межластерного интервала: " + String.format("%.2f", statistic.getMidInterClustersInterval()));
         addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
-        addLabelToMatrixInfo("Среднее расстояние установки: " + String.format("%.2f", statistic.getPythagorasDistance().getFirst()));
+        addLabelToMatrixInfo("Среднее расстояние установки: " + String.format("%.2f", statistic.getMidDarkRedCellsStation()));
         addLabelToMatrixInfo("Среднее черных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageBlackCellsInTape()));
         addLabelToMatrixInfo("Среднее темнокрасных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageDarkRedCellsInTape()));
     }

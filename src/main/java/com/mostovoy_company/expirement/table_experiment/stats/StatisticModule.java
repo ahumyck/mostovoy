@@ -25,8 +25,8 @@ public class StatisticModule {
         double emptyRowsAverage = average(repository, AnalyzerData::getEmptyRowCounter);
         double emptyRowsDispersion = standardDeviation(repository, emptyRowsAverage, AnalyzerData::getEmptyRowCounter);
 
-        double blackCellsPerRowAverage = average(repository, AnalyzerData::getAverageBlackCellsPerRow);
-        double blackCellsPerRowDispersion = standardDeviation(repository, blackCellsPerRowAverage, AnalyzerData::getAverageBlackCellsPerRow);
+        double blackCellsPerRowAverage = average(repository, AnalyzerData::getAverageBlackCellsPerColumn);
+        double blackCellsPerRowDispersion = standardDeviation(repository, blackCellsPerRowAverage, AnalyzerData::getAverageBlackCellsPerColumn);
 
         return new BlackBlockData(totalBlackCellsAverage, totalBlackCellsDispersion,
                 emptyRowsAverage, emptyRowsDispersion,

@@ -28,11 +28,6 @@ public class PercolationProgramming {
         this.generator = new RhombusBoundaryGenerator(matrix);
     }
 
-    public PercolationProgramming setDistanceCalculator(DistanceCalculator calculator) {
-        this.calculator = calculator;
-        return this;
-    }
-
     private Stream<Cell> streamBlackNotUsedObjects(List<Cell> cells) {
         return cells.stream().filter(Cell::isBlack)
                 .filter(cell -> !path.contains(cell))

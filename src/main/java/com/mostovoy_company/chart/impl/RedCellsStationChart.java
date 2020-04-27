@@ -14,9 +14,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 @Slf4j
-public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData implements LightningBoltDependentChart {
+public class RedCellsStationChart extends BaseLineChartData implements LightningBoltDependentChart {
 
-    public RedCellsStationDistancesPythagorasChart(FxWeaver fxWeaver) {
+    public RedCellsStationChart(FxWeaver fxWeaver) {
         super(fxWeaver);
     }
 
@@ -27,24 +27,22 @@ public class RedCellsStationDistancesPythagorasChart extends BaseLineChartData i
 
     @Override
     public String getChartName() {
-        return "Расстояние вычисляется с помощью теоремы Пифагора";
+        return "Среднее расстояние установки темно-красной клетки";
     }
 
     @Override
     public String getTabName() {
-        return "Расстояние установки способ 2";
+        return "Расстояние установки";
     }
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         AtomicReference<Double> d = new AtomicReference<>(0.0);
         AtomicInteger n = new AtomicInteger(0);
-        statistics.stream()
-                .map(Statistic::getPythagorasDistance)
-                .forEach(pair -> {
-                    d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
-                    n.addAndGet(pair.getSecond());
-                });
+        statistics.forEach(statistic -> {
+            d.updateAndGet(v -> v + statistic.getMidDarkRedCellsStation() * statistic.getRelationsCounter());
+            n.addAndGet(statistic.getRelationsCounter());
+        });
         if (n.get() == 0) message.setRedCellsStationDistancesPythagoras(message.getSize() * message.getSize());
         else message.setRedCellsStationDistancesPythagoras(d.get() / n.get());
     }

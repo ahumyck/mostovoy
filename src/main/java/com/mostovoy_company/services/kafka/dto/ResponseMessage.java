@@ -21,7 +21,8 @@ public class ResponseMessage {
     private double redCellsStationDistancesDiscrete;
     private double percolationThreshold;
     private double percolationWayWidth;
-    private double interClusterIntervalSize;
+    private double midInterClusterIntervalSize;
+    private double maxInterClusterIntervalSize;
     private double interClustersHoleCount;
     private double blackCellsTape;
     private double darkRedCellsTape;

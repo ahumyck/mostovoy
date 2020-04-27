@@ -38,7 +38,6 @@ public class LightningBolt {
             int endPos = this.shiftedSize * (this.shiftedSize - 1) + shortest;
             List<Cell> path = getPath(currentPos, endPos, parents);
             paths.add(new Paired<>(path, distances.get(shortest)));
-
         }
         this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Paired::getSecond)).get();
         return this;

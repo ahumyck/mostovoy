@@ -8,7 +8,7 @@ import net.rgielen.fxweaver.core.FxWeaver;
 
 import java.util.List;
 
-//@Component(RATIO_DARK_RED_AND_BLACK_CELLS_CHART)
+//@Component
 public class RatioDarkRedAndBlackCellsChart extends BaseLineChartData implements LightningBoltDependentChart {
 
     public RatioDarkRedAndBlackCellsChart(FxWeaver fxWeaver) {

@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class TableViewRepository {
+public class TableRepository {
 
-    public static String blackTableRowName = "Статистика черных клеток в строке";
+    public static String blackTableRowName = "Статистика по черным клеткам";
     public static String whiteTableRowName = "Статистика белых клеток в строке";
     public static String whiteTableColumnName = "Статистика белых клеток в столбце";
 

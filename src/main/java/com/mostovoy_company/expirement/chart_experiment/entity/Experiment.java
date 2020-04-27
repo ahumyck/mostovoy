@@ -6,7 +6,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.LightningBolt;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.Paired;
-import com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationProgramming;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationRelation;
 import lombok.NoArgsConstructor;
@@ -108,6 +107,7 @@ public class Experiment {
             interClustersSizes.remove(interClustersSizes.get(interClustersSizes.size() - 1));
         }
         this.statistic.setMidInterClustersInterval(interClustersSizes.stream().mapToDouble(AtomicInteger::get).average().orElse(0));
+        this.statistic.setMaxInterClusterHoleSize(interClustersSizes.stream().mapToDouble(AtomicInteger::get).max().orElse(0));
         this.statistic.setInterClustersHoleCount(interClustersSizes.size());
     }
 
@@ -127,7 +127,7 @@ public class Experiment {
                 int index = i - Matrix.OFFSET;
                 blackPerTape.add(0);
                 darkRedPerTape.add(0);
-                for (int column = min; column <= max; column++){
+                for (int column = min; column <= max; column++) {
                     Cell cell = matrix.getCell(i, column);
                     if (cell.isBlack() && !this.percolationWay.contains(cell)) {
                         blackPerTape.set(index, blackPerTape.get(index) + 1);
@@ -153,22 +153,12 @@ public class Experiment {
     }
 
     public Experiment putProgrammingPercolationInStatistic() {
-        String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
-        Paired[] averagesWithSize = new Paired[]{new Paired<Double, Integer>(), new Paired<Double, Integer>()};
-        for (int i = 0; i < 2; i++) {
-            String calculator = calculators[i];
-            List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
-                    .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(calculator))
-                    .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
-            int n = percolationRelations.size();
-            double d = percolationRelations.stream()
-                    .mapToDouble(PercolationRelation::getDistance)
-                    .average().orElse(getSize() * getSize());
-            averagesWithSize[i].setFirst(d);
-            averagesWithSize[i].setSecond(n);
-        }
-        this.statistic.setPythagorasDistance(averagesWithSize[0]);
-        this.statistic.setDiscreteDistance(averagesWithSize[1]);
+        List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
+                .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
+        this.statistic.setMidDarkRedCellsStation(percolationRelations.stream()
+                .mapToDouble(PercolationRelation::getDistance)
+                .average().orElse(getSize() * getSize()));
+        this.statistic.setRelationsCounter(percolationRelations.size());
         return this;
     }
 
@@ -183,7 +173,6 @@ public class Experiment {
     public Experiment calculateProgrammingPercolation(String distanceCalculatorType) {
         int neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
         this.relations = new PercolationProgramming(matrix, percolationWay)
-                .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(distanceCalculatorType))
                 .getProgrammingPercolationList(neighborhood);
         return this;
     }

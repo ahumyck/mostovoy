@@ -15,7 +15,7 @@ public class AnalyzerData {
 
     private int sumBlackCell;
     private List<Integer> emptyRows;
-    private double averageBlackCellsPerRow;
+    private double averageBlackCellsPerColumn;
 
     private double whileCellsAveragePerColumn;
     private double whiteCellsAveragePerRow;

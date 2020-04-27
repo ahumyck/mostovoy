@@ -44,6 +44,14 @@ public class Painter {
         });
     }
 
+    private void drawRelationLines(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D) {
+        relations.forEach(relation -> {
+            graphicsContext2D.moveTo(relation.getRedCell().getY() * size + size/2, relation.getRedCell().getX() * size + size/2);
+            graphicsContext2D.lineTo(relation.getDarkRedCell().getY() * size + size / 2, relation.getDarkRedCell().getX() * size + size / 2);
+            graphicsContext2D.stroke();
+        });
+    }
+
     private void paintPath(double size, List<Cell> path, GraphicsContext graphicsContext2D) {
         path.forEach(cell -> {
             graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
@@ -82,6 +90,10 @@ public class Painter {
         paintMatrix(size, matrix, graphicsContext2D);
         paintPath(size, path, graphicsContext2D);
         paintRelations(size, relations, graphicsContext2D);
+        drawRelationLines(size, relations, graphicsContext2D);
         drawLines(size, matrix, graphicsContext2D);
+
+//        pane.getChildren().clear();
+//        pane.getChildren().add(canvas);
     }
 }

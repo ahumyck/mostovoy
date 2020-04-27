@@ -16,7 +16,7 @@ public class AnalyzerModule {
     public AnalyzerData gatherData(Matrix matrix, double probability) {
         int actualSize = matrix.getSize();
 
-        List<Integer> blackCellsPerRow = new ArrayList<>();
+        List<Integer> blackCellsPerColumn = new ArrayList<>();
 
         List<Integer> whiteCellsPerColumn = new ArrayList<>();
         List<Integer> whiteCellsPerRow = new ArrayList<>();
@@ -28,10 +28,11 @@ public class AnalyzerModule {
             int whiteCellRowCounter = 0;
             int whiteCellColumnCounter = 0;
             for (int j = Matrix.OFFSET; j < actualSize - Matrix.OFFSET; j++) {
-                if (matrix.getCell(i, j).isBlack()) {
+                if (matrix.getCell(j, i).isBlack()) {
                     blackCellRowCounter++;
                     totalBlackCells++;
-                } else if (matrix.getCell(i, j).isWhite()) {
+                }
+                if (matrix.getCell(i, j).isWhite()) {
                     whiteCellRowCounter++;
                 }
 
@@ -42,7 +43,7 @@ public class AnalyzerModule {
             if (blackCellRowCounter == 0) emptyRows.add(i - Matrix.OFFSET);
             whiteCellsPerColumn.add(whiteCellColumnCounter);
             whiteCellsPerRow.add(whiteCellRowCounter);
-            blackCellsPerRow.add(blackCellRowCounter);
+            blackCellsPerColumn.add(blackCellRowCounter);
         }
 
         return new AnalyzerData(
@@ -50,7 +51,7 @@ public class AnalyzerModule {
                 probability,
                 totalBlackCells,
                 emptyRows,
-                blackCellsPerRow.stream().mapToDouble(i -> i)
+                blackCellsPerColumn.stream().mapToDouble(i -> i)
                         .average().getAsDouble(),
                 whiteCellsPerColumn.stream().mapToDouble(i -> i)
                         .average().getAsDouble(),
