@@ -52,7 +52,6 @@
                 <Insets top="10" left="10" right="10"/>
             </padding>
             <Button fx:id="applyConfiguration" mnemonicParsing="false" text="Добавить"/>
-            <Button fx:id="distanceCalculatorType" text="Пифагор"/>
         </HBox>
 
         <HBox spacing="10">

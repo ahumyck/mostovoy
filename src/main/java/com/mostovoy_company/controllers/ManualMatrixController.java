@@ -54,8 +54,6 @@ public class ManualMatrixController {
     @FXML
     public StackPane lightningBoltPane;
     @FXML
-    public Button distanceCalculatorType;
-    @FXML
     public HBox manualMatrixAnchorPane;
     @FXML
     public TabPane mainTabPane;

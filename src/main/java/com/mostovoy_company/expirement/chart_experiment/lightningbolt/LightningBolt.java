@@ -83,10 +83,11 @@ public class LightningBolt {
                         parents[to] = f_v;
                     }
                 });
-            }
-            else break;
+            } else break;
         }
-        return new Paired<>(Arrays.stream(parents).boxed().collect(Collectors.toList()), Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize).boxed().collect(Collectors.toList()));
+        return new Paired<>(Arrays.stream(parents).boxed().collect(Collectors.toList()),
+                Arrays.stream(distanceToOtherNeighbors).skip(distanceToOtherNeighbors.length - this.shiftedSize)
+                        .boxed().collect(Collectors.toList()));
     }
 
     private List<Cell> getPath(int start, int end, List<Integer> parents) {
