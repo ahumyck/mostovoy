@@ -41,6 +41,15 @@ public class ExperimentManager {
         return experimentObservableList;
     }
 
+    public Experiment initializeExperiment(Matrix matrix, String experimentName){
+        return new Experiment().matrix(matrix)
+                .setName(experimentName)
+                .calculateLightningBolt(rules)
+                .calculateProgrammingPercolation()
+                .putProgrammingPercolationInStatistic()
+                .putBlackAndDarkRedCellsPerTapeInStatistics();
+    }
+
     public List<Statistic> getStatistics(int count, FillingType fillingType, ConsumeProperties consumeProperties) {
         return Stream.generate(Experiment::new)
                 .limit(count)

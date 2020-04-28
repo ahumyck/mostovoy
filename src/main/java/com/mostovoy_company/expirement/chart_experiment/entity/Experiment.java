@@ -178,6 +178,11 @@ public class Experiment {
         return this;
     }
 
+    public Experiment setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     @Override
     public String toString() {
         return getName();

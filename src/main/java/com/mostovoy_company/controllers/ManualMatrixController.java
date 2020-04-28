@@ -1,7 +1,9 @@
 package com.mostovoy_company.controllers;
 
 import com.mostovoy_company.expirement.chart_experiment.ExperimentManager;
+import com.mostovoy_company.expirement.chart_experiment.MatrixBuilderByPicture;
 import com.mostovoy_company.expirement.chart_experiment.entity.Experiment;
+import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
 import com.mostovoy_company.expirement.chart_experiment.filling.FillingType;
 import com.mostovoy_company.expirement.chart_experiment.filling.RandomFillingType;
@@ -23,6 +25,8 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -66,23 +70,27 @@ public class ManualMatrixController {
     @FXML
     public Button clearListButton;
     @FXML
-    public Button saveButton;
+    public Button saveMatrixButton;
     @FXML
-    public Button uploadButton;
+    public Button uploadMatrixButton;
+    @FXML
+    public Button uploadPictureButton;
 
 
     private ObservableList<FillingType> fillingTypesList;
     private ExperimentManager experimentManager;
     private Painter painter;
     private FxWeaver fxWeaver;
+    private MatrixBuilderByPicture pictureBuilder;
 
     public ManualMatrixController(List<FillingType> fillingTypesList,
                                   ExperimentManager experimentManager,
-                                  Painter painter, FxWeaver fxWeaver) {
+                                  Painter painter, FxWeaver fxWeaver, MatrixBuilderByPicture pictureBuilder) {
         this.fillingTypesList = FXCollections.observableArrayList(fillingTypesList);
         this.experimentManager = experimentManager;
         this.painter = painter;
         this.fxWeaver = fxWeaver;
+        this.pictureBuilder = pictureBuilder;
     }
 
     Node getContent() {
@@ -116,7 +124,7 @@ public class ManualMatrixController {
             showMatrixInfo(experiment);
         });
 
-        saveButton.setOnAction(actionEvent ->
+        saveMatrixButton.setOnAction(actionEvent ->
                 fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter)
                         .ifPresent(file -> {
                             Experiment selectedItem = experimentListView.getSelectionModel().getSelectedItem();
@@ -125,10 +133,24 @@ public class ManualMatrixController {
                             }
                         })
         );
-        uploadButton.setOnAction(actionEvent ->
+        uploadMatrixButton.setOnAction(actionEvent ->
                 fxWeaver.loadController(FileChooserController.class).getMultipleFiles(FileChooserController.jsonExtensionFilter)
                         .ifPresent(files -> experimentListView.getItems().addAll(loadExperiments(files)))
         );
+
+        uploadPictureButton.setOnAction(action -> fxWeaver
+                .loadController(FileChooserController.class)
+                .getSingleFile(FileChooserController.pngExtensionFilter)
+                .ifPresent(file -> {
+                    try {
+                        BufferedImage image = ImageIO.read(file);
+                        Matrix matrix = pictureBuilder.build(image);
+                        Experiment experiment = experimentManager.initializeExperiment(matrix, file.getName());
+                        experimentListView.getItems().add(experiment);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }));
 
 
         fillingProbability.setVisible(false);
@@ -186,8 +208,8 @@ public class ManualMatrixController {
         addLabelToMatrixInfo("Средний размер межластерного интервала: " + String.format("%.2f", statistic.getMidInterClustersInterval()));
         addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
         addLabelToMatrixInfo("Среднее расстояние установки: " + String.format("%.2f", statistic.getMidDarkRedCellsStation()));
-        addLabelToMatrixInfo("Среднее черных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageBlackCellsInTape()));
-        addLabelToMatrixInfo("Среднее темнокрасных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageDarkRedCellsInTape()));
+//        addLabelToMatrixInfo("Среднее черных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageBlackCellsInTape()));
+//        addLabelToMatrixInfo("Среднее темнокрасных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageDarkRedCellsInTape()));
     }
 
     private void addLabelToMatrixInfo(String text) {

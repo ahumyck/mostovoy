@@ -1,6 +1,6 @@
 package com.mostovoy_company.expirement.chart_experiment.filling;
 
-abstract public class FillingType {
+public abstract class FillingType {
     private String name;
 
     public FillingType(String name) {

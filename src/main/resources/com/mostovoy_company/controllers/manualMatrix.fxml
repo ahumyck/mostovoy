@@ -52,14 +52,15 @@
                 <Insets top="10" left="10" right="10"/>
             </padding>
             <Button fx:id="applyConfiguration" mnemonicParsing="false" text="Добавить"/>
+            <Button fx:id="uploadPictureButton" mnemonicParsing="false" text="Загрузить картинку"/>
         </HBox>
 
         <HBox spacing="10">
             <padding>
                 <Insets top="10" left="10" right="10"/>
             </padding>
-            <Button fx:id="saveButton" mnemonicParsing="false" text="Сохранить матрицу"/>
-            <Button fx:id="uploadButton" text="Загрузить матрицу"/>
+            <Button fx:id="saveMatrixButton" mnemonicParsing="false" text="Сохранить матрицу"/>
+            <Button fx:id="uploadMatrixButton" text="Загрузить матрицу"/>
         </HBox>
     </VBox>
     <HBox fx:id="experimentListAndCanvas" spacing="5">
