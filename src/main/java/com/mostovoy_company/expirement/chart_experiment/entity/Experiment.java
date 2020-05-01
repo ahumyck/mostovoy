@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.LightningBolt;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.Paired;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
+import com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationProgramming;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationRelation;
 import lombok.NoArgsConstructor;
@@ -152,12 +153,29 @@ public class Experiment {
     }
 
     public Experiment putProgrammingPercolationInStatistic() {
-        List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
-                .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
-        this.statistic.setMidGreenCellsStation(percolationRelations.stream()
-                .mapToDouble(PercolationRelation::getDistance)
-                .average().orElse(0));
-        this.statistic.setRelationsCounter(percolationRelations.size());
+//        List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
+//                .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
+//        this.statistic.setMidGreenCellsStation(
+//                percolationRelations.stream()
+//                                    .mapToDouble(PercolationRelation::getDistance)
+//                                    .average().orElse(0));
+//        this.statistic.setRelationsCounter(percolationRelations.size());
+        String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
+        Paired<Double, Integer>[] averagesWithSize = new Paired[]{new Paired<Double, Integer>(), new Paired<Double, Integer>()};
+        for (int i = 0; i < 2; i++) {
+            String calculator = calculators[i];
+            List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
+                    .setDistanceCalculator(DistanceCalculatorTypeResolver.getDistanceCalculator(calculator))
+                    .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
+            int n = percolationRelations.size();
+            double d = percolationRelations.stream()
+                                           .mapToDouble(PercolationRelation::getDistance)
+                                           .average().orElse(0);
+            averagesWithSize[i].setFirst(d);
+            averagesWithSize[i].setSecond(n);
+        }
+        this.statistic.setPythagorasDistance(averagesWithSize[0]);
+        this.statistic.setDiscreteDistance(averagesWithSize[1]);
         return this;
     }
 

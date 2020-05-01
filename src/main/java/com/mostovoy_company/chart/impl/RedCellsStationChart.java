@@ -28,23 +28,33 @@ public class RedCellsStationChart extends BaseLineChartData implements Lightning
 
     @Override
     public String getChartName() {
-        return "Среднее расстояние установки зеленой клетки";
+        return "Среднее расстояние установки зеленой клетки вычисляется по теореме Пифагора";
     }
 
     @Override
     public String getTabName() {
-        return "Расстояние установки";
+        return "Расстояние установки Пифагор";
     }
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
+//        AtomicReference<Double> d = new AtomicReference<>(0.0);
+//        AtomicInteger n = new AtomicInteger(0);
+//        statistics.forEach(statistic -> {
+//            d.updateAndGet(v -> v + statistic.getMidGreenCellsStation() * statistic.getRelationsCounter());
+//            n.addAndGet(statistic.getRelationsCounter());
+//        });
+//        if (n.get() == 0) message.setRedCellsStationDistancesPythagoras(message.getSize() * message.getSize());
+//        else message.setRedCellsStationDistancesPythagoras(d.get() / n.get());
         AtomicReference<Double> d = new AtomicReference<>(0.0);
         AtomicInteger n = new AtomicInteger(0);
-        statistics.forEach(statistic -> {
-            d.updateAndGet(v -> v + statistic.getMidGreenCellsStation() * statistic.getRelationsCounter());
-            n.addAndGet(statistic.getRelationsCounter());
-        });
-        if (n.get() == 0) message.setRedCellsStationDistancesPythagoras(message.getSize() * message.getSize());
+        statistics.stream()
+                  .map(Statistic::getPythagorasDistance)
+                  .forEach(pair -> {
+                      d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
+                      n.addAndGet(pair.getSecond());
+                  });
+        if(n.get() == 0) message.setRedCellsStationDistancesPythagoras(0);
         else message.setRedCellsStationDistancesPythagoras(d.get() / n.get());
     }
 

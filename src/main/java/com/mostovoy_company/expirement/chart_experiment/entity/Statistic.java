@@ -21,10 +21,14 @@ public class Statistic {
     @Expose
     private int percolationWayLength;
 
+//    @Expose
+//    private int relationsCounter;
+//    @Expose
+//    private double midGreenCellsStation;
     @Expose
-    private int relationsCounter;
+    private Paired<Double,Integer> pythagorasDistance;
     @Expose
-    private double midGreenCellsStation;
+    private Paired<Double, Integer> discreteDistance;
 
     @Expose
     private boolean percolationizated;

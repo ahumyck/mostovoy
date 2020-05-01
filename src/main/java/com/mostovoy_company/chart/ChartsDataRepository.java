@@ -40,13 +40,15 @@ public class ChartsDataRepository {
             Map<String, Map<String, List<Map<String, Double>>>> result = new Gson().fromJson(jsonReader, HashMap.class);
             jsonReader.close();
             result.forEach(
-                    (name, data) -> data.forEach(
-                            (size, nodes) -> nodes.forEach(
-                                    node -> {
-                                        System.out.println(name);
-                                        charts.get(name).add(Integer.parseInt(size),
-                                                new LineChartNode(node.get("x"), node.get("y")));
-                                    })));
+                    (name, data) -> {
+                        System.out.println(name);
+                        data.forEach(
+                                (size, nodes) -> nodes.forEach(
+                                        node -> {
+                                            charts.get(name).add(Integer.parseInt(size),
+                                                    new LineChartNode(node.get("x"), node.get("y")));
+                                        }));
+                    });
         } catch (IOException e) {
             e.printStackTrace();
         }
