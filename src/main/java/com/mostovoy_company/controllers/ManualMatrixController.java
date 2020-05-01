@@ -208,8 +208,8 @@ public class ManualMatrixController {
         addLabelToMatrixInfo("Средний размер межластерного интервала: " + String.format("%.2f", statistic.getMidInterClustersInterval()));
         addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
         addLabelToMatrixInfo("Среднее расстояние установки: " + String.format("%.2f", statistic.getMidDarkRedCellsStation()));
-//        addLabelToMatrixInfo("Среднее черных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageBlackCellsInTape()));
-//        addLabelToMatrixInfo("Среднее темнокрасных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageDarkRedCellsInTape()));
+        addLabelToMatrixInfo("Среднее черных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageBlackCellsInTape()));
+        addLabelToMatrixInfo("Среднее темнокрасных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageDarkRedCellsInTape()));
     }
 
     private void addLabelToMatrixInfo(String text) {

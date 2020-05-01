@@ -117,23 +117,23 @@ public class Experiment {
 
         if (max - min > 0) {
             List<Integer> blackPerRowInTape = new ArrayList<>();
-            List<Integer> whitePerRowInTape = new ArrayList<>();
+            List<Integer> darkRedCells = new ArrayList<>();
 
             for (int i = Matrix.OFFSET; i < matrix.getSize() - Matrix.OFFSET; i++) {
                 int index = i - Matrix.OFFSET;
                 blackPerRowInTape.add(0);
-                whitePerRowInTape.add(0);
+                darkRedCells.add(0);
                 for (int column = min; column <= max; column++) {
                     Cell cell = matrix.getCell(i, column);
                     if(cell.isBlack()) blackPerRowInTape.set(index, blackPerRowInTape.get(index) + 1);
-                    if(cell.isWhite()) whitePerRowInTape.set(index, whitePerRowInTape.get(index) + 1);
+                    if(cell.isWhite() && this.percolationWay.contains(cell)) darkRedCells.set(index, darkRedCells.get(index) + 1);
                 }
             }
 
-            this.statistic.setAverageWhiteCellsInTape(whitePerRowInTape.stream().mapToDouble(d -> d).average().orElse(0));
+            this.statistic.setAverageDarkRedCellsInTape(darkRedCells.stream().mapToDouble(d -> d).average().orElse(0));
             this.statistic.setAverageBlackCellsInTape(blackPerRowInTape.stream().mapToDouble(d -> d).average().orElse(0));
         } else {
-            this.statistic.setAverageWhiteCellsInTape(0);
+            this.statistic.setAverageDarkRedCellsInTape(0);
             this.statistic.setAverageBlackCellsInTape(0);
         }
         return this;
