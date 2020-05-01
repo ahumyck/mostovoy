@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-//@Component
+@Component
 public class DarkRedCellsTapeChart extends BaseLineChartData implements LightningBoltDependentChart {
     public DarkRedCellsTapeChart(FxWeaver fxWeaver) {
         super(fxWeaver);
@@ -33,7 +33,7 @@ public class DarkRedCellsTapeChart extends BaseLineChartData implements Lightnin
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setDarkRedCellsTape(statistics.stream()
-                .mapToDouble(Statistic::getAverageDarkRedCellsInTape)
+                .mapToDouble(Statistic::getAverageWhiteCellsInTape)
                 .average()
                 .orElse(0));
     }

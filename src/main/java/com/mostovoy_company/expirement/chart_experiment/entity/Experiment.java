@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class Experiment {
@@ -117,31 +116,24 @@ public class Experiment {
         int min = getPercolationWay().stream().mapToInt(Cell::getY).min().getAsInt() + Matrix.OFFSET;
 
         if (max - min > 0) {
-            List<Integer> blackPerTape = new ArrayList<>();
-            List<Integer> darkRedPerTape = new ArrayList<>();
-
-
-            List<Cell> darkredCells = getProgrammings().stream()
-                    .map(PercolationRelation::getDarkRedCell).collect(Collectors.toList());
+            List<Integer> blackPerRowInTape = new ArrayList<>();
+            List<Integer> whitePerRowInTape = new ArrayList<>();
 
             for (int i = Matrix.OFFSET; i < matrix.getSize() - Matrix.OFFSET; i++) {
                 int index = i - Matrix.OFFSET;
-                blackPerTape.add(0);
-                darkRedPerTape.add(0);
+                blackPerRowInTape.add(0);
+                whitePerRowInTape.add(0);
                 for (int column = min; column <= max; column++) {
                     Cell cell = matrix.getCell(i, column);
-                    if (cell.isBlack() && !this.percolationWay.contains(cell)) {
-                        blackPerTape.set(index, blackPerTape.get(index) + 1);
-                        if (darkredCells.contains(cell))
-                            darkRedPerTape.set(index, darkRedPerTape.get(index) + 1);
-                    }
+                    if(cell.isBlack()) blackPerRowInTape.set(index, blackPerRowInTape.get(index) + 1);
+                    if(cell.isWhite()) whitePerRowInTape.set(index, whitePerRowInTape.get(index) + 1);
                 }
             }
 
-            this.statistic.setAverageDarkRedCellsInTape(darkRedPerTape.stream().mapToDouble(d -> d).average().orElse(0));
-            this.statistic.setAverageBlackCellsInTape(blackPerTape.stream().mapToDouble(d -> d).average().orElse(0));
+            this.statistic.setAverageWhiteCellsInTape(whitePerRowInTape.stream().mapToDouble(d -> d).average().orElse(0));
+            this.statistic.setAverageBlackCellsInTape(blackPerRowInTape.stream().mapToDouble(d -> d).average().orElse(0));
         } else {
-            this.statistic.setAverageDarkRedCellsInTape(0);
+            this.statistic.setAverageWhiteCellsInTape(0);
             this.statistic.setAverageBlackCellsInTape(0);
         }
         return this;

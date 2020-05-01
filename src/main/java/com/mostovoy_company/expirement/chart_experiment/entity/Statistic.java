@@ -39,6 +39,6 @@ public class Statistic {
     @Expose
     private double averageBlackCellsInTape;
     @Expose
-    private double averageDarkRedCellsInTape;
+    private double averageWhiteCellsInTape;
 
 }

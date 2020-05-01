@@ -56,14 +56,14 @@ public class Painter {
 
     private void paintPath(double size, List<Cell> path, GraphicsContext graphicsContext2D) {
         path.forEach(cell -> {
-            graphicsContext2D.setFill(cell.hasClusterMark() ? Color.GREEN : Color.RED);
+            graphicsContext2D.setFill(cell.hasClusterMark() ? Color.DARKRED : Color.RED);
             graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, size);
         });
     }
 
     private void paintRelations(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D) {
         relations.stream().map(PercolationRelation::getDarkRedCell).forEach(cell -> {
-            graphicsContext2D.setFill(Color.DARKRED);
+            graphicsContext2D.setFill(Color.GREEN);
             graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, size);
         });
     }
@@ -93,7 +93,7 @@ public class Painter {
         paintMatrix(size, matrix, graphicsContext2D);
         paintPath(size, path, graphicsContext2D);
         paintRelations(size, relations, graphicsContext2D);
-        drawRelationLines(size, relations, graphicsContext2D);
+//        drawRelationLines(size, relations, graphicsContext2D);
         drawSplitterMatrixLines(size, matrix, graphicsContext2D);
 
         pane.getChildren().clear();

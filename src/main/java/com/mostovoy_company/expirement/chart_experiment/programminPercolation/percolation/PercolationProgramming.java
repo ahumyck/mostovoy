@@ -36,7 +36,7 @@ public class PercolationProgramming {
 
     public List<PercolationRelation> getProgrammingPercolationList(int neighborhood) {
         List<PercolationRelation> percolationRelations = new ArrayList<>();
-        this.path.stream().map(cell -> findRelationForCurrentCell(cell, neighborhood)).
+        this.path.stream().filter(Cell::isWhite).map(cell -> findRelationForCurrentCell(cell, neighborhood)).
                 forEach(element -> element.ifPresent(percolationRelations::addAll));
         return percolationRelations;
     }
