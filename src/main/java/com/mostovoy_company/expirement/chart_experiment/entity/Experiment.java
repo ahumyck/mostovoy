@@ -79,6 +79,11 @@ public class Experiment {
         return Optional.of(name).orElse(getSize() + "x" + getSize());
     }
 
+    public Experiment setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public int getSize() {
         return this.statistic.getSize();
     }
@@ -125,8 +130,9 @@ public class Experiment {
                 redPerRowInTape.add(0);
                 for (int column = min; column <= max; column++) {
                     Cell cell = matrix.getCell(i, column);
-                    if(cell.isBlack()) blackPerRowInTape.set(index, blackPerRowInTape.get(index) + 1);
-                    if(cell.isWhite() && this.percolationWay.contains(cell)) redPerRowInTape.set(index, redPerRowInTape.get(index) + 1);
+                    if (cell.isBlack()) blackPerRowInTape.set(index, blackPerRowInTape.get(index) + 1);
+                    if (cell.isWhite() && this.percolationWay.contains(cell))
+                        redPerRowInTape.set(index, redPerRowInTape.get(index) + 1);
                 }
             }
 
@@ -149,8 +155,8 @@ public class Experiment {
         List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
                 .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
         this.statistic.setMidGreenCellsStation(percolationRelations.stream()
-                                                                   .mapToDouble(PercolationRelation::getDistance)
-                                                                   .average().orElse(getSize() * getSize()));
+                .mapToDouble(PercolationRelation::getDistance)
+                .average().orElse(0));
         this.statistic.setRelationsCounter(percolationRelations.size());
         return this;
     }
@@ -167,11 +173,6 @@ public class Experiment {
         int neighborhood = 2 * (matrix.getSize() - 2 * Matrix.OFFSET);
         this.relations = new PercolationProgramming(matrix, percolationWay)
                 .getProgrammingPercolationList(neighborhood);
-        return this;
-    }
-
-    public Experiment setName(String name) {
-        this.name = name;
         return this;
     }
 
