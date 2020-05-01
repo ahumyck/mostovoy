@@ -148,9 +148,9 @@ public class Experiment {
     public Experiment putProgrammingPercolationInStatistic() {
         List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
                 .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
-        this.statistic.setMidDarkRedCellsStation(percolationRelations.stream()
-                .mapToDouble(PercolationRelation::getDistance)
-                .average().orElse(getSize() * getSize()));
+        this.statistic.setMidGreenCellsStation(percolationRelations.stream()
+                                                                   .mapToDouble(PercolationRelation::getDistance)
+                                                                   .average().orElse(getSize() * getSize()));
         this.statistic.setRelationsCounter(percolationRelations.size());
         return this;
     }

@@ -207,7 +207,7 @@ public class ManualMatrixController {
         addLabelToMatrixInfo("Ширина перколяционного пути: " + statistic.getPercolationWayWidth());
         addLabelToMatrixInfo("Средний размер межластерного интервала: " + String.format("%.2f", statistic.getMidInterClustersInterval()));
         addLabelToMatrixInfo("Количество межкластреных дырок: " + statistic.getInterClustersHoleCount());
-        addLabelToMatrixInfo("Среднее расстояние установки: " + String.format("%.2f", statistic.getMidDarkRedCellsStation()));
+        addLabelToMatrixInfo("Среднее расстояние установки: " + String.format("%.2f", statistic.getMidGreenCellsStation()));
         addLabelToMatrixInfo("Среднее черных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageBlackCellsPerRowInWayWidth()));
         addLabelToMatrixInfo("Среднее темнокрасных клеток в пределах перколяции: " + String.format("%.2f", statistic.getAverageRedCellsPerRowInTapeWidth()));
     }

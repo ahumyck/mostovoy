@@ -8,7 +8,7 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+//RedCellsTapeChart
 @Component
 public class DarkRedCellsTapeChart extends BaseLineChartData implements LightningBoltDependentChart {
     public DarkRedCellsTapeChart(FxWeaver fxWeaver) {
@@ -22,7 +22,7 @@ public class DarkRedCellsTapeChart extends BaseLineChartData implements Lightnin
 
     @Override
     public String getChartName() {
-        return "Среднее количество темно красных клеток в строке в прелах ширины управляемой перколяции";
+        return "Среднее количество красных клеток в строке в прелах ширины управляемой перколяции";
     }
 
     @Override

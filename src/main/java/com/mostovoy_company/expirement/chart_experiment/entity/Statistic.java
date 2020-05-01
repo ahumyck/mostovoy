@@ -24,7 +24,7 @@ public class Statistic {
     @Expose
     private int relationsCounter;
     @Expose
-    private double midDarkRedCellsStation;
+    private double midGreenCellsStation;
 
     @Expose
     private boolean percolationizated;

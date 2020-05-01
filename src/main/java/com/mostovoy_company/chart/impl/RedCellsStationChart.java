@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+//GreenCellStationChart
 @Component
 @Slf4j
 public class RedCellsStationChart extends BaseLineChartData implements LightningBoltDependentChart {
@@ -27,7 +28,7 @@ public class RedCellsStationChart extends BaseLineChartData implements Lightning
 
     @Override
     public String getChartName() {
-        return "Среднее расстояние установки темно-красной клетки";
+        return "Среднее расстояние установки зеленой клетки";
     }
 
     @Override
@@ -40,7 +41,7 @@ public class RedCellsStationChart extends BaseLineChartData implements Lightning
         AtomicReference<Double> d = new AtomicReference<>(0.0);
         AtomicInteger n = new AtomicInteger(0);
         statistics.forEach(statistic -> {
-            d.updateAndGet(v -> v + statistic.getMidDarkRedCellsStation() * statistic.getRelationsCounter());
+            d.updateAndGet(v -> v + statistic.getMidGreenCellsStation() * statistic.getRelationsCounter());
             n.addAndGet(statistic.getRelationsCounter());
         });
         if (n.get() == 0) message.setRedCellsStationDistancesPythagoras(message.getSize() * message.getSize());
