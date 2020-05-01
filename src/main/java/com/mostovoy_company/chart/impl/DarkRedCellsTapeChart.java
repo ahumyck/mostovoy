@@ -33,7 +33,7 @@ public class DarkRedCellsTapeChart extends BaseLineChartData implements Lightnin
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
         message.setDarkRedCellsTape(statistics.stream()
-                .mapToDouble(Statistic::getAverageDarkRedCellsInTape)
+                .mapToDouble(Statistic::getAverageRedCellsPerRowInTapeWidth)
                 .average()
                 .orElse(0));
     }

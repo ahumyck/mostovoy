@@ -37,8 +37,8 @@ public class Statistic {
     @Expose
     private int interClustersHoleCount;
     @Expose
-    private double averageBlackCellsInTape;
+    private double averageBlackCellsPerRowInWayWidth;
     @Expose
-    private double averageDarkRedCellsInTape;
+    private double averageRedCellsPerRowInTapeWidth;
 
 }
