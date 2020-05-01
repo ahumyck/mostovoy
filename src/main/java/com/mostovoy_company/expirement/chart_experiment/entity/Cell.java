@@ -28,8 +28,8 @@ public class Cell {
     }
 
     public Cell(Cell cell){
-        this.x = cell.x + Matrix.OFFSET;
-        this.y = cell.x + Matrix.OFFSET;
+        this.x = cell.x;
+        this.y = cell.y;
         this.type = cell.type;
         this.clusterMark = cell.clusterMark;
     }
@@ -43,8 +43,6 @@ public class Cell {
     public boolean isBlack(){ return type.equals(CellType.BLACK); }
 
     public boolean isEmpty(){ return type.equals(CellType.EMPTY); }
-
-    public boolean isNotEmpty(){ return !type.equals(CellType.EMPTY); }
 
     public CellType getType() {
         return type;
