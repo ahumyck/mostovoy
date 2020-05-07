@@ -9,6 +9,7 @@ import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -56,7 +57,8 @@ public abstract class BaseMainService implements MainService {
         fillingType.setPercolationProbability(probability);
         fillingType.setSize(size);
         List<Statistic> statistics = experimentManager.getStatistics(count, fillingType, consumeProperties);
-        log.info("=> end consumed request message: " + (System.currentTimeMillis() - startTime));
+        log.info("=> end consumed request message[" + String.format("%.2f", probability) + "]: " + (System.currentTimeMillis() - startTime) + " ms");
+
         return collectStatisticAndBuildResponseMessage(size, probability, statistics, consumeProperties);
     }
 

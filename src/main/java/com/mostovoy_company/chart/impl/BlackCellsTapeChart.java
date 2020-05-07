@@ -27,7 +27,7 @@ public class BlackCellsTapeChart extends BaseLineChartData implements LightningB
 
     @Override
     public String getTabName() {
-        return "BlackCellsTapeChart";
+        return "Черные клетки в пределах ширины пути";
     }
 
     @Override

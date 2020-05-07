@@ -27,7 +27,7 @@ public class DarkRedCellsTapeChart extends BaseLineChartData implements Lightnin
 
     @Override
     public String getTabName() {
-        return "DarkRedCellsTapeChart";
+        return "Темнокрасные клетки в пределах ширины пути";
     }
 
     @Override

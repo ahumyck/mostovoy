@@ -121,9 +121,10 @@ public class Experiment {
         int max = getPercolationWay().stream().mapToInt(Cell::getY).max().getAsInt() + Matrix.OFFSET;
         int min = getPercolationWay().stream().mapToInt(Cell::getY).min().getAsInt() + Matrix.OFFSET;
 
-        if (max - min > 0) {
+        if (max - min >= 0) {
             List<Integer> blackPerRowInTape = new ArrayList<>();
             List<Integer> redPerRowInTape = new ArrayList<>();
+
 
             for (int i = Matrix.OFFSET; i < matrix.getSize() - Matrix.OFFSET; i++) {
                 int index = i - Matrix.OFFSET;
