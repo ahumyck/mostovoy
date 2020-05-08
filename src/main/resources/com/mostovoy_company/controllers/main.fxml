@@ -12,7 +12,7 @@
 <StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.mostovoy_company.controllers.MainController">
     <TabPane tabClosingPolicy="UNAVAILABLE">
-        <Tab fx:id="manualMatrixTab" text="Настройки">
+        <Tab fx:id="manualMatrixTab" text="Работа с матрицами">
         </Tab>
         <Tab fx:id="fullExperiment" text="Общий эксперимент">
         </Tab>

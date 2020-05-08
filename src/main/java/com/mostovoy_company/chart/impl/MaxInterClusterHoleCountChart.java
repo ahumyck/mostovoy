@@ -19,7 +19,7 @@ public class MaxInterClusterHoleCountChart extends BaseLineChartData implements 
 
     @Override
     protected double getNormalizedCoefficient(int size) {
-        return 0;
+        return 1.0 / size;
     }
 
     @Override

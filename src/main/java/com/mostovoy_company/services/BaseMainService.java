@@ -58,7 +58,6 @@ public abstract class BaseMainService implements MainService {
         fillingType.setSize(size);
         List<Statistic> statistics = experimentManager.getStatistics(count, fillingType, consumeProperties);
         log.info("=> end consumed request message[" + String.format("%.2f", probability) + "]: " + (System.currentTimeMillis() - startTime) + " ms");
-
         return collectStatisticAndBuildResponseMessage(size, probability, statistics, consumeProperties);
     }
 

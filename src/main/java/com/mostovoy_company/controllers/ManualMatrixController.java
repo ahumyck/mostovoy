@@ -225,6 +225,7 @@ public class ManualMatrixController {
         for (File file : files) {
             try {
                 Experiment experiment = Experiment.getExperimentFromJson(file.getPath());
+                experiment.calculateProgrammingPercolation();
                 matrixObservableList.add(experiment);
             } catch (IOException ignored) {
             }
