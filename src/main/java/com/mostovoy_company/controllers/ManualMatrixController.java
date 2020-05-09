@@ -179,7 +179,10 @@ public class ManualMatrixController {
                 double probability = Double.parseDouble(fillingProbability.getText());
                 ((RandomFillingType) fillingType).setPercolationProbability(probability);
                 ((RandomFillingType) fillingType).setSize(size);
-                experimentListView.getItems().addAll(experimentManager.initializeExperimentsParallel(number, fillingType));
+                if (number != 1)
+                    experimentListView.getItems().addAll(experimentManager.initializeExperimentsParallel(number, fillingType));
+                else
+                    experimentListView.getItems().add(experimentManager.initializeSingleExperiment(fillingType));
             } else if (fillingType instanceof CustomTestFillingType) {
                 experimentListView.getItems().addAll(experimentManager.initializeExperimentsParallel(number, fillingType));
             }

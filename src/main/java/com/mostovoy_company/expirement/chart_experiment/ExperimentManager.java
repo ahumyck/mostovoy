@@ -24,16 +24,26 @@ public class ExperimentManager {
     private CostRules costRules;
 
     public ExperimentManager(@Qualifier("defaultNeighborhoodRules") NeighborhoodRules neighborhoodRules,
-                             @Qualifier("defaultCostRules") CostRules costRules) {
+                             @Qualifier("defaultCostRules") CostRules costRules) { //diagonalCostRules, defaultCostRules
         this.neighborhoodRules = neighborhoodRules;
         this.costRules = costRules;
+    }
+
+    public Experiment initializeSingleExperiment(FillingType fillingType) {
+        return new Experiment().matrix(new Matrix(fillingType))
+                .setName(fillingType.getName())
+                .clusterization()
+                .calculateLightningBolt(neighborhoodRules, costRules)
+                .calculateProgrammingPercolation()
+                .putProgrammingPercolationInStatistic()
+                .putBlackAndDarkRedCellsPerTapeInStatistics();
     }
 
     public List<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
         List<Experiment> experimentObservableList = new ArrayList<>();
         for (int i = 0; i < number; i++) {
             experimentObservableList.add(new Experiment().matrix(new Matrix(fillingType))
-                    .name(fillingType.getName())
+                    .setName(fillingType.getName())
                     .clusterization());
         }
         new Thread(() -> experimentObservableList.parallelStream()
@@ -45,9 +55,10 @@ public class ExperimentManager {
         return experimentObservableList;
     }
 
-    public Experiment initializeExperiment(Matrix matrix, String experimentName){
+    public Experiment initializeExperiment(Matrix matrix, String experimentName) {
         return new Experiment().matrix(matrix)
                 .setName(experimentName)
+                .clusterization()
                 .calculateLightningBolt(neighborhoodRules, costRules)
                 .calculateProgrammingPercolation()
                 .putProgrammingPercolationInStatistic()

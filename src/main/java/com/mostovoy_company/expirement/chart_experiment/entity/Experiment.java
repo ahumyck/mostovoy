@@ -53,11 +53,6 @@ public class Experiment {
         return this;
     }
 
-    public Experiment name(String name) {
-        this.name = name;
-        return this;
-    }
-
     public Experiment clusterization() {
         this.matrix.clusterization();
         this.statistic.setBlackCellCount((int) matrix.getCountOfBlackCells());

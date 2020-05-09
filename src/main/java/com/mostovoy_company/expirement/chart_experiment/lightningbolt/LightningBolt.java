@@ -7,21 +7,20 @@ import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborho
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 public class LightningBolt {
     private Matrix matrix;
     private Map<Integer, List<Paired<Integer, Integer>>> adjacencyList;
     private int shiftedSize;
-    private List<Paired<List<Cell>, Integer>> paths;
     private Paired<List<Cell>, Integer> shortestPath = null;
 
     public LightningBolt(Matrix matrix, NeighborhoodRules neighborhoodRules, CostRules costRules) {
         this.matrix = matrix;
         this.adjacencyList = new AdjacencyListBuilderByMatrix(costRules, neighborhoodRules).build(matrix);
         this.shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
-        this.paths = new ArrayList<>(matrix.getSize());
     }
 
     public Optional<Paired<List<Cell>, Integer>> getShortestPath() {
@@ -33,17 +32,17 @@ public class LightningBolt {
     }
 
     public LightningBolt calculateShortestPaths() {
-        for (int currentPos = 0; currentPos < this.shiftedSize; currentPos++) {
-            Paired<List<Integer>, List<Integer>> inf = findShortestPaths(currentPos);
-            List<Integer> distances = inf.getSecond();
-            List<Integer> parents = inf.getFirst();
-
-            int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
-            int endPos = this.shiftedSize * (this.shiftedSize - 1) + shortest;
-            List<Cell> path = getPath(currentPos, endPos, parents);
-            paths.add(new Paired<>(path, distances.get(shortest)));
-        }
-        this.shortestPath = this.paths.stream().min(Comparator.comparingInt(Paired::getSecond)).get();
+        IntStream.iterate(0, i -> i + 1).limit(this.shiftedSize)
+                .mapToObj(currentPos -> new Paired<>(currentPos, findShortestPaths(currentPos)))
+                .map(pairedInfo -> {
+                    Integer currentPos = pairedInfo.getFirst();
+                    Paired<List<Integer>, List<Integer>> inf = pairedInfo.getSecond();
+                    List<Integer> distances = inf.getSecond();
+                    List<Integer> parents = inf.getFirst();
+                    int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
+                    int endPos = this.shiftedSize * (this.shiftedSize - 1) + shortest;
+                    return new Paired<>(getPath(currentPos, endPos, parents), distances.get(shortest));
+                }).min(Comparator.comparingInt(Paired::getSecond)).ifPresent(path -> this.shortestPath = path);
         return this;
     }
 

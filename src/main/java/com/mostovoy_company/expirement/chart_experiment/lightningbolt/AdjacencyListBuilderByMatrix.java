@@ -21,16 +21,12 @@ public class AdjacencyListBuilderByMatrix {
         this.neighborhoodRules = neighborhoodRules;
     }
 
-    private int setCostUsingRules(Cell startCell, Cell endCell, int shiftedSize) {
-        return costRules.setCostUsingRules(startCell, endCell, shiftedSize);
-    }
-
     private void add(Cell startCell, int startShiftedPosition, int i, int j, Matrix matrix) {
         int shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
         Cell endCell = matrix.getCell(i, j);
         if (!endCell.isEmpty()) {
             int endShiftedPosition = shiftedSize * (i - Matrix.OFFSET) + (j - Matrix.OFFSET);
-            int cost = setCostUsingRules(startCell, endCell, shiftedSize);
+            int cost = costRules.setCostUsingRules(startCell, endCell, shiftedSize);
             map.get(startShiftedPosition).add(new Paired<>(endShiftedPosition, cost));
         }
     }

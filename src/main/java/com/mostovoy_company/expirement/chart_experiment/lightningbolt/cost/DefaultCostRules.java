@@ -4,22 +4,9 @@ import com.mostovoy_company.expirement.chart_experiment.entity.Cell;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DefaultCostRules implements CostRules {
+public class DefaultCostRules extends CostRules {
     @Override
     public int setCostUsingRules(Cell startCell, Cell endCell, int shiftedSize) {
-        int cheapCost = 1;
-        int expensiveCost = shiftedSize * shiftedSize + 1;
-        int cost = 0;
-
-        if (startCell.isBlack() && endCell.isBlack())  //black -> black - cheap
-            cost = cheapCost;
-        if (startCell.isBlack() && endCell.isWhite()) // black -> white - expensive
-            cost = expensiveCost;
-        if (startCell.isWhite() && endCell.isBlack()) // white -> black - half expensive
-            cost = cheapCost;
-        if (startCell.isWhite() && endCell.isWhite()) // white -> white - twice expensive
-            cost = expensiveCost;
-
-        return cost;
+        return this.setCosts(startCell, endCell, 1, shiftedSize * shiftedSize + 1);
     }
 }
