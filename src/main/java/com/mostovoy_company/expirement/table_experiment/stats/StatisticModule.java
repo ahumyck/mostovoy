@@ -69,7 +69,9 @@ public class StatisticModule {
     }
 
     private double standardDeviation(AnalyzerDataRepository repository, double average, ToDoubleFunction<? super AnalyzerData> mapper){
-        return Math.sqrt(repository.stream().mapToDouble(mapper)
+        int size = repository.size();
+        double k = (size == 1 ? 1 : (double) size / (size - 1));
+        return Math.sqrt(k * repository.stream().mapToDouble(mapper)
                 .map(d -> (d - average) * (d - average))
                 .average().getAsDouble());
 

@@ -18,29 +18,29 @@ import java.util.Map;
 @Component
 public class TableRepository {
 
-    public static String blackTableRowName = "Статистика по черным клеткам";
+    public static String blackTableColumnName = "Статистика по черным клеткам";
     public static String whiteTableRowName = "Статистика белых клеток в строке";
     public static String whiteTableColumnName = "Статистика белых клеток в столбце";
 
 
-    private Map<String, Table<TableViewData>> tables = new HashMap<>();
+    private Map<String, TableView<TableViewData>> tables = new HashMap<>();
 
     public void createTable(String tableName, TableView<TableViewData> tableView) {
-        this.tables.put(tableName, new Table<>(tableName, tableView));
+        this.tables.put(tableName, tableView);
     }
 
 
     public void clear() {
-        this.tables.forEach((name, table) -> table.getTableView().getItems().clear());
+        this.tables.forEach((name, table) -> table.getItems().clear());
     }
 
-    public void put(String tableName, TableViewData data){
-        this.tables.get(tableName).getTableView().getItems().add(data);
+    public void put(String tableName, TableViewData data) {
+        this.tables.get(tableName).getItems().add(data);
     }
 
     public void saveTablesToJSON(String filename) {
         Map<String, List<TableViewData>> result = new HashMap<>();
-        this.tables.forEach((name, table) -> result.put(name, new ArrayList<>(table.getTableView().getItems())));
+        this.tables.forEach((name, table) -> result.put(name, new ArrayList<>(table.getItems())));
         try (FileWriter fileWriter = new FileWriter(filename)) {
             new Gson().toJson(result, fileWriter);
         } catch (IOException e) {
@@ -51,9 +51,10 @@ public class TableRepository {
     public void restoreTablesFormJSON(String filename) {
         try (FileReader fileReader = new FileReader(filename)) {
             JsonReader jsonReader = new JsonReader(fileReader);
-            Map<String, List<TableViewData>> result = new Gson().fromJson(jsonReader, new TypeToken<HashMap<String, List<TableViewData>>>() {}.getType());
+            Map<String, List<TableViewData>> result = new Gson().fromJson(jsonReader, new TypeToken<HashMap<String, List<TableViewData>>>() {
+            }.getType());
             jsonReader.close();
-            result.forEach((name, columns) -> this.tables.get(name).getTableView().setItems(FXCollections.observableArrayList(columns)));
+            result.forEach((name, columns) -> this.tables.get(name).setItems(FXCollections.observableArrayList(columns)));
         } catch (IOException e) {
             e.printStackTrace();
         }

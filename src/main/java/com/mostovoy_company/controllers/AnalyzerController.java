@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ import java.util.stream.DoubleStream;
 
 
 @Component
+@Slf4j
 @FxmlView("analyzer.fxml")
 public class AnalyzerController {
 
@@ -43,11 +45,11 @@ public class AnalyzerController {
     @FXML
     public HBox hBox;
     @FXML
-    public TableView<TableViewData> tableWhiteColumn;
+    public TableView<TableViewData> whiteTableColumn;
     @FXML
-    public TableView<TableViewData> tableWhiteRow;
+    public TableView<TableViewData> whiteTableRow;
     @FXML
-    public TableView<TableViewData> tableBlackRow;
+    public TableView<TableViewData> blackTableColumn;
     @FXML
     public TextField stepProbability;
     @FXML
@@ -83,14 +85,15 @@ public class AnalyzerController {
             int numberOfMatrices = Integer.parseInt(this.matrixCountAnalyzer.getText());
             double step = Double.parseDouble(this.stepProbability.getText());
 
+
             new Thread(() -> DoubleStream.iterate(0.00, x -> x + step)
-                    .limit(120)
-                    .filter(x -> x > 0)
+                    .limit((long) (1.0 / step + 1))
+                    .filter(x -> x >= 0)
                     .filter(x -> x < 1.01)
                     .forEach(probability -> {
                         AnalyzerDataRepository analyzerDataRepository = analyzerManager.initializeAnalyzerExperiments(numberOfMatrices, matrixSize, probability);
                         StatisticBlockData statisticBlockData = statisticModule.gatherStatistic(analyzerDataRepository);
-                        repository.put(TableRepository.blackTableRowName, statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability));
+                        repository.put(TableRepository.blackTableColumnName, statisticBlockData.getBlackBlockData().getDataForTableViewRepresentation(matrixSize, probability));
                         repository.put(TableRepository.whiteTableRowName, statisticBlockData.getWhiteBlockDataRow().getDataForTableViewRepresentation(matrixSize, probability));
                         repository.put(TableRepository.whiteTableColumnName, statisticBlockData.getWhiteBlockDataColumn().getDataForTableViewRepresentation(matrixSize, probability));
                     })).start();
@@ -116,45 +119,40 @@ public class AnalyzerController {
                 "secondParamAverage", "secondParamDispersion",
                 "thirdParamAverage", "thirdParamDispersion"
         );
-        initializeTableView(tableWhiteColumn,
+        initializeTableView(whiteTableColumn,
                 generateList("Статистика среднего белых в столбце",
                         "Статистика максимального белых в столбце", "Статистика минимального белых в столбце"),
                 params);
-        initializeTableView(tableWhiteRow,
+        initializeTableView(whiteTableRow,
                 generateList("Статистика среднего белых в строке",
                         "Статистика максимального белых в строке", "Статистика минимального белых в строке"),
                 params);
-        initializeTableView(tableBlackRow,
+        initializeTableView(blackTableColumn,
                 generateList("Статистика суммы черных клеток по столбцам",
                         "Статистика пустых строк", "Статистика среднего черных в строке"),
                 params);
-        repository.createTable(TableRepository.blackTableRowName, tableBlackRow);
-        repository.createTable(TableRepository.whiteTableRowName, tableWhiteRow);
-        repository.createTable(TableRepository.whiteTableColumnName, tableWhiteColumn);
+        repository.createTable(TableRepository.blackTableColumnName, blackTableColumn);
+        repository.createTable(TableRepository.whiteTableRowName, whiteTableRow);
+        repository.createTable(TableRepository.whiteTableColumnName, whiteTableColumn);
     }
 
     private void initializeTableView(TableView<TableViewData> tableView, List<String> columnsNames, List<String> propertyNames) {
         VBox.setVgrow(tableView, Priority.ALWAYS);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+        tableView.getColumns().clear();
+        tableView.getColumns().add(initializeBaseTableColumns("L", "size"));
+        tableView.getColumns().add(initializeBaseTableColumns("концентрация", "percolation"));
+        tableView.getColumns().addAll(initializeColumns(columnsNames, propertyNames));
+    }
+
+    private List<TableColumn<TableViewData, String>> initializeColumns(List<String> columnsNames, List<String> propertyNames){
         List<TableColumn<TableViewData, String>> columns = new ArrayList<>();
         for (String columnName : columnsNames) {
             columns.add(initializeTableColumn(columnName));
         }
-
-        int counter = 0;
-        for (TableColumn<TableViewData, String> column : columns) {
-            ObservableList<TableColumn<TableViewData, ?>> subColumns = column.getColumns();
-            for (TableColumn<TableViewData, ?> tableViewTempTableColumn : subColumns) {
-                tableViewTempTableColumn.setCellValueFactory(new PropertyValueFactory<>(propertyNames.get(counter++)));
-            }
-        }
-
-        tableView.setItems(FXCollections.observableArrayList());
-        tableView.getColumns().clear();
-        tableView.getColumns().add(initializeBaseTableColumns("L", "size"));
-        tableView.getColumns().add(initializeBaseTableColumns("концентрация", "percolation"));
-        tableView.getColumns().addAll(columns);
+        return initializePropertyValueFactory(columns, propertyNames);
     }
 
 
@@ -166,6 +164,18 @@ public class AnalyzerController {
         param.getColumns().add(dispersionFirstParam);
         return param;
     }
+
+    private List<TableColumn<TableViewData, String>> initializePropertyValueFactory(List<TableColumn<TableViewData, String>> columns, List<String> propertyNames){
+        int counter = 0;
+        for (TableColumn<TableViewData, String> column : columns) {
+            ObservableList<TableColumn<TableViewData, ?>> subColumns = column.getColumns();
+            for (TableColumn<TableViewData, ?> tableViewTempTableColumn : subColumns) {
+                tableViewTempTableColumn.setCellValueFactory(new PropertyValueFactory<>(propertyNames.get(counter++)));
+            }
+        }
+        return columns;
+    }
+
 
     private TableColumn<TableViewData, String> initializeBaseTableColumns(String columnName, String propertyName) {
         TableColumn<TableViewData, String> column = new TableColumn<>(columnName);

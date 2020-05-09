@@ -33,13 +33,13 @@
         </padding>
         <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <Tab text="Статистика пустых клеток в матрицах по столбцам">
-                <TableView fx:id="tableWhiteColumn" prefHeight="150"/>
+                <TableView fx:id="whiteTableColumn" prefHeight="150"/>
             </Tab>
             <Tab text="Статистика пустых клеток в матрицах по строкам">
-                <TableView fx:id="tableWhiteRow" prefHeight="150"/>
+                <TableView fx:id="whiteTableRow" prefHeight="150"/>
             </Tab>
             <Tab text="Статистика черных клеток в матрицах по строкам">
-                <TableView fx:id="tableBlackRow" prefHeight="150"/>
+                <TableView fx:id="blackTableColumn" prefHeight="150"/>
             </Tab>
         </TabPane>
     </VBox>

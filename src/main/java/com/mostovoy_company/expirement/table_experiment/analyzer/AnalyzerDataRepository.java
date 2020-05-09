@@ -15,4 +15,5 @@ public class AnalyzerDataRepository {
     public Stream<AnalyzerData> stream(){
         return analyzerDataList.stream();
     }
+    public int size() { return analyzerDataList.size(); }
 }
