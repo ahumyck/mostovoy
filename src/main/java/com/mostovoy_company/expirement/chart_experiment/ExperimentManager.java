@@ -24,7 +24,7 @@ public class ExperimentManager {
     private CostRules costRules;
 
     public ExperimentManager(@Qualifier("defaultNeighborhoodRules") NeighborhoodRules neighborhoodRules,
-                             @Qualifier("diagonalCostRules") CostRules costRules) { //diagonalCostRules, defaultCostRules
+                             @Qualifier("defaultCostRules") CostRules costRules) { //diagonalCostRules, defaultCostRules
         this.neighborhoodRules = neighborhoodRules;
         this.costRules = costRules;
     }
