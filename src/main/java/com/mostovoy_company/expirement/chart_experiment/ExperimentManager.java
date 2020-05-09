@@ -4,6 +4,7 @@ import com.mostovoy_company.expirement.chart_experiment.entity.Experiment;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
 import com.mostovoy_company.expirement.chart_experiment.filling.FillingType;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.cost.CostRules;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
 import com.mostovoy_company.services.ConsumeProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,13 @@ import java.util.stream.Stream;
 @Component
 public class ExperimentManager {
 
-    private NeighborhoodRules rules;
+    private NeighborhoodRules neighborhoodRules;
+    private CostRules costRules;
 
-    public ExperimentManager(@Qualifier("defaultRules") NeighborhoodRules rules) {
-        this.rules = rules;
+    public ExperimentManager(@Qualifier("defaultNeighborhoodRules") NeighborhoodRules neighborhoodRules,
+                             @Qualifier("defaultCostRules") CostRules costRules) {
+        this.neighborhoodRules = neighborhoodRules;
+        this.costRules = costRules;
     }
 
     public List<Experiment> initializeExperimentsParallel(int number, FillingType fillingType) {
@@ -33,7 +37,7 @@ public class ExperimentManager {
                     .clusterization());
         }
         new Thread(() -> experimentObservableList.parallelStream()
-                .forEach(experiment -> experiment.calculateLightningBolt(rules)
+                .forEach(experiment -> experiment.calculateLightningBolt(neighborhoodRules, costRules)
                         .calculateProgrammingPercolation()
                         .putProgrammingPercolationInStatistic()
                         .putBlackAndDarkRedCellsPerTapeInStatistics()
@@ -44,7 +48,7 @@ public class ExperimentManager {
     public Experiment initializeExperiment(Matrix matrix, String experimentName){
         return new Experiment().matrix(matrix)
                 .setName(experimentName)
-                .calculateLightningBolt(rules)
+                .calculateLightningBolt(neighborhoodRules, costRules)
                 .calculateProgrammingPercolation()
                 .putProgrammingPercolationInStatistic()
                 .putBlackAndDarkRedCellsPerTapeInStatistics();
@@ -59,7 +63,7 @@ public class ExperimentManager {
                     experiment.matrix(new Matrix(fillingType))
                             .clusterization();
                     if (consumeProperties.isLightningBoltEnable()) {
-                        experiment.calculateLightningBolt(rules)
+                        experiment.calculateLightningBolt(neighborhoodRules, costRules)
                                 .calculateProgrammingPercolation()
                                 .putProgrammingPercolationInStatistic()
                                 .putBlackAndDarkRedCellsPerTapeInStatistics();

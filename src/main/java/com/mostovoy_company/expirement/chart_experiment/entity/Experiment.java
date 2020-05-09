@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.LightningBolt;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.Paired;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.cost.CostRules;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.DistanceCalculatorTypeResolver;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.percolation.PercolationProgramming;
@@ -64,8 +65,8 @@ public class Experiment {
         return this;
     }
 
-    public Experiment calculateLightningBolt(NeighborhoodRules rules) {
-        this.lightningBolt = new LightningBolt(this.matrix, rules);
+    public Experiment calculateLightningBolt(NeighborhoodRules neighborhoodRules, CostRules costRules) {
+        this.lightningBolt = new LightningBolt(this.matrix, neighborhoodRules, costRules);
         Paired<List<Cell>, Integer> listIntegerPaired = this.lightningBolt.calculateShortestPaths().getShortestPath().get();
         this.percolationWay = listIntegerPaired.getFirst();
         this.statistic.setRedCellCount(getRedCellsCount());

@@ -2,10 +2,13 @@ package com.mostovoy_company.expirement.chart_experiment.lightningbolt;
 
 import com.mostovoy_company.expirement.chart_experiment.entity.Cell;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
+import com.mostovoy_company.expirement.chart_experiment.lightningbolt.cost.CostRules;
 import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborhood.NeighborhoodRules;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+
 
 public class LightningBolt {
     private Matrix matrix;
@@ -14,9 +17,9 @@ public class LightningBolt {
     private List<Paired<List<Cell>, Integer>> paths;
     private Paired<List<Cell>, Integer> shortestPath = null;
 
-    public LightningBolt(Matrix matrix, NeighborhoodRules rules) {
+    public LightningBolt(Matrix matrix, NeighborhoodRules neighborhoodRules, CostRules costRules) {
         this.matrix = matrix;
-        this.adjacencyList = new AdjacencyListBuilderByMatrix().build(matrix, rules);
+        this.adjacencyList = new AdjacencyListBuilderByMatrix(costRules, neighborhoodRules).build(matrix);
         this.shiftedSize = matrix.getSize() - 2 * Matrix.OFFSET;
         this.paths = new ArrayList<>(matrix.getSize());
     }

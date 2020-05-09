@@ -1,6 +1,7 @@
 package com.mostovoy_company.chart;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.mostovoy_company.services.kafka.dto.LineChartNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class ChartsDataRepository {
         Map<String, Map<Integer, List<LineChartNode>>> result = new HashMap<>();
         charts.forEach((name, data) -> result.put(name, data.getUnmodifiableChartData()));
         try (FileWriter fileWriter = new FileWriter(filename)) {
-            new Gson().toJson(result, fileWriter);
+            new GsonBuilder().setPrettyPrinting().create().toJson(result, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }
