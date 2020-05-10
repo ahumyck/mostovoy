@@ -18,6 +18,7 @@ public class FileChooserController {
 
     public static FileChooser.ExtensionFilter jsonExtensionFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
     public static FileChooser.ExtensionFilter pngExtensionFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+    public static FileChooser.ExtensionFilter txtExtensionFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
 
     private static String lastUsedDirectory = "NULL";
 

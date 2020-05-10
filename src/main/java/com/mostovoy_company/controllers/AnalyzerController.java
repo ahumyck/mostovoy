@@ -58,6 +58,8 @@ public class AnalyzerController {
     public Button uploadButton;
     @FXML
     public Button clear;
+    @FXML
+    public Button save;
 
     private AnalyzerManager analyzerManager;
     private StatisticModule statisticModule;
@@ -101,6 +103,11 @@ public class AnalyzerController {
 
         clear.setOnAction(event -> repository.clear());
 
+
+        save.setOnAction(actionEvent -> {
+            Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.txtExtensionFilter);
+            optionalFileName.ifPresent(file -> repository.saveTablesDefault(file.getPath()));
+        });
         saveButton.setOnAction(actionEvent -> {
             Optional<File> optionalFileName = fxWeaver.loadController(FileChooserController.class).getFileToSave(FileChooserController.jsonExtensionFilter);
             optionalFileName.ifPresent(file -> repository.saveTablesToJSON(file.getPath()));

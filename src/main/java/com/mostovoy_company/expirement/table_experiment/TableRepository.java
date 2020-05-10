@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +38,29 @@ public class TableRepository {
 
     public void put(String tableName, TableViewData data) {
         this.tables.get(tableName).getItems().add(data);
+    }
+
+    public void saveTablesDefault(String filename) {
+        StringBuilder builder = new StringBuilder();
+        tables.forEach((name, table) -> {
+            builder.append(name).append('\n');
+            table.getItems().forEach(item -> {
+                builder.append(item.getSize()).append('\t')
+                        .append(item.getPercolation()).append('\t')
+                        .append(item.getFirstParamAverage()).append('\t')
+                        .append(item.getFirstParamDispersion()).append('\t')
+                        .append(item.getSecondParamAverage()).append('\t')
+                        .append(item.getSecondParamDispersion()).append('\t')
+                        .append(item.getThirdParamAverage()).append('\t')
+                        .append(item.getThirdParamDispersion()).append('\t')
+                        .append("\n\n\n");
+            });
+        });
+        try (FileWriter fileWriter = new FileWriter(filename)) {
+            fileWriter.write(builder.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveTablesToJSON(String filename) {

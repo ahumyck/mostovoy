@@ -25,6 +25,9 @@
             <Button fx:id="saveButton" text="Сохранить"/>
             <Button fx:id="uploadButton" text="Загрузить"/>
         </HBox>
+        <HBox>
+            <Button fx:id="save" text="Создать отчет"/>
+        </HBox>
     </VBox>
 
     <VBox spacing="20" HBox.hgrow="ALWAYS">
