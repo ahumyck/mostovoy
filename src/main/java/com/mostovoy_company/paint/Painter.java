@@ -93,7 +93,7 @@ public class Painter {
         paintMatrix(size, matrix, graphicsContext2D);
         paintPath(size, path, graphicsContext2D);
         paintRelations(size, relations, graphicsContext2D);
-//        drawRelationLines(size, relations, graphicsContext2D);
+        drawRelationLines(size, relations, graphicsContext2D);
         drawSplitterMatrixLines(size, matrix, graphicsContext2D);
 
         pane.getChildren().clear();
