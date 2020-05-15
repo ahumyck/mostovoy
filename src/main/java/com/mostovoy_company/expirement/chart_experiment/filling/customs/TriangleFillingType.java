@@ -20,7 +20,7 @@ public class TriangleFillingType extends CustomTestFillingType {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     public TriangleFillingType() {
-        super("Треугольники");
+        super("Заполнение треугольниками");
     }
 
     @Override

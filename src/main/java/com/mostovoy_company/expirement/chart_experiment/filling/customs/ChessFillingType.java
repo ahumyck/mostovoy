@@ -9,7 +9,7 @@ public class ChessFillingType extends CustomTestFillingType {
     private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
 
     public ChessFillingType(){
-        super("Шахматка");
+        super("Шахматное заполнение");
     }
 
 

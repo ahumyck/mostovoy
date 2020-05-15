@@ -9,7 +9,7 @@ public class SquareFillingType extends CustomTestFillingType  {
     private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
 
     public SquareFillingType() {
-        super("Квадраты");
+        super("Квадратное заполнение");
     }
 
     @Override

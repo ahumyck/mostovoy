@@ -15,7 +15,7 @@ public class RandomFillingType extends FillingType {
     }
 
     public RandomFillingType() {
-        super("Случайная");
+        super("Случайное засеивание");
     }
 
     public void setPercolationProbability(double percolationProbability) {

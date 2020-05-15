@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RandomHorizontalLineFillingType extends CustomTestFillingType {
     public RandomHorizontalLineFillingType() {
-        super("Горизонтальные линии v2.0");
+        super("Горизонтальные линии с отступами");
     }
 
     private final int MATRIX_SIZE = 50;
