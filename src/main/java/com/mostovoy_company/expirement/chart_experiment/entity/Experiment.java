@@ -150,13 +150,6 @@ public class Experiment {
     }
 
     public Experiment putProgrammingPercolationInStatistic() {
-//        List<PercolationRelation> percolationRelations = new PercolationProgramming(matrix, percolationWay)
-//                .getProgrammingPercolationList(2 * (matrix.getSize() - 2 * Matrix.OFFSET));
-//        this.statistic.setMidGreenCellsStation(
-//                percolationRelations.stream()
-//                                    .mapToDouble(PercolationRelation::getDistance)
-//                                    .average().orElse(0));
-//        this.statistic.setRelationsCounter(percolationRelations.size());
         String[] calculators = {DistanceCalculatorTypeResolver.PYTHAGORAS, DistanceCalculatorTypeResolver.DISCRETE};
         Paired<Double, Integer>[] averagesWithSize = new Paired[]{new Paired<Double, Integer>(), new Paired<Double, Integer>()};
         for (int i = 0; i < 2; i++) {

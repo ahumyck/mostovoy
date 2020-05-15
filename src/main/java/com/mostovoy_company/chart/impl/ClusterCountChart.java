@@ -3,6 +3,7 @@ package com.mostovoy_company.chart.impl;
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltIndependentChart;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.entity.StatisticManager;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.core.annotation.Order;
@@ -34,10 +35,7 @@ public class ClusterCountChart extends BaseLineChartData implements LightningBol
     }
 
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        message.setClusterCount(statistics.stream()
-                .mapToDouble(Statistic::getClusterCount)
-                .average()
-                .orElse(0));
+        message.setClusterCount(StatisticManager.clusterCountStatistic(statistics));
     }
 
     @Override

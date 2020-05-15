@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PercolationRelation {
-    private Cell darkRedCell;
+    private Cell greenCell;
     private Cell redCell;
     private double distance;
 }

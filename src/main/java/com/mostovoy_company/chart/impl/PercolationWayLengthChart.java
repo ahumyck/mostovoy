@@ -3,6 +3,7 @@ package com.mostovoy_company.chart.impl;
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltDependentChart;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.entity.StatisticManager;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.core.annotation.Order;
@@ -35,10 +36,7 @@ public class PercolationWayLengthChart extends BaseLineChartData implements Ligh
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        message.setPercolationWayLength(statistics.stream()
-                .mapToDouble(Statistic::getPercolationWayLength)
-                .average()
-                .orElse(0));
+        message.setPercolationWayLength(StatisticManager.percolationWayLength(statistics));
     }
 
     @Override

@@ -7,7 +7,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +48,7 @@ public class Painter {
     private void drawRelationLines(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D) {
         relations.forEach(relation -> {
             graphicsContext2D.moveTo(relation.getRedCell().getY() * size + size/2, relation.getRedCell().getX() * size + size/2);
-            graphicsContext2D.lineTo(relation.getDarkRedCell().getY() * size + size / 2, relation.getDarkRedCell().getX() * size + size / 2);
+            graphicsContext2D.lineTo(relation.getGreenCell().getY() * size + size / 2, relation.getGreenCell().getX() * size + size / 2);
         });
         graphicsContext2D.stroke();
     }
@@ -62,7 +61,7 @@ public class Painter {
     }
 
     private void paintRelations(double size, List<PercolationRelation> relations, GraphicsContext graphicsContext2D) {
-        relations.stream().map(PercolationRelation::getDarkRedCell).forEach(cell -> {
+        relations.stream().map(PercolationRelation::getGreenCell).forEach(cell -> {
             graphicsContext2D.setFill(Color.GREEN);
             graphicsContext2D.fillRect(cell.getY() * size, cell.getX() * size, size, size);
         });
@@ -93,7 +92,7 @@ public class Painter {
         paintMatrix(size, matrix, graphicsContext2D);
         paintPath(size, path, graphicsContext2D);
         paintRelations(size, relations, graphicsContext2D);
-//        drawRelationLines(size, relations, graphicsContext2D);
+        drawRelationLines(size, relations, graphicsContext2D);
         drawSplitterMatrixLines(size, matrix, graphicsContext2D);
 
         pane.getChildren().clear();

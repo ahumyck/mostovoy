@@ -28,10 +28,6 @@ public class KafkaConsumerConfig {
     @Value("${kafka.group.id}")
     private String kafkaGroupId;
 
-
-    /**
-     * Consumer configuration for {@link RequestMessage}
-     */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<Long, RequestMessage> requestMessageKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Long, RequestMessage> factory =
@@ -59,13 +55,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
         return props;
     }
-    /*
-     * End configuration
-     */
 
-    /**
-     * Consumer configuration for {@link ResponseMessage}
-     */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<Long, ResponseMessage> responseMessageKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Long, ResponseMessage> factory =
@@ -93,14 +83,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
         return props;
     }
-    /*
-     * End configuration
-     */
 
-
-    /**
-     * Consumer configuration for {@link ControlMessage}
-     */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<Long, ControlMessage> controlMessageKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Long, ControlMessage> factory =
@@ -128,9 +111,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
         return props;
     }
-    /*
-     * End configuration
-     */
+
     @Bean
     public KafkaListenerContainerFactory<?> kafkaListenerContainerFactory() {
         return new ConcurrentKafkaListenerContainerFactory<>();

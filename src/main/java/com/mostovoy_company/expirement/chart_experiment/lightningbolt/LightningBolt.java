@@ -41,9 +41,6 @@ public class LightningBolt {
                     List<Integer> parents = inf.getFirst();
                     int shortest = distances.indexOf(distances.stream().min(Integer::compareTo).get());
                     int endPos = this.shiftedSize * (this.shiftedSize - 1) + shortest;
-//                    System.out.println("start pos = " + currentPos + " ,end pos = " + endPos);
-//                    System.out.println("parents = " + parents);
-//                    System.out.println();
                     return new Paired<>(getPath(currentPos, endPos, parents), distances.get(shortest));
                 }).min(Comparator.comparingInt(Paired::getSecond)).ifPresent(path -> this.shortestPath = path);
         return this;

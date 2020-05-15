@@ -3,6 +3,7 @@ package com.mostovoy_company.chart.impl;
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltIndependentChart;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.entity.StatisticManager;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.core.annotation.Order;
@@ -35,16 +36,7 @@ public class ClusterSizeChart extends BaseLineChartData implements LightningBolt
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        double result = 0;
-        final double[] blackCellCounter = {0};
-        final double[] clusterCounter = {0};
-        statistics.forEach(statistic -> {
-            blackCellCounter[0] += statistic.getBlackCellCount();
-            clusterCounter[0] += statistic.getClusterCount();
-        });
-        double concentration = blackCellCounter[0];
-        if (clusterCounter[0] > 0) result = concentration / clusterCounter[0];
-        message.setClusterSize(result);
+        message.setClusterSize(StatisticManager.clusterSizeStatistic(statistics));
     }
 
     @Override

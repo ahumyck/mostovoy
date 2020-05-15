@@ -3,6 +3,7 @@ package com.mostovoy_company.chart.impl;
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltDependentChart;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.entity.StatisticManager;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
@@ -32,10 +33,7 @@ public class BlackCellsTapeChart extends BaseLineChartData implements LightningB
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        message.setBlackCellsTape(statistics.stream()
-                .mapToDouble(Statistic::getAverageBlackCellsPerRowInWayWidth)
-                .average()
-                .orElse(0));
+        message.setBlackCellsTape(StatisticManager.blackCellsTapeStatistic(statistics));
     }
 
     @Override

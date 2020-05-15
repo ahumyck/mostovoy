@@ -28,15 +28,15 @@ public class PercolationProgramming {
         this.generator = new RhombusBoundaryGenerator(matrix);
     }
 
-    public PercolationProgramming setDistanceCalculator(DistanceCalculator calculator){
+    public PercolationProgramming setDistanceCalculator(DistanceCalculator calculator) {
         this.calculator = calculator;
         return this;
     }
 
     private Stream<Cell> streamBlackNotUsedObjects(List<Cell> cells) {
         return cells.stream().filter(Cell::isBlack)
-                .filter(cell -> !path.contains(cell))
-                .filter(cell -> !usedPercolationObjects.contains(cell));
+                    .filter(cell -> !path.contains(cell))
+                    .filter(cell -> !usedPercolationObjects.contains(cell));
     }
 
     public List<PercolationRelation> getProgrammingPercolationList(int neighborhood) {
@@ -50,9 +50,9 @@ public class PercolationProgramming {
         List<Cell> optimalCellsCollection = getOptimalCellsCollection(neighborhood, percolationCell);
         if (!optimalCellsCollection.isEmpty()) {
             return Optional.of(getBestOptimalCells(optimalCellsCollection).stream()
-                    .map(goodCell -> new PercolationRelation(goodCell, percolationCell,
-                            calculator.calculateDistance(percolationCell, goodCell)))
-                    .collect(Collectors.toList()));
+                                                                          .map(goodCell -> new PercolationRelation(goodCell, percolationCell,
+                                                                                  calculator.calculateDistance(percolationCell, goodCell)))
+                                                                          .collect(Collectors.toList()));
         }
         return Optional.empty();
     }
@@ -81,5 +81,4 @@ public class PercolationProgramming {
         }
         return collect;
     }
-
 }

@@ -49,6 +49,4 @@ public class ChartConfigurationController {
             charts.forEach(chartData -> Platform.runLater(chartData::saveConfiguration));
         });
     }
-
-
 }

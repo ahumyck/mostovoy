@@ -3,6 +3,7 @@ package com.mostovoy_company.chart.impl;
 import com.mostovoy_company.chart.BaseLineChartData;
 import com.mostovoy_company.chart.LightningBoltDependentChart;
 import com.mostovoy_company.expirement.chart_experiment.entity.Statistic;
+import com.mostovoy_company.expirement.chart_experiment.entity.StatisticManager;
 import com.mostovoy_company.services.kafka.dto.ResponseMessage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
@@ -35,16 +36,7 @@ public class RedCellsStationDistancesDiscreteChart extends BaseLineChartData imp
 
     @Override
     public void collectStatistic(ResponseMessage message, List<Statistic> statistics) {
-        AtomicReference<Double> d = new AtomicReference<>(0.0);
-        AtomicInteger n = new AtomicInteger(1);
-        statistics.stream()
-                  .map(Statistic::getDiscreteDistance)
-                  .forEach(pair -> {
-                      d.updateAndGet(v -> v + pair.getFirst() * pair.getSecond());
-                      n.addAndGet(pair.getSecond());
-                  });
-        if (n.get() == 0) message.setRedCellsStationDistancesDiscrete(0);
-        else message.setRedCellsStationDistancesDiscrete(d.get() / n.get());
+        message.setRedCellsStationDistancesDiscrete(StatisticManager.redCellsStationDiscrete(statistics));
     }
 
     @Override

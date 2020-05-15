@@ -26,8 +26,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-@FxmlView("charts.fxml")
 @Component
+@FxmlView("charts.fxml")
 @Slf4j
 public class ChartsController {
     @FXML

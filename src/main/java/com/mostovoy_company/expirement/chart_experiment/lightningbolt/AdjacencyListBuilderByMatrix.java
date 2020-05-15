@@ -42,7 +42,6 @@ public class AdjacencyListBuilderByMatrix {
                         .forEach(coordinates -> add(currentCell, shiftedPosition, coordinates.getFirst(), coordinates.getSecond(), matrix));
             }
         }
-//        map.forEach((pos, n) -> System.out.println(pos + " = " + n));
         return map;
     }
 }

@@ -20,16 +20,10 @@ public class Statistic {
     private int blackCellCount;
     @Expose
     private int percolationWayLength;
-
-//    @Expose
-//    private int relationsCounter;
-//    @Expose
-//    private double midGreenCellsStation;
     @Expose
     private Paired<Double,Integer> pythagorasDistance;
     @Expose
     private Paired<Double, Integer> discreteDistance;
-
     @Expose
     private boolean percolationizated;
     @Expose
@@ -44,5 +38,4 @@ public class Statistic {
     private double averageBlackCellsPerRowInWayWidth;
     @Expose
     private double averageRedCellsPerRowInTapeWidth;
-
 }
