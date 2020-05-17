@@ -20,11 +20,11 @@ import java.util.stream.Stream;
 @Component
 public class ExperimentManager {
 
-    private NeighborhoodRules neighborhoodRules;
-    private CostRules costRules;
+    private final NeighborhoodRules neighborhoodRules;
+    private final CostRules costRules;
 
     public ExperimentManager(@Qualifier("defaultNeighborhoodRules") NeighborhoodRules neighborhoodRules,
-                             @Qualifier("defaultCostRules") CostRules costRules) { //diagonalCostRules, defaultCostRules
+                             @Qualifier("diagonalCostRules") CostRules costRules) { //diagonalCostRules, defaultCostRules
         this.neighborhoodRules = neighborhoodRules;
         this.costRules = costRules;
     }

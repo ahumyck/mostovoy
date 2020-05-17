@@ -53,14 +53,6 @@ public class Matrix {
     }
 
 
-    public Matrix clusterization() {
-        markClusters();
-        reindexClusterMarks();
-        joinClusters();
-        countClusters();
-        return this;
-    }
-
     public Stream<Cell> stream() {
         List<Cell> cells = new ArrayList<>();
         for (Cell[] value : this.matrix) {
@@ -86,119 +78,12 @@ public class Matrix {
         return clusterCounter;
     }
 
+    public void setClusterCount(int clusterCount){
+        this.clusterCounter = clusterCount;
+    }
+
     public long getCountOfBlackCells() {
         return stream().filter(Cell::isBlack).count();
-    }
-
-    private int minClusterMark(Cell first, Cell second) {
-        return Math.min(first.getClusterMark(), second.getClusterMark());
-    }
-
-    private void reindexClusterMarks() {
-        this.clusterCounter = 1;
-        Map<Integer, Integer> newMarks = new HashMap<>();
-        for (int i = OFFSET; i < this.matrix.length - OFFSET; i++) {
-            for (int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
-                Cell cell = this.matrix[i][j];
-                if (cell.getClusterMark() == 0) continue;
-                if (!newMarks.containsKey(cell.getClusterMark())) {
-                    newMarks.put(cell.getClusterMark(), clusterCounter++);
-                }
-                cell.setClusterMark(newMarks.get(cell.getClusterMark()));
-            }
-        }
-    }
-
-    private void countClusters() {
-        Set<Integer> set = new HashSet<>();
-        stream().filter(Cell::hasClusterMark).forEach(cell -> set.add(cell.getClusterMark()));
-        clusterCounter = set.size();
-    }
-
-    private void markClusters() {
-        int clusterCounter = 0;
-        for (int i = OFFSET; i < this.matrix.length - OFFSET; i++) {
-            for (int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
-                Cell currentCell = this.matrix[i][j];
-                if (currentCell.isBlack()) {
-                    Cell up = this.matrix[i - 1][j];
-                    Cell left = this.matrix[i][j - 1];
-                    boolean isLeftBlack = left.isBlack();
-                    boolean isUpBlack = up.isBlack();
-                    if (isUpBlack && !isLeftBlack) {
-                        currentCell.setClusterMark(up.getClusterMark());
-                    }
-                    if (!isUpBlack && isLeftBlack) {
-                        currentCell.setClusterMark(left.getClusterMark());
-                    }
-                    if (isUpBlack && isLeftBlack) {
-                        currentCell.setClusterMark(minClusterMark(up, left));
-                    }
-                    if (!isLeftBlack && !isUpBlack) {
-                        currentCell.setClusterMark(++clusterCounter);
-                    }
-                }
-            }
-        }
-    }
-
-    private void joinClusters() {
-        for (int i = OFFSET; i < this.matrix.length - OFFSET; i++) {
-            for (int j = OFFSET; j < this.matrix.length - OFFSET; j++) {
-                joinCells(i, j);
-            }
-        }
-    }
-
-    private void joinCells(int i, int j) {
-        List<Paired<Integer, Integer>> path = new ArrayList<>();
-        path.add(new Paired<>(i, j));
-
-        while (!path.isEmpty()) {
-            Paired<Integer, Integer> p = path.get(path.size() - 1);
-            i = p.getFirst();
-            j = p.getSecond();
-            Cell currentCell = this.matrix[i][j];
-            if (currentCell.hasClusterMark()) {
-                Cell right = this.matrix[i][j + 1];
-                Cell left = this.matrix[i][j - 1];
-                Cell down = this.matrix[i + 1][j];
-                Cell up = this.matrix[i - 1][j];
-                if (up.hasClusterMark()) {
-                    if (up.getClusterMark() > currentCell.getClusterMark()) {
-                        up.setClusterMark(currentCell.getClusterMark());
-                        i = i - 1;
-                        path.add(new Paired<>(i, j));
-                        continue;
-                    }
-                }
-                if (left.hasClusterMark()) {
-                    if (left.getClusterMark() > currentCell.getClusterMark()) {
-                        left.setClusterMark(currentCell.getClusterMark());
-                        j = j - 1;
-                        path.add(new Paired<>(i, j));
-                        continue;
-                    }
-                }
-                if (right.hasClusterMark()) {
-                    if (right.getClusterMark() > currentCell.getClusterMark()) {
-                        right.setClusterMark(currentCell.getClusterMark());
-                        j = j + 1;
-                        path.add(new Paired<>(i, j));
-                        continue;
-                    }
-                }
-                if (down.hasClusterMark()) {
-                    if (down.getClusterMark() > currentCell.getClusterMark()) {
-                        down.setClusterMark(currentCell.getClusterMark());
-                        i = i + 1;
-                        path.add(new Paired<>(i, j));
-                        continue;
-                    }
-                }
-            }
-            path.remove(path.size() - 1);
-        }
     }
 
     public int getMaxClusterSize() {

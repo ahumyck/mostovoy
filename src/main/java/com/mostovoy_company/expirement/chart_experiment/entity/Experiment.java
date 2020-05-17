@@ -54,7 +54,7 @@ public class Experiment {
     }
 
     public Experiment clusterization() {
-        this.matrix.clusterization();
+        new HoshenKopelman().clusterization(matrix);
         this.statistic.setBlackCellCount((int) matrix.getCountOfBlackCells());
         this.statistic.setClusterCount(matrix.getClusterCount());
         return this;

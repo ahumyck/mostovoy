@@ -4,7 +4,6 @@ import com.mostovoy_company.Main;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Scope("prototype")
 @FxmlView
 public class FileChooserController {
 

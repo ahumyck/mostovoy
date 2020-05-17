@@ -1,5 +1,6 @@
 package com.mostovoy_company.expirement.chart_experiment;
 
+import com.mostovoy_company.expirement.chart_experiment.entity.HoshenKopelman;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.filling.customs.CustomTestFillingType;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,8 @@ public class MatrixBuilderByPicture {
                 return pixels;
             }
         };
-        return new Matrix(imageFillingType).clusterization();
+        Matrix matrix = new Matrix(imageFillingType);
+        new HoshenKopelman().clusterization(matrix);
+        return matrix;
     }
 }
