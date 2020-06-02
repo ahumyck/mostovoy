@@ -30,7 +30,7 @@ public class Experiment {
     private List<PercolationRelation> relations;
 
     @Expose
-    private Statistic statistic = new Statistic();
+    private final Statistic statistic = new Statistic();
     @Expose
     private String name;
     @Expose

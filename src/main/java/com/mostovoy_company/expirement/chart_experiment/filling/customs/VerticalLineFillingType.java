@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class VerticalLineFillingType  extends CustomTestFillingType {
 
     private final int MATRIX_SIZE = 50;
-    private int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
+    private final int[][] matrix = new int[MATRIX_SIZE][MATRIX_SIZE];
 
     public VerticalLineFillingType() {
         super("Вертикальные линии");

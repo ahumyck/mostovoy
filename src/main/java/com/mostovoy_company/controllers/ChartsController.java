@@ -53,11 +53,11 @@ public class ChartsController {
     @FXML
     public Button uploadButton;
 
-    private FxWeaver fxWeaver;
-    private List<LightningBoltIndependentChart> lightningBoltIndependentCharts;
-    private ChartsDataRepository chartsDataRepository;
-    private MainService mainService;
-    private List<LightningBoltDependentChart> lightningBoltDependentCharts;
+    private final FxWeaver fxWeaver;
+    private final List<LightningBoltIndependentChart> lightningBoltIndependentCharts;
+    private final ChartsDataRepository chartsDataRepository;
+    private final MainService mainService;
+    private final List<LightningBoltDependentChart> lightningBoltDependentCharts;
 
 
     public ChartsController(FxWeaver fxWeaver,

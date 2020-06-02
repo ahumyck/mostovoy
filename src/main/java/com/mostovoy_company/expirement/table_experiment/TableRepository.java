@@ -25,7 +25,7 @@ public class TableRepository {
     public static String whiteTableColumnName = "Статистика белых клеток в столбце";
 
 
-    private Map<String, TableView<TableViewData>> tables = new HashMap<>();
+    private final Map<String, TableView<TableViewData>> tables = new HashMap<>();
 
     public void createTable(String tableName, TableView<TableViewData> tableView) {
         this.tables.put(tableName, tableView);

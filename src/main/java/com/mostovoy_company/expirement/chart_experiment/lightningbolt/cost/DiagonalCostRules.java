@@ -5,9 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DiagonalCostRules extends CostRules {
-
-    private static int INFINITY = Integer.MAX_VALUE;
-
     @Override
     public int setCostUsingRules(Cell startCell, Cell endCell, int shiftedSize) {
         int cheapCost = 1;
@@ -32,12 +29,6 @@ public class DiagonalCostRules extends CostRules {
             } else {
                 return this.setCosts(startCell, endCell, cheapCost, expensiveCost);
             }
-        }
-
-        try {
-            throw new Exception("I AM NOT SUPPOSED TO BE HERE");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return 0;
     }

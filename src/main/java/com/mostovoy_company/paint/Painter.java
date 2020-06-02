@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class Painter {
 
-    private ColorRepository colorRepository;
+    private final ColorRepository colorRepository;
 
     public Painter(@Qualifier("colorRandomRepository") ColorRepository colorRepository) {
         this.colorRepository = colorRepository;

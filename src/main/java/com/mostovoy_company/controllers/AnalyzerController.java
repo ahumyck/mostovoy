@@ -61,12 +61,15 @@ public class AnalyzerController {
     @FXML
     public Button save;
 
-    private AnalyzerManager analyzerManager;
-    private StatisticModule statisticModule;
-    private TableRepository repository;
-    private FxWeaver fxWeaver;
+    private final AnalyzerManager analyzerManager;
+    private final StatisticModule statisticModule;
+    private final TableRepository repository;
+    private final FxWeaver fxWeaver;
 
-    public AnalyzerController(AnalyzerManager analyzerManager, StatisticModule statisticModule, TableRepository repository, FxWeaver fxWeaver) {
+    public AnalyzerController(AnalyzerManager analyzerManager,
+                              StatisticModule statisticModule,
+                              TableRepository repository,
+                              FxWeaver fxWeaver) {
         this.analyzerManager = analyzerManager;
         this.statisticModule = statisticModule;
         this.repository = repository;

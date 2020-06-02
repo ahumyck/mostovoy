@@ -2,7 +2,6 @@ package com.mostovoy_company.expirement.table_experiment.analyzer;
 
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
 import com.mostovoy_company.expirement.chart_experiment.filling.RandomFillingType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,8 +10,11 @@ import java.util.List;
 @Component
 public class AnalyzerManager {
 
-    @Autowired
-    private AnalyzerModule analyzerModule;
+    private final AnalyzerModule analyzerModule;
+
+    public AnalyzerManager(AnalyzerModule analyzerModule) {
+        this.analyzerModule = analyzerModule;
+    }
 
     public AnalyzerDataRepository initializeAnalyzerExperiments(int number, int matrixSize, double probability) {
         RandomFillingType fillingType = new RandomFillingType();

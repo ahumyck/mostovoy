@@ -12,9 +12,9 @@ import java.util.Map;
 
 
 public class AdjacencyListBuilderByMatrix {
-    private Map<Integer, List<Paired<Integer, Integer>>> map = new HashMap<>();
-    private CostRules costRules;
-    private NeighborhoodRules neighborhoodRules;
+    private final Map<Integer, List<Paired<Integer, Integer>>> map = new HashMap<>();
+    private final CostRules costRules;
+    private final NeighborhoodRules neighborhoodRules;
 
     public AdjacencyListBuilderByMatrix(CostRules costRules, NeighborhoodRules neighborhoodRules) {
         this.costRules = costRules;

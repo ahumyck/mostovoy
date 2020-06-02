@@ -13,8 +13,8 @@ public class HoshenKopelman {
 
     public void clusterization(Matrix matrix) {
         markClusters(matrix);
-        reindexClusterMarks(matrix);
         joinClusters(matrix);
+        reindexClusterMarks(matrix);
         matrix.setClusterCount(countClusters(matrix));
     }
 

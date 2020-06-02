@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 public class MatrixBuilderByPicture {
 
     public Matrix build(BufferedImage image) {
-
         CustomTestFillingType imageFillingType = new CustomTestFillingType("image") {
             @Override
             public int[][] getMatrix() {

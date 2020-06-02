@@ -8,13 +8,12 @@ import com.mostovoy_company.expirement.chart_experiment.lightningbolt.neighborho
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 
 public class LightningBolt {
-    private Matrix matrix;
-    private Map<Integer, List<Paired<Integer, Integer>>> adjacencyList;
-    private int shiftedSize;
+    private final Matrix matrix;
+    private final Map<Integer, List<Paired<Integer, Integer>>> adjacencyList;
+    private final int shiftedSize;
     private Paired<List<Cell>, Integer> shortestPath = null;
 
     public LightningBolt(Matrix matrix, NeighborhoodRules neighborhoodRules, CostRules costRules) {
@@ -95,7 +94,7 @@ public class LightningBolt {
     private List<Cell> getPath(int start, int end, List<Integer> parents) {
         List<Cell> path = new ArrayList<>();
         for (int v = end; ; v = parents.get(v)) {
-            smartPathBuilder(v, path);
+            addVertex(v, path);
             if (v == start) break;
         }
         return path;
@@ -107,7 +106,7 @@ public class LightningBolt {
         return new Paired<>(i, j);
     }
 
-    private void smartPathBuilder(int currentPosition, List<Cell> path) {
+    private void addVertex(int currentPosition, List<Cell> path) {
         Paired<Integer, Integer> indecies = getIndecies(currentPosition);
         int i = indecies.getFirst();
         int j = indecies.getSecond();

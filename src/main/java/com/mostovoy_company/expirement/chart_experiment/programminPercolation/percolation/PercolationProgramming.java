@@ -2,7 +2,6 @@ package com.mostovoy_company.expirement.chart_experiment.programminPercolation.p
 
 import com.mostovoy_company.expirement.chart_experiment.entity.Cell;
 import com.mostovoy_company.expirement.chart_experiment.entity.Matrix;
-import com.mostovoy_company.expirement.chart_experiment.programminPercolation.boundaryGenerators.RhombusBoundaryGenerator;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.calculator.DistanceCalculator;
 import com.mostovoy_company.expirement.chart_experiment.programminPercolation.distance.calculator.PythagoreanTheoremCalculator;
 
@@ -15,10 +14,10 @@ import java.util.stream.Stream;
 
 public class PercolationProgramming {
 
-    private List<Cell> path;
-    private List<Cell> usedPercolationObjects;
+    private final List<Cell> path;
+    private final List<Cell> usedPercolationObjects;
     private DistanceCalculator calculator;
-    private RhombusBoundaryGenerator generator;
+    private final RhombusBoundaryGenerator generator;
 
 
     public PercolationProgramming(Matrix matrix, List<Cell> path) {
@@ -73,7 +72,7 @@ public class PercolationProgramming {
         int current = 1;
         List<Cell> collect = new ArrayList<>();
         while (current <= neighborhood) {
-            collect = streamBlackNotUsedObjects(generator.generateAreaPerimeter(current, percolationCell))
+            collect = streamBlackNotUsedObjects(generator.generateArea(current, percolationCell))
                     .sorted(Comparator.comparingDouble(a -> calculator.calculateDistance(a, percolationCell)))
                     .collect(Collectors.toList());
             if (!collect.isEmpty()) return collect;

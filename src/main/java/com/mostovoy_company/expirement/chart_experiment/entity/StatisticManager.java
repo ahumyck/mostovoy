@@ -1,8 +1,5 @@
 package com.mostovoy_company.expirement.chart_experiment.entity;
 
-import com.mostovoy_company.services.kafka.dto.ResponseMessage;
-import org.apache.kafka.common.metrics.Stat;
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
